@@ -8,7 +8,11 @@ target 'erinapp' do
   use_unimodules!
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config["reactNativePath"],
+    # If you got mac, you need to do pod install
+    :hermes_enabled => true
+  )
 
   # Uncomment to opt-in to using Flipper
   #
