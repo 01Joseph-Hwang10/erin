@@ -1,0 +1,12 @@
+{
+  "name": "erin_app",
+  "displayName": "erin_app",
+  "expo": {
+    "name": "erin_app",
+    "slug": "erin_app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
