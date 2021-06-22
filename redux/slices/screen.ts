@@ -5,35 +5,35 @@ export interface RectSpecType {
     height: number,
 }
 
+export interface SetScreenSpecInput extends RectSpecType {}
+
+const setScreenSpecReducer: CaseReducer<
+ScreenState,
+PayloadAction<SetScreenSpecInput>
+> = (state, { payload: screenSpec }) => {
+  state.screenSpec = screenSpec;
+};
+
 interface ScreenState {
     screenSpec: RectSpecType
 }
 
 const initialState: ScreenState = {
-    screenSpec: {
-        width: 1,
-        height: 1
-    }
-}
-
-export interface SetScreenSpecInput extends RectSpecType {}
-
-const setScreenSpecReducer: CaseReducer<
-    ScreenState,
-    PayloadAction<SetScreenSpecInput>
-> = (state, { payload: screenSpec }) => {
-    state.screenSpec = screenSpec
-}
+  screenSpec: {
+    width: 1,
+    height: 1
+  }
+};
 
 export const {
-    reducer,
-    actions: {
-        setScreenSpec
-    }
+  reducer,
+  actions: {
+    setScreenSpec
+  }
 } = createSlice({
-    name: 'screenSlice',
-    initialState,
-    reducers: {
-        setScreenSpec: setScreenSpecReducer
-    }
-})
+  name: "screenSlice",
+  initialState,
+  reducers: {
+    setScreenSpec: setScreenSpecReducer
+  }
+});

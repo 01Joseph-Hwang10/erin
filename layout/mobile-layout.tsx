@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+// import { StyleSheet } from "react-native";
 import Editor from "../pages/editor";
 import Viewer from "../pages/viewer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -40,31 +40,31 @@ const MobileLayout: React.FC = () => {
 
 export default React.memo(MobileLayout);
 
-const HEADER_HEIGHT = 8;
-const NAVIGATION_HEIGHT = 12;
-const CONTENT_HEIGHT = 100 - HEADER_HEIGHT - NAVIGATION_HEIGHT;
+// const HEADER_HEIGHT = 8;
+// const NAVIGATION_HEIGHT = 12;
+// const CONTENT_HEIGHT = 100 - HEADER_HEIGHT - NAVIGATION_HEIGHT;
 
-const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-    height: "100%"
-  },
-  main: {
-    flex: 1,
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    width: "100%",
-    height: `${HEADER_HEIGHT}%`
-  },
-  navigation: {
-    width: "100%",
-    height: `${NAVIGATION_HEIGHT}%`,
-  },
-  content: {
-    width: "100%",
-    height: `${CONTENT_HEIGHT}%`
-  }
-});
+// const styles = StyleSheet.create({
+//   root: {
+//     width: "100%",
+//     height: "100%"
+//   },
+//   main: {
+//     flex: 1,
+//     height: "100%",
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   header: {
+//     width: "100%",
+//     height: `${HEADER_HEIGHT}%`
+//   },
+//   navigation: {
+//     width: "100%",
+//     height: `${NAVIGATION_HEIGHT}%`,
+//   },
+//   content: {
+//     width: "100%",
+//     height: `${CONTENT_HEIGHT}%`
+//   }
+// });
