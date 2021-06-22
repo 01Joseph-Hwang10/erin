@@ -1,43 +1,44 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Router, Stack, Scene } from "react-native-router-flux";
-import Header from "../components/header";
-import Navigation from "../components/navigation";
+import { StyleSheet } from "react-native";
 import Editor from "../pages/editor";
-import Friends from "../pages/friends";
-import MyPage from "../pages/my-page";
-import Postbox from "../pages/postbox";
 import Viewer from "../pages/viewer";
-import { ROUTES } from "../src/constants";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Main from "./main";
 
+
+export type StackParamList = {
+  main: undefined,
+  editor: undefined,
+  viewer: undefined
+}
+
+const Stack = createStackNavigator<StackParamList>()
 
 const MobileLayout: React.FC = () => {
   return (
-    <Router>
-      <View style={styles.root}>
-        <Scene key={ROUTES.EDITOR} component={Editor} hideNavBar hideTabBar />
-        <Scene key={ROUTES.VIEWER} component={Viewer} hideNavBar hideTabBar />
-        <Scene key='main'>
-          <View style={styles.main}>
-            <View style={styles.header}>
-              <Header />
-            </View>
-            <View style={styles.content}>
-              <Scene key={ROUTES.POSTBOX} initial={true} component={Postbox} />
-              <Scene key={ROUTES.FRIENDS} component={Friends} />
-              <Scene key={ROUTES.MY_PAGE} component={MyPage} />
-            </View>
-            <View style={styles.navigation}>
-              <Navigation />
-            </View>
-          </View>
-        </Scene>
-      </View>
-    </Router>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='main'>
+        <Stack.Screen 
+          name="main"
+          component={Main}
+        />
+        <Stack.Screen 
+          name='editor'
+          component={Editor}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen 
+          name='viewer'
+          component={Viewer}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-export default React.memo(MobileLayout);
+export default MobileLayout;
 
 const HEADER_HEIGHT = 8;
 const NAVIGATION_HEIGHT = 12;

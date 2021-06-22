@@ -1,27 +1,27 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { View, Text } from "react-native";
-import { Actions } from "react-native-router-flux";
+import { NavigationStackProp } from "react-navigation-stack";
 import { ROUTES } from "../src/constants";
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+  navigation: NavigationStackProp<undefined>
+}
+
+const Navigation: React.FC<NavigationProps> = ({
+  navigation
+}) => {
 
   const navigateToFriends = () => {
-    if (Actions.currentScene !== ROUTES.FRIENDS) {
-      Actions.friends();
-    }
+    navigation.navigate(ROUTES.FRIENDS);
   };
 
   const navigateToPostbox = () => {
-    if (Actions.currentScene !== ROUTES.POSTBOX ) {
-      Actions.postbox();
-    }
+    navigation.navigate(ROUTES.POSTBOX);
   };
 
   const navigateToMyPage = () => {
-    if (Actions.currentScene !== ROUTES.MY_PAGE ) {
-      Actions.myPage();
-    }
+    navigation.navigate(ROUTES.MY_PAGE);
   };
 
   return (

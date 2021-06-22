@@ -1,17 +1,25 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Actions } from "react-native-router-flux";
+import { NavigationStackProp } from "react-navigation-stack";
+import { ROUTES } from "../src/constants";
 
-const Postbox: React.FC = () => {
+interface PostboxProps {
+  navigation: NavigationStackProp<undefined>
+}
+
+const Postbox: React.FC<PostboxProps> = ({
+  navigation
+}) => {
 
   const navigateToEditor = () => {
-    Actions.editor();
+    navigation.navigate(ROUTES.EDITOR);
   };
 
   return (
     <View>
       <TouchableOpacity
+        style={styles.button}
         onPress={navigateToEditor}
       >
         <Text>Editor</Text>
@@ -21,3 +29,11 @@ const Postbox: React.FC = () => {
 };
 
 export default Postbox;
+
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "orange",
+    padding: 10
+  }
+});
