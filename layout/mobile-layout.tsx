@@ -13,7 +13,7 @@ export type StackParamList = {
   viewer: undefined
 }
 
-const Stack = createStackNavigator<StackParamList>()
+const Stack = createStackNavigator<StackParamList>();
 
 const MobileLayout: React.FC = () => {
   return (
@@ -28,7 +28,7 @@ const MobileLayout: React.FC = () => {
           component={Editor}
           options={{ headerShown: false }}
         />
-          <Stack.Screen 
+        <Stack.Screen 
           name='viewer'
           component={Viewer}
           options={{ headerShown: false }}
@@ -38,7 +38,7 @@ const MobileLayout: React.FC = () => {
   );
 };
 
-export default MobileLayout;
+export default React.memo(MobileLayout);
 
 const HEADER_HEIGHT = 8;
 const NAVIGATION_HEIGHT = 12;

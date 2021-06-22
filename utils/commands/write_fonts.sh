@@ -6,3 +6,5 @@ TO="/mnt/c/Users/josep/storage"
 cd $ROOT
 
 cp -rf "$ROOT/assets/fonts" $TO
+
+echo "Fonts saved!"

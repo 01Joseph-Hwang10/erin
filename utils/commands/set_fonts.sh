@@ -16,3 +16,5 @@ fi
 
 cp -rf $FROM $TO
 
+echo 'Fonts loaded!'
+
