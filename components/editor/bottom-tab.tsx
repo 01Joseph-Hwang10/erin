@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { View } from "react-native";
 
 
-class TopFloat extends React.Component {
+class BottomTab extends React.Component {
 
   render(): React.ReactNode {
     return (
@@ -12,14 +12,14 @@ class TopFloat extends React.Component {
   }
 }
 
-export default TopFloat;
+export default BottomTab;
 
 const styles = StyleSheet.create({
   root: {
+    backgroundColor: "black",
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    zIndex: 9999
+    justifyContent: "center"
   }
 });

@@ -1,18 +1,15 @@
 import React from "react";
-import { GestureResponderEvent, TouchableOpacity, View, ViewStyle, StyleProp } from "react-native";
+import { View, ViewStyle, StyleProp } from "react-native";
 import Shadow from "./shadow";
 
 interface CircularFrameProps {
     size: number,
-    children: React.ReactNode,
+    children?: React.ReactNode,
     border?: boolean,
     borderColor?: string,
     borderWidth?: number,
     backgroundColor?: string,
     style?: ViewStyle,
-    touchable?: boolean,
-    onPress?: (event: GestureResponderEvent) => void,
-    onLongPress?: (event: GestureResponderEvent) => void,
     shadow?: boolean,
     shadowLevel?: number,
 }
@@ -25,11 +22,8 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
   borderWidth,
   backgroundColor,
   style: customStyle,
-  touchable,
-  onPress,
   shadow,
   shadowLevel,
-  onLongPress
 }) => {
 
 
@@ -50,24 +44,13 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
     alignItems: "center",
   };
 
-  const RenderItem: React.FC = () => {
-    if (touchable) return (
-      <TouchableOpacity
-        style={stylingOptions}
-        onPress={onPress}
-        onLongPress={onLongPress}
-      >
-        {children}
-      </TouchableOpacity>
-    );
-    return (
-      <View
-        style={stylingOptions}
-      >
-        {children}
-      </View>
-    );
-  };
+  const RenderItem: React.FC = () => (
+    <View
+      style={stylingOptions}
+    >
+      {children}
+    </View>
+  );
 
   if (shadow && shadowLevel) {
     return <Shadow 

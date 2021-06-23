@@ -16,7 +16,7 @@ export interface EditorState {
     focusedComponent: number, // if no focused component, -1,
     bottomTabCurrent: Erin.Editor.BottomTabMenuType,
     topFloatCurrent: Erin.Editor.TopFloatMenuType,
-    sideFloatCurrent: Erin.Editor.SideFloatMenuType
+    bottomFloatCurrent: Erin.Editor.BottomFloatMenuType,
 }
 
 const initialState: EditorState = {
@@ -29,11 +29,11 @@ const initialState: EditorState = {
     music: null
   },
   test: false,
-  currentPage: 1,
+  currentPage: 1, // Index of pages but +1
   focusedComponent: -1,
   bottomTabCurrent: "default",
   topFloatCurrent: "default",
-  sideFloatCurrent: "none"
+  bottomFloatCurrent: "none",
 };
 
 export type SetPublishInput = boolean;

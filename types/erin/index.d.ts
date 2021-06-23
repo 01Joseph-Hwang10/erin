@@ -23,7 +23,7 @@ export namespace Erin {
 
         export type TopFloatMenuType = "default" | "pages"
 
-        export type SideFloatMenuType = "none" | "animation"
+        export type BottomFloatMenuType = "none" | "animation"
 
         type BackgroundType = "image" | "color" | "pattern"
 
@@ -66,8 +66,11 @@ export namespace Erin {
         export interface Page {
             id: number,
             animations: AnimationInterface[],
-            components: Component[]
+            components: Component[],
+            autoZIndex: number // It always starts with 2 since workspace's zIndex is 1
         }
+
+        export type BaseEditorButtonType = "press" | "toggle" | "on-hover" | "long-press" | "press-and-long-press"
 
     }
 

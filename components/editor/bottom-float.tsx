@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { View } from "react-native";
 
 
-class TopFloat extends React.Component {
+class BottomFloat extends React.Component {
 
   render(): React.ReactNode {
     return (
@@ -12,7 +12,7 @@ class TopFloat extends React.Component {
   }
 }
 
-export default TopFloat;
+export default BottomFloat;
 
 const styles = StyleSheet.create({
   root: {
