@@ -21,6 +21,10 @@ class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState>
       return this.state.iconIndex;
     }
 
+    public setToggleIndex = (iconIndex: number): void => {
+      this.setState({ iconIndex });
+    }
+
     render(): React.ReactNode {
 
       const { icons, onPress } = this.props;

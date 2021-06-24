@@ -2,7 +2,7 @@ import React from "react";
 import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
 
-const FontsTYLE: React.FC = () => {
+const FontStyle: React.FC = () => {
 
   const icons: JSX.Element[] = []; // You need to add styles
 
@@ -19,4 +19,4 @@ const FontsTYLE: React.FC = () => {
   />;
 };
 
-export default FontsTYLE;
+export default FontStyle;

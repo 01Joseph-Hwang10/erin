@@ -27,7 +27,8 @@ export namespace Erin {
 
         type BackgroundType = "image" | "color" | "pattern"
 
-        type AnimationTriggerTypes = "onload" | "onButtonTap" | "onPrevEnd" | "onPrevSimultaneous" | "afterTimeout" | "afterPrevTimeout"
+        // Let's say that text is not clickable, and can be penetrated by tap
+        type AnimationTriggerTypes = "onload" | "onButtonTap" | "onPrevEnd" | "onPrevSimultaneous" | "afterTimeout" | "afterPrevTimeout" 
 
         type AnimationTypes = string // Temporal declaration. Need to decide what to include in animation
 
