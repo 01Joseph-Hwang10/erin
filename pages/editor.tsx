@@ -9,10 +9,12 @@ import BottomFloat from "../components/editor/bottom-float";
 
 class Editor extends Component {
   render(): React.ReactNode {
+
+    // Workspace component is in absolute positioning
     return (
       <SafeAreaView style={styles.root}>
         <View style={styles.workspaceWrapper}>
-          <Workspace /> {/* This component is in absolute positioning */}
+          <Workspace />
           <TopFloat />
           <BottomFloat />
         </View>
@@ -24,6 +26,7 @@ class Editor extends Component {
   }
 }
 
+// export default React.memo(Editor);
 export default Editor;
 
 const styles = StyleSheet.create({
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   workspaceWrapper: {
-    flex: 5,
+    flex: 8,
     justifyContent: "space-between",
     alignItems: "center"
   },

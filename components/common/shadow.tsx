@@ -1,5 +1,6 @@
 import React from "react";
 import { BoxShadow, BoxShadowProps } from "react-native-shadow";
+import { Text } from "react-native";
 
 interface ShadowProps {
     children: React.ReactNode,

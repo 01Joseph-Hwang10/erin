@@ -1,19 +1,34 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { View } from "react-native";
-import { ICON_SIZE } from "./contants";
+import { StyleProp, View, ViewStyle } from "react-native";
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../../redux/root-reducer";
 
-const Placeholder: React.FC = () => {
+type PlaceholderReduxProps = ConnectedProps<typeof connector>
+
+interface PlaceholderProps extends PlaceholderReduxProps {}
+
+const Placeholder: React.FC<PlaceholderProps> = ({
+  width: screenWidth
+}) => {
+
+  const placeholderStyle: StyleProp<ViewStyle> = {
+    width: screenWidth / 7,
+    height: 1
+  };
+
   return (
-    <View style={styles.root}></View>
+    <View style={placeholderStyle}></View>
   );
 };
 
-export default Placeholder;
+const mapStateToProps = (state: RootState) => {
+  return {
+    width: state.screen.screenSpec.width
+  };
+};
 
-const styles = StyleSheet.create({
-  root: {
-    width: ICON_SIZE,
-    height: 1
-  }
-});
+const connector = connect(mapStateToProps, {});
+
+// export default React.memo(connector(Placeholder));
+export default connector(Placeholder);
+

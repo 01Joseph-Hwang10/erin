@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ViewStyle, StyleProp } from "react-native";
+import { View, ViewStyle, StyleProp, Text } from "react-native";
 import Shadow from "./shadow";
 
 interface CircularFrameProps {
@@ -44,10 +44,9 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
     alignItems: "center",
   };
 
+  
   const RenderItem: React.FC = () => (
-    <View
-      style={stylingOptions}
-    >
+    <View style={stylingOptions}>
       {children}
     </View>
   );
@@ -64,4 +63,5 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
 
 };
 
-export default React.memo(CircularFrame);
+// export default React.memo(CircularFrame);
+export default CircularFrame;

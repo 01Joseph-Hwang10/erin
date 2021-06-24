@@ -50,4 +50,5 @@ const Main: React.FC<MainProps> = ({
   );
 };
 
-export default React.memo(Main);
+// export default React.memo(Main);
+export default Main;

@@ -31,4 +31,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 
 const connector = connect(null, mapDispatchToProps);
 
-export default React.memo(connector(LayoutWrapper));
+// export default React.memo(connector(LayoutWrapper));
+export default connector(LayoutWrapper);

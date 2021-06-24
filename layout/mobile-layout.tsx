@@ -38,7 +38,8 @@ const MobileLayout: React.FC = () => {
   );
 };
 
-export default React.memo(MobileLayout);
+// export default React.memo(MobileLayout);
+export default MobileLayout;
 
 // const HEADER_HEIGHT = 8;
 // const NAVIGATION_HEIGHT = 12;

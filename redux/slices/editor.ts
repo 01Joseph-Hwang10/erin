@@ -17,6 +17,7 @@ export interface EditorState {
     bottomTabCurrent: Erin.Editor.BottomTabMenuType,
     topFloatCurrent: Erin.Editor.TopFloatMenuType,
     bottomFloatCurrent: Erin.Editor.BottomFloatMenuType,
+    settings: Erin.Editor.Settings
 }
 
 const initialState: EditorState = {
@@ -34,6 +35,10 @@ const initialState: EditorState = {
   bottomTabCurrent: "default",
   topFloatCurrent: "default",
   bottomFloatCurrent: "none",
+  settings: {
+    iconSize: 1,
+    iconGap: 1
+  }
 };
 
 export type SetPublishInput = boolean;
@@ -45,17 +50,27 @@ const setPublishReducer: CaseReducer<
   state.publish = publish;
 };
 
+export type ConfigureIconLayoutInput = Erin.Editor.Settings;
+
+const configureIconLayoutReducer: CaseReducer<
+  EditorState,
+  PayloadAction<ConfigureIconLayoutInput>
+> = (state, { payload: settings }) => {
+  state.settings = settings;
+};
 
 
 export const {
   reducer,
   actions: {
-    setPublish
+    setPublish,
+    configureIconLayout
   }
 } = createSlice({
   name: "editorSlice",
   initialState,
   reducers: {
-    setPublish: setPublishReducer
+    setPublish: setPublishReducer,
+    configureIconLayout: configureIconLayoutReducer
   }
 });

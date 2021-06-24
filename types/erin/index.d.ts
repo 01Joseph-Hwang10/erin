@@ -19,7 +19,15 @@ export namespace Erin {
 
     export namespace Editor {
 
-        export type BottomTabMenuType = "default" | "create" | "text" | "shape" | "image" | "sticker" | "animationDefault" | "animationConfig"
+        export type BottomTabMenuType = 
+            | "default" 
+            | "create" 
+            | "text" 
+            | "shape"
+            // | "image"
+            // | "sticker" 
+            | "animationDefault" 
+            | "animationConfig"
 
         export type TopFloatMenuType = "default" | "pages"
 
@@ -36,6 +44,11 @@ export namespace Erin {
             background: string,
             backgroundType: BackgroundType,
             music: string | null
+        }
+
+        export interface Settings {
+            iconSize: number,
+            iconGap: number,
         }
 
 
