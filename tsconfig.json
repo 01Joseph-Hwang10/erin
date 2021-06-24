@@ -8,6 +8,6 @@
         "./types/*"
       ]
     },
-    // "esModuleInterop": true
+    "esModuleInterop": true
   },
 }

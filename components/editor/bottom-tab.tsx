@@ -95,10 +95,17 @@ const BottomTab: React.FC<BottomTabProps> = ({
   bottomTabCurrent
 }) => {
 
+
   return <View style={styles.root}>
     {
-      iconMembers[bottomTabCurrent].map((member, index) => {
-        if (member) return <React.Fragment key={index}>{member}</React.Fragment>;
+      iconMembers?.[bottomTabCurrent]?.map((member, index) => {
+        if (member) {
+          const Icon = () => member;
+          console.log(Icon);
+          return <React.Fragment key={index}>
+            <Icon />
+          </React.Fragment>;
+        }
         return <Placeholder key={index} />;
       })
     }

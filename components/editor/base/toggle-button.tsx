@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 import { GestureResponderEvent } from "react-native";
 
 interface ToggleButtonProps {
@@ -28,13 +28,14 @@ class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState>
     render(): React.ReactNode {
 
       const { icons, onPress } = this.props;
-      const Icon = icons[this.state.iconIndex];
+      const Icon = () => icons[this.state.iconIndex];
+      // const Icon: React.FC = () => <IconElement />;
 
       return (
         <TouchableOpacity
           onPress={onPress}
         >
-          {Icon}
+          <Icon />
         </TouchableOpacity>
       );
     }
