@@ -1,19 +1,24 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import PressButton from "../editor/base/press-button";
-import { ICON_SIZE } from "../editor/base/contants";
+import { ICON_COLOR } from "../editor/base/constants";
 import { GestureResponderEvent } from "react-native";
+import { RootState } from "../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
 
-interface CheckButtonProps {
+type CheckButtonReduxProps = ConnectedProps<typeof connector>
+
+interface CheckButtonProps extends CheckButtonReduxProps {
     onPress: (e: GestureResponderEvent) => void
 }
 
 const CheckButton: React.FC<CheckButtonProps> = ({
-  onPress
+  onPress,
+  iconSize
 }) => {
 
   const renderIcon = () => (
-    <Feather name="check-circle" size={ICON_SIZE} color="white" />
+    <Feather name="check-circle" size={iconSize} color={ICON_COLOR} />
   );
   
   return <PressButton 
@@ -22,4 +27,12 @@ const CheckButton: React.FC<CheckButtonProps> = ({
   />;
 };
 
-export default CheckButton;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize
+  };
+};
+
+const connector = connect(mapStateToProps, {});
+
+export default connector(CheckButton);

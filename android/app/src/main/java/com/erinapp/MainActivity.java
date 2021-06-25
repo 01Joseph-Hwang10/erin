@@ -1,6 +1,7 @@
 package com.erinapp;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -10,7 +11,9 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import expo.modules.splashscreen.singletons.SplashScreen;
 import expo.modules.splashscreen.SplashScreenImageResizeMode;
 
+
 public class MainActivity extends ReactActivity {
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);

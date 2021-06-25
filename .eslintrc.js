@@ -40,6 +40,8 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": 0,
     "react/prop-types": 0,
     "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/no-unused-vars": [
       1,
       { "argsIgnorePattern": "[_]{3,}",  }

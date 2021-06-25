@@ -1,17 +1,21 @@
 import React from "react";
 import CircularFrame from "../../../common/circular-frame";
-import { ICON_SIZE } from "../../base/contants";
 import { Text } from "react-native";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
 
-interface PageButtonProps {
+type PageButtonReduxProps = ConnectedProps<typeof connector>
+
+interface PageButtonProps extends PageButtonReduxProps {
     pageNumber: number
 }
 
 const PageButton: React.FC<PageButtonProps> = ({
-  pageNumber
+  pageNumber,
+  iconSize
 }) => {
   return <CircularFrame
-    size={ICON_SIZE}
+    size={iconSize}
     border={true}
     borderColor={"grey"}
     borderWidth={2.5}
@@ -23,4 +27,12 @@ const PageButton: React.FC<PageButtonProps> = ({
   </CircularFrame>;
 };
 
-export default PageButton;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize
+  };
+};
+
+const connector = connect(mapStateToProps, {});
+
+export default connector(PageButton);

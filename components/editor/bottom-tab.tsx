@@ -2,7 +2,6 @@ import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/root-reducer";
 import { StyleSheet, View, Text, ViewStyle } from "react-native";
-import XButton from "../common/x-button";
 import Placeholder from "./base/placeholder";
 import CreateShape from "./bottom-tab/create-member/create-shape";
 import CreateText from "./bottom-tab/create-member/create-text";
@@ -16,7 +15,6 @@ import ShapeColor from "./bottom-tab/shape-member/shape-color";
 import ShapePattern from "./bottom-tab/shape-member/shape-pattern";
 import FontColor from "./bottom-tab/text-member/font-color";
 import FontStyle from "./bottom-tab/text-member/font-style";
-import CheckButton from "../common/check-button";
 import ToggleToDefault from "./bottom-tab/animation-default-member/toggle-to-default";
 import AddAnimation from "./bottom-tab/animation-default-member/add-animation";
 import DeleteAnimation from "./bottom-tab/animation-default-member/delete-animation";
@@ -31,13 +29,10 @@ import CheckShape from "./bottom-tab/shape-member/check-shape";
 import CheckText from "./bottom-tab/text-member/check-text";
 import CheckAnimationConfig from "./bottom-tab/animation-config-member/check-animation-config";
 import XCreate from "./bottom-tab/create-member/x-create";
+import CreateSticker from "./bottom-tab/create-member/create-sticker";
 
 type NullableComponent = JSX.Element | null
 type NullableComponentList = NullableComponent[]
-
-const voidFunction = () => {
-  // do sth
-};
 
 const iconMembers: Record<Erin.Editor.BottomTabMenuType, NullableComponentList> = {
   default: [
@@ -52,7 +47,7 @@ const iconMembers: Record<Erin.Editor.BottomTabMenuType, NullableComponentList> 
   create: [
     <CreateShape key={0} />,
     <CreateText key={1} />,
-    null,
+    <CreateSticker key={2} />,
     null,
     null,
     null,

@@ -5,3 +5,5 @@ export const ROUTES = {
   FRIENDS: "friends",
   MY_PAGE: "myPage",
 };
+
+export const voidFunction = (): void => {};

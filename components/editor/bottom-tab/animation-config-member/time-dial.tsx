@@ -2,24 +2,40 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { View, Text } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { ICON_SIZE } from "../../base/contants";
+import { ICON_COLOR } from "../../base/constants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
 
-const TimeDial: React.FC = () => {
+type TimeDialReduxProps = ConnectedProps<typeof connector>
+
+interface TimeDialProps extends TimeDialReduxProps {}
+
+const TimeDial: React.FC<TimeDialProps> = ({
+  iconSize
+}) => {
 
   const time = 0; // Temporal value
 
   return (
     <View style={styles.root}>
-      <Entypo name="chevron-left" size={ICON_SIZE} color='white' />
+      <Entypo name="chevron-left" size={iconSize} color={ICON_COLOR} />
       <View style={styles.indicator}>
         <Text>{time}s</Text>
       </View>
-      <Entypo name="chevron-right" size={ICON_SIZE} color='white' />
+      <Entypo name="chevron-right" size={iconSize} color={ICON_COLOR} />
     </View>
   );
 };
 
-export default TimeDial;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize
+  };
+};
+
+const connector = connect(mapStateToProps, {});
+
+export default connector(TimeDial);
 
 const styles = StyleSheet.create({
   root: {

@@ -8,6 +8,8 @@ import { RouteProp } from "@react-navigation/core";
 import { StackParamList } from "./mobile-layout";
 import { useNavigationState } from "@react-navigation/native";
 import { useEffect } from "react";
+import { useState } from "react";
+import { Platform, BackHandler } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,6 +33,7 @@ const Main: React.FC<MainProps> = ({
 }) => {
 
   const state = useNavigationState(state => state.routes[0].state);
+  const [ listenerAdded, setListenerAdded ] = useState(false);
   useEffect(() => {
     if (state?.routeNames && typeof state.index === "number") {
       const routeName = state?.routeNames[state.index];
@@ -38,6 +41,20 @@ const Main: React.FC<MainProps> = ({
       navigation.setOptions({ 
         title: capitalizedName
       });
+    }
+    if (!listenerAdded && Platform.OS === "android") {
+      const backButtonHandler = () => {
+        if (state?.routeNames && typeof state.index === "number") {
+          const routeName = state?.routeNames[state.index];
+          if (["main","friends","postbox","myPage"].includes(routeName)) {
+            BackHandler.exitApp();
+            return true;
+          }
+        }
+        return false;
+      };
+      BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+      setListenerAdded(true);
     }
   }, [state]);
 
