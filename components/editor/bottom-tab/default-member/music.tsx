@@ -1,12 +1,20 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
-import { ICON_SIZE } from "../../base/contants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const Music: React.FC = () => {
+type MusicReduxProps = ConnectedProps<typeof connector>
+
+interface MusicProps extends MusicReduxProps {}
+
+const Music: React.FC<MusicProps> = ({
+  iconSize
+}) => {
 
   const renderIcon = () => (
-    <Feather name="music" size={ICON_SIZE} color="white" />
+    <Feather name="music" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -19,4 +27,12 @@ const Music: React.FC = () => {
   />;
 };
 
-export default Music;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(Music);

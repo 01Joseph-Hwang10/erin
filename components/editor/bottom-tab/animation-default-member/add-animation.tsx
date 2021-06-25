@@ -1,12 +1,20 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
-import { ICON_SIZE } from "../../base/contants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const AddAnimation: React.FC = () => {
+type AddAnimationReduxProps = ConnectedProps<typeof connector>
+
+interface AddAnimationProps extends AddAnimationReduxProps {}
+
+const AddAnimation: React.FC<AddAnimationProps> = ({
+  iconSize
+}) => {
 
   const renderIcon = () => (
-    <Ionicons name="add-circle-outline" size={ICON_SIZE} color="white" />
+    <Ionicons name="add-circle-outline" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -19,4 +27,12 @@ const AddAnimation: React.FC = () => {
   />;
 };
 
-export default AddAnimation;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(AddAnimation);

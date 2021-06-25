@@ -1,12 +1,20 @@
 import React from "react";
 import PressButton from "../../base/press-button";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ICON_SIZE } from "../../base/contants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const ToggleToAnimation: React.FC = () => {
+type ToggleToAnimationReduxProps = ConnectedProps<typeof connector>
+
+interface ToggleToAnimationProps extends ToggleToAnimationReduxProps {}
+
+const ToggleToAnimation: React.FC<ToggleToAnimationProps> = ({
+  iconSize
+}) => {
 
   const renderIcon = () => (
-    <MaterialIcons name="animation" size={ICON_SIZE} color="white" />
+    <MaterialIcons name="animation" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -19,4 +27,12 @@ const ToggleToAnimation: React.FC = () => {
   />;
 };
 
-export default ToggleToAnimation;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(ToggleToAnimation);

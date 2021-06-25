@@ -1,8 +1,17 @@
 import React from "react";
 import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const AnimationTrigger: React.FC = () => {
+type AnimationTriggerReduxProps = ConnectedProps<typeof connector>
+
+interface AnimationTriggerProps extends AnimationTriggerReduxProps {}
+
+const AnimationTrigger: React.FC<AnimationTriggerProps> = ({
+  iconSize
+}) => {
 
   const icons: JSX.Element[] = []; // You need to add animation triggers
 
@@ -19,4 +28,12 @@ const AnimationTrigger: React.FC = () => {
   />;
 };
 
-export default AnimationTrigger;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(AnimationTrigger);

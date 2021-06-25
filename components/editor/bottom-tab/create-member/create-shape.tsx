@@ -1,12 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { ICON_SIZE } from "../../base/contants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 import PressButton from "../../base/press-button";
 
-const CreateShape: React.FC = () => {
+type CreateShapeReduxProps = ConnectedProps<typeof connector>
+
+interface CreateShapeProps extends CreateShapeReduxProps {}
+
+const CreateShape: React.FC<CreateShapeProps> = ({
+  iconSize
+}) => {
 
   const renderIcon = () => (
-    <Ionicons name="shapes" size={ICON_SIZE} color="white" />
+    <Ionicons name="shapes" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -19,4 +27,12 @@ const CreateShape: React.FC = () => {
   />;
 };
 
-export default CreateShape;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(CreateShape);

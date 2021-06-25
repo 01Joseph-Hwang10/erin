@@ -1,7 +1,16 @@
 import React from "react";
 import CheckButton from "../../../common/check-button";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const CheckShape: React.FC = () => {
+type CheckShapeReduxProps = ConnectedProps<typeof connector>
+
+interface CheckShapeProps extends CheckShapeReduxProps {}
+
+const CheckShape: React.FC<CheckShapeProps> = ({
+  iconSize
+}) => {
 
   const onPress = () => {
     // sth
@@ -12,4 +21,12 @@ const CheckShape: React.FC = () => {
   />;
 };
 
-export default CheckShape;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(CheckShape);

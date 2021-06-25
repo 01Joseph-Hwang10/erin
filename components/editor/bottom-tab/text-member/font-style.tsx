@@ -1,8 +1,17 @@
 import React from "react";
 import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const FontStyle: React.FC = () => {
+type FontStyleReduxProps = ConnectedProps<typeof connector>
+
+interface FontStyleProps extends FontStyleReduxProps {}
+
+const FontStyle: React.FC<FontStyleProps> = ({
+  iconSize
+}) => {
 
   const icons: JSX.Element[] = []; // You need to add styles
 
@@ -19,4 +28,12 @@ const FontStyle: React.FC = () => {
   />;
 };
 
-export default FontStyle;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(FontStyle);

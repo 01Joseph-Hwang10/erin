@@ -1,12 +1,20 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
-import { ICON_SIZE } from "../../base/contants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const LinkToPage: React.FC = () => {
+type LinkToPageReduxProps = ConnectedProps<typeof connector>
+
+interface LinkToPageProps extends LinkToPageReduxProps {}
+
+const LinkToPage: React.FC<LinkToPageProps> = ({
+  iconSize
+}) => {
 
   const renderIcon = () => (
-    <Feather name="link" size={ICON_SIZE} color="white" />
+    <Feather name="link" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -19,4 +27,12 @@ const LinkToPage: React.FC = () => {
   />;
 };
 
-export default LinkToPage;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(LinkToPage);

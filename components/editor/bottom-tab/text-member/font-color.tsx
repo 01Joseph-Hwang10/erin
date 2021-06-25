@@ -1,8 +1,17 @@
 import React from "react";
 import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const FontColor: React.FC = () => {
+type FontColorReduxProps = ConnectedProps<typeof connector>
+
+interface FontColorProps extends FontColorReduxProps {}
+
+const FontColor: React.FC<FontColorProps> = ({
+  iconSize
+}) => {
 
   const icons: JSX.Element[] = []; // You need to add colors
 
@@ -19,4 +28,12 @@ const FontColor: React.FC = () => {
   />;
 };
 
-export default FontColor;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(FontColor);

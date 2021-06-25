@@ -1,12 +1,20 @@
 import React from "react";
 import { Foundation } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
-import { ICON_SIZE } from "../../base/contants";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const DeletePage: React.FC = () => {
+type DeletePageReduxProps = ConnectedProps<typeof connector>
+
+interface DeletePageProps extends DeletePageReduxProps {}
+
+const DeletePage: React.FC<DeletePageProps> = ({
+  iconSize
+}) => {
 
   const renderIcon = () => (
-    <Foundation name="page-delete" size={ICON_SIZE} color="white" />
+    <Foundation name="page-delete" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -19,4 +27,12 @@ const DeletePage: React.FC = () => {
   />;
 };
 
-export default DeletePage;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(DeletePage);

@@ -1,8 +1,17 @@
 import React from "react";
 import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
+import { RootState } from "../../../../redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
+import { ICON_COLOR } from "../../base/constants"
 
-const AnimationType: React.FC = () => {
+type AnimationTypeReduxProps = ConnectedProps<typeof connector>
+
+interface AnimationTypeProps extends AnimationTypeReduxProps {}
+
+const AnimationType: React.FC<AnimationTypeProps> = ({
+  iconSize
+}) => {
 
   const icons: JSX.Element[] = []; // You need to add animation type
 
@@ -19,4 +28,12 @@ const AnimationType: React.FC = () => {
   />;
 };
 
-export default AnimationType;
+const mapStateToProps = (state: RootState) => {
+  return {
+    iconSize: state.editor.settings.iconSize,
+  }
+}
+
+const connector = connect(mapStateToProps, { });
+
+export default connector(AnimationType);
