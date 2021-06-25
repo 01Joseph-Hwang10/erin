@@ -3,7 +3,7 @@ import { Foundation } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type AddPageReduxProps = ConnectedProps<typeof connector>
 
@@ -30,8 +30,8 @@ const AddPage: React.FC<AddPageProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.settings.iconSize,
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

@@ -3,14 +3,15 @@ import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type SaveReduxProps = ConnectedProps<typeof connector>
 
 interface SaveProps extends SaveReduxProps {}
 
 const Save: React.FC<SaveProps> = ({
-  iconSize
+  iconSize,
+  popAtEditor
 }) => {
 
   const renderIcon = () => (
@@ -18,7 +19,7 @@ const Save: React.FC<SaveProps> = ({
   );
 
   const onPress = () => {
-    // Needa do sth here
+    popAtEditor();
   };
   
   return <PressButton 
@@ -30,8 +31,9 @@ const Save: React.FC<SaveProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.settings.iconSize,
-  }
-}
+    popAtEditor: state.navigation.popAtEditor
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

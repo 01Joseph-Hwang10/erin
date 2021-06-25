@@ -1,38 +1,30 @@
-import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
+declare type RNComponent<P = any, S = any, SS = any> = import("react").Component<P, S, SS>;
+declare type RNConstructor<T> = import("react-native").Constructor<T>;
+declare type RNViewProps = import("react-native").ViewProps;
+declare type RNViewStyle = import("react-native").ViewStyle;
 
-// declare module "react-native-shadow" {
-
-// }
-
-declare module "react-native-shadow"
-
-declare type BaseShadowProps = {
+declare module "react-native-shadow" {
+  export interface BoxShadowProps {
     width: number,
     height: number,
     color: string,
     border: number,
-    opacity: number,
-    style?: StyleProp<ViewStyle>
-}
-
-export interface BoxShadowProps extends BaseShadowProps {
     radius: number,
+    opacity: number,
     x: number,
     y: number,
+    style?: RNViewStyle,
+  }
+
+  export interface BorderShadowProps {
+    width: number,
+    color: string,
+    border: number,
+    opacity: number,
+    style?: RNViewStyle,
+    side: "top" | "bottom" | "left" | "right",
+    inset: boolean,
+  }
+  export const BoxShadow : RNConstructor<RNComponent<RNViewProps & {setting?: BoxShadowProps}>>;
+  export const BorderShadow : RNConstructor<RNComponent<RNViewProps & {setting?: BorderShadowProps}>>;
 }
-
-declare type BorderShadowSideType = "top" | "bottom"
-
-export interface BorderShadowProps extends BaseShadowProps {
-    side: BorderShadowSideType,
-    inset: boolean
-}
-
-declare type ShadowComponentProps<T = any> = {
-    setting: T
-}
-
-export class BoxShadow extends React.Component<ShadowComponentProps<BoxShadowProps>> {}
-
-export class BorderShadow extends React.Component<ShadowComponentProps<BorderShadowProps>> {}

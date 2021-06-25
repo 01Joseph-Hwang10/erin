@@ -1,6 +1,5 @@
 import React from "react";
-import { BoxShadow, BoxShadowProps } from "react-native-shadow";
-import { Text } from "react-native";
+import { Shadow as BoxShadow } from "react-native-shadow-2";
 
 interface ShadowProps {
     children: React.ReactNode,
@@ -14,20 +13,10 @@ const Shadow: React.FC<ShadowProps> = ({
   size
 }) => {
 
-  const shadowOptions: BoxShadowProps = {
-    width: size,
-    height: size,
-    color: "#000",
-    border: 3,
-    radius: 2,
-    opacity: shadowLevel / 25,
-    x: 0,
-    y: shadowLevel / 4,
-  };
 
   return (
-    <BoxShadow
-      setting={shadowOptions}
+    <BoxShadow 
+      distance={shadowLevel}
     >
       {children}
     </BoxShadow>

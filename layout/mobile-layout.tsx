@@ -1,10 +1,11 @@
 import React from "react";
-// import { StyleSheet } from "react-native";
+import { BackHandler, Alert } from "react-native";
 import Editor from "../pages/editor";
 import Viewer from "../pages/viewer";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Main from "./main";
+import { voidFunction } from "../src/constants";
 
 
 export type StackParamList = {
@@ -16,6 +17,7 @@ export type StackParamList = {
 const Stack = createStackNavigator<StackParamList>();
 
 const MobileLayout: React.FC = () => {
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='main'>

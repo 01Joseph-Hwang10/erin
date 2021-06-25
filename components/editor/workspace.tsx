@@ -14,8 +14,7 @@ export default Workspace;
 
 const styles = StyleSheet.create({
   root: {
-    position: "absolute",
     width: "100%",
-    height: "100%"
+    height: "100%",
   }
 });

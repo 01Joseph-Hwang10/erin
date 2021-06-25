@@ -8,12 +8,12 @@ type PlaceholderReduxProps = ConnectedProps<typeof connector>
 interface PlaceholderProps extends PlaceholderReduxProps {}
 
 const Placeholder: React.FC<PlaceholderProps> = ({
-  width: screenWidth
+  iconSize
 }) => {
 
   const placeholderStyle: StyleProp<ViewStyle> = {
-    width: screenWidth / 7,
-    height: 1
+    width: iconSize,
+    height: iconSize
   };
 
   return (
@@ -23,7 +23,7 @@ const Placeholder: React.FC<PlaceholderProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    width: state.screen.screenSpec.width
+    iconSize: state.editor.settings.iconSize
   };
 };
 

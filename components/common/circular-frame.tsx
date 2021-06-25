@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ViewStyle, StyleProp, Text } from "react-native";
-import Shadow from "./shadow";
+import { Shadow } from "react-native-shadow-2";
 
 interface CircularFrameProps {
     size: number,
@@ -28,10 +28,11 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
 
 
   // Needa work on shadows
+  const borderRadius = size / 2;
   const stylingOptions: StyleProp<ViewStyle> = {
     width: size,
     height: size,
-    borderRadius: size / 2,
+    borderRadius,
     backgroundColor,
     ...( border ? {
       borderColor,
@@ -53,8 +54,11 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
 
   if (shadow && shadowLevel) {
     return <Shadow 
-      shadowLevel={shadowLevel} 
-      size={size}
+      distance={shadowLevel}
+      radius={borderRadius}
+      // startColor={"#c5c5c5"}
+      // finalColor={"#000"}
+      offset={[0,shadowLevel * 0.5]}
     >
       <RenderItem />
     </Shadow>;

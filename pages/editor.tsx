@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { BackHandler, StyleSheet } from "react-native";
 import { View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BottomTab from "../components/editor/bottom-tab";
@@ -9,6 +9,11 @@ import BottomFloat from "../components/editor/bottom-float";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackParamList } from "../layout/mobile-layout";
 import { voidFunction } from "../src/constants";
+import { connect, ConnectedProps } from "react-redux";
+import { Dispatch } from "redux";
+import { setCurrentPage, SetCurrentPageInput, setPopAtEditor, SetPopAtEditorInput } from "../redux/slices/navigation";
+import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
+import COLORS from "../src/colors";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -16,81 +21,126 @@ type EditorNavigationProp = StackNavigationProp<
   "editor"
 >
 
-interface EditorProps {
+type EditorReduxProps = ConnectedProps<typeof connector>
+
+interface EditorProps extends EditorReduxProps {
   navigation: EditorNavigationProp
 }
 
 const Editor: React.FC<EditorProps> = ({
-  navigation
+  navigation,
+  setCurrentPage: SetCurrentPage,
+  setPopAtEditor: SetPopAtEditor,
+  setLoading: SetLoading
 }) => {
+
+  const [ firstAccess, setFirstAccess ] = useState(true);
   const [text, setText] = useState("");
-  const hasUnsavedChanges = Boolean(text);
+  // const hasUnsavedChanges = Boolean(text);
+  const hasUnsavedChanges = false;
 
-  React.useEffect(
-    () =>{
-      // @ts-ignore
-      const backHandler = (e) => { // This should be definitely typed soon
-        const actionDispatcher = () => navigation.dispatch(e.data.action);
-        if (!hasUnsavedChanges) {
-        // If we don't have unsaved changes, then we don't need to do anything
-          return;
-        }
+  const handleConfirm = () => {
+    navigation.pop();
+  };
 
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-
-        // Prompt the user before leaving the screen
+  useEffect(() => {
+    if (firstAccess) {
+      SetCurrentPage("editor");
+      SetPopAtEditor(handleConfirm);
+      setFirstAccess(false);
+      SetLoading(false);
+    }
+    const backHandler = () => {
+      if (hasUnsavedChanges) {
         Alert.alert(
-          "Discard changes?",
-          "You have unsaved changes. Are you sure to discard them and leave the screen?",
+          "Erin",
+          "변경사항을 저장하지 않았어요! 정말 나가도 괜찮으시겠어요?",
           [
             { 
-              text: "Don't leave", 
+              text: "아니요", 
               style: "cancel", 
               onPress: voidFunction
             },
             {
-              text: "Discard",
+              text: "예",
               style: "destructive",
               // If the user confirmed, then we dispatch the action we blocked earlier
               // This will continue the action that had triggered the removal of the screen
-              onPress: actionDispatcher,
+              onPress: handleConfirm,
             },
           ]
         );
-      };
-      navigation.addListener("beforeRemove", backHandler);
-    },
-    [navigation, hasUnsavedChanges]
+      } else {
+        handleConfirm();
+      }
+      return true;
+    };
+    BackHandler.addEventListener("hardwareBackPress", backHandler);
+    return () => BackHandler.removeEventListener("hardwareBackPress", backHandler);
+  }, [hasUnsavedChanges]
   );
 
   return (
-    <SafeAreaView style={styles.root}>
-      <View style={styles.workspaceWrapper}>
-        <Workspace />
-        <TopFloat />
-        <BottomFloat />
-      </View>
-      <View style={styles.toolbarWrapper}>
-        <BottomTab />
-      </View>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.safeFirst} />
+      <SafeAreaView style={styles.safeSecond}>
+        <View style={styles.root}>
+          <View style={styles.workspaceWrapper}>
+            <Workspace />
+            <View style={styles.floatWrapper}>
+              <TopFloat />
+              <BottomFloat />
+            </View>
+          </View>
+          <View style={styles.toolbarWrapper}>
+            <BottomTab />
+          </View>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setCurrentPage: (payload: SetCurrentPageInput) => dispatch(setCurrentPage(payload)),
+    setPopAtEditor: (payload: SetPopAtEditorInput) => dispatch(setPopAtEditor(payload)),
+    setLoading: (payload: SetLoadingInput) => dispatch(setLoading(payload))
+  };
+};
+
+const connector = connect(null, mapDispatchToProps);
+
 // export default React.memo(Editor);
-export default Editor;
+export default connector(Editor);
 
 const styles = StyleSheet.create({
   root: {
+    flex: 1,
+    height: "100%"
+  },
+  floatWrapper: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0
+  },
+  toolbarWrapper: {
     flex: 1
   },
   workspaceWrapper: {
     flex: 8,
-    justifyContent: "space-between",
-    alignItems: "center"
   },
-  toolbarWrapper: {
-    flex: 1
+  safeFirst: {
+    flex: 0,
+    backgroundColor: COLORS.LIGHT.secondary,
+  },
+  safeSecond: {
+    flex: 1,
+    backgroundColor: COLORS.LIGHT.secondary,
   }
 });

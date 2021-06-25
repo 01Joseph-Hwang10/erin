@@ -30,17 +30,16 @@ import CheckText from "./bottom-tab/text-member/check-text";
 import CheckAnimationConfig from "./bottom-tab/animation-config-member/check-animation-config";
 import XCreate from "./bottom-tab/create-member/x-create";
 import CreateSticker from "./bottom-tab/create-member/create-sticker";
+import NotSave from "./bottom-tab/default-member/not-save";
+import { IconMembers } from "../common/types";
 
-type NullableComponent = JSX.Element | null
-type NullableComponentList = NullableComponent[]
-
-const iconMembers: Record<Erin.Editor.BottomTabMenuType, NullableComponentList> = {
+const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   default: [
     <ToggleToAnimation key={0} />,
     <Background key={1} />,
     <Music key={2} />,
     null,
-    null,
+    <NotSave key={4} />,
     <Save key={5} />,
     <Send key={6} />
   ],

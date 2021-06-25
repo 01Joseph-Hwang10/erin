@@ -1,3 +1,5 @@
+import { Erin } from "erin";
+
 export const ROUTES = {
   EDITOR: "editor",
   VIEWER: "viewer",
@@ -7,3 +9,5 @@ export const ROUTES = {
 };
 
 export const voidFunction = (): void => {};
+
+export const APP_PAGES: Erin.Common.AppPageNames[] = ["editor", "friends", "main", "myPage", "postbox", "viewer"];

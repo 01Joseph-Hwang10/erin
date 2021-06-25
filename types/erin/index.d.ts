@@ -15,6 +15,8 @@ export namespace Erin {
         }
 
         export interface RectPosSpec extends PositionSpec, RectangleSpec { }
+
+        export type AppPageNames = "main" | "friends" | "postbox" | "myPage" | "editor" | "viewer" | "not-main"
     }
 
     export namespace Editor {
@@ -31,7 +33,7 @@ export namespace Erin {
 
         export type TopFloatMenuType = "default" | "pages"
 
-        export type BottomFloatMenuType = "none" | "animation"
+        export type BottomFloatMenuType = "none" | "animation" | "delete"
 
         type BackgroundType = "image" | "color" | "pattern"
 
