@@ -32,6 +32,7 @@ import XCreate from "./bottom-tab/create-member/x-create";
 import CreateSticker from "./bottom-tab/create-member/create-sticker";
 import NotSave from "./bottom-tab/default-member/not-save";
 import { IconMembers } from "../common/types";
+import IconWrapper from "./base/icon-wrapper";
 
 const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   default: [
@@ -106,12 +107,12 @@ const BottomTab: React.FC<BottomTabProps> = ({
       iconMembers?.[bottomTabCurrent]?.map((member, index) => {
         if (member) {
           const Icon = () => member;
-          return <View 
-            key={index} 
-            style={iconWrapperStyle}
+          return <IconWrapper
+            key={index}
+            wrapperStyle={iconWrapperStyle}
           >
             <Icon />
-          </View>;
+          </IconWrapper>;
         }
         return <View 
           key={index}

@@ -1,9 +1,11 @@
 import React from "react";
-import { TouchableOpacity, GestureResponderEvent, Text } from "react-native";
+import { GestureResponderEvent } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 
 interface PressButtonProps {
     icon: () => JSX.Element,
-    onPress?: (e: GestureResponderEvent) => void
+    onPress?: (((event: GestureResponderEvent) => void) & (() => void)) | undefined
 }
 
 const PressButton: React.FC<PressButtonProps> = ({

@@ -1,10 +1,10 @@
 import React from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { GestureResponderEvent } from "react-native";
 
 interface ToggleButtonProps {
     icons: JSX.Element[],
-    onPress?: (e: GestureResponderEvent) => void
+    onPress?: (((event: GestureResponderEvent) => void) & (() => void)) | undefined
 }
 
 interface ToggleButtonState {
