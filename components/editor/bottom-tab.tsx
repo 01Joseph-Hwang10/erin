@@ -33,6 +33,7 @@ import CreateSticker from "./bottom-tab/create-member/create-sticker";
 import NotSave from "./bottom-tab/default-member/not-save";
 import { IconMembers } from "../common/types";
 import IconWrapper from "./base/icon-wrapper";
+import { useState } from "react";
 
 const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   default: [
@@ -94,9 +95,12 @@ type BottomTabReduxProps = ConnectedProps<typeof connector>
 interface BottomTabProps extends BottomTabReduxProps {}
 
 const BottomTab: React.FC<BottomTabProps> = ({
-  bottomTabCurrent,
+  bottomTabCurrent: bottomTabCurrentRaw,
   iconGap
 }) => {
+
+  const [ bottomTabCurrent, setBottomTabCurrent ] = useState<Erin.Editor.BottomTabMenuType>(bottomTabCurrentRaw);
+  const [ visible, setVisible ] = useState<boolean>(false);
 
   const iconWrapperStyle: StyleProp<ViewStyle> = {
     marginHorizontal: iconGap

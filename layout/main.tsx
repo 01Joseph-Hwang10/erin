@@ -14,6 +14,7 @@ import { RootState } from "../redux/root-reducer";
 import { Dispatch } from "redux";
 import { setCurrentPage, SetCurrentPageInput } from "../redux/slices/navigation";
 import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
+import { capitalizer } from "./main.function";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,21 +41,26 @@ const Main: React.FC<MainProps> = ({
   setCurrentPage: SetCurrentPage,
   setLoading: SetLoading
 }) => {
-
+  
   const state = useNavigationState(state => state.routes[0].state);
   useEffect(() => {
+    SetCurrentPage("postbox");
     SetLoading(false);
+    let capitalizedName: string | undefined;
     if (
       typeof state?.index === "number" && 
       typeof state?.routeNames?.[state.index] === "string"
     ) {
       const routeName = state?.routeNames[state.index];
       SetCurrentPage(routeName);
-      const capitalizedName = routeName.charAt(0).toUpperCase() + routeName.slice(1);
-      navigation.setOptions({ 
-        title: capitalizedName
-      });
+      capitalizedName = capitalizer(routeName);
     }
+    if (!capitalizedName) {
+      capitalizedName = capitalizer(currentPage);
+    }
+    navigation.setOptions({ 
+      title: capitalizedName
+    });
     const backButtonHandler = () => {
       BackHandler.exitApp();
       if (["main", "friends", "postbox", "myPage"].includes(currentPage)) {
@@ -64,11 +70,10 @@ const Main: React.FC<MainProps> = ({
       }
     };
     BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
-    const cleaner = () => {
+    return () => {
       SetCurrentPage("not-main");
       BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
     };
-    return cleaner;
   }, [state]);
 
   return (

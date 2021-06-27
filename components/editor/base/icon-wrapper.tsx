@@ -1,14 +1,5 @@
-import React, { 
-  useState, 
-  useEffect 
-} from "react";
-import { StyleProp, ViewStyle } from "react-native";
-import Animated, { 
-  Easing, 
-  useAnimatedStyle, 
-  withTiming, 
-  useSharedValue 
-} from "react-native-reanimated";
+import React from "react";
+import { StyleProp, ViewStyle, View } from "react-native";
 
 interface IconWrapperProps {
     wrapperStyle: StyleProp<ViewStyle>,
@@ -20,35 +11,12 @@ const IconWrapper: React.FC<IconWrapperProps> = ({
   children
 }) => {
 
-  const [opacity, setOpacity] = useState<number>(0);
-  const animatedOpacity = useSharedValue(opacity);
-
-  const animationStyle = useAnimatedStyle(
-    () => {
-      return {
-        opacity: withTiming(animatedOpacity.value, {
-          duration: 100,
-          easing: Easing.linear
-        })
-      };
-    },
-    [opacity]
-  );
-
-  const hookEffect = () => {
-    setOpacity(1);
-    const cleaner = () => setOpacity(0);
-    return cleaner;
-  };
-  
-  useEffect(hookEffect, []);
-
   return (
-    <Animated.View
-      style={[wrapperStyle, animationStyle]}
+    <View
+      style={wrapperStyle}
     >
       {children}
-    </Animated.View>
+    </View>
   );
 };
 
