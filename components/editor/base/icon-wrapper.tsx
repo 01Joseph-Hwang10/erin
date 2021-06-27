@@ -20,19 +20,20 @@ const IconWrapper: React.FC<IconWrapperProps> = ({
   children
 }) => {
 
-  const [opacity, setOpacity] = useState<number>(1);
+  const [opacity, setOpacity] = useState<number>(0);
   const animatedOpacity = useSharedValue(opacity);
-    
-  const hookUpdater = () => {
-    return {
-      opacity: withTiming(animatedOpacity.value, {
-        duration: 100,
-        easing: Easing.linear
-      })
-    };
-  };
 
-  const animationStyle = useAnimatedStyle(hookUpdater, [opacity]);
+  const animationStyle = useAnimatedStyle(
+    () => {
+      return {
+        opacity: withTiming(animatedOpacity.value, {
+          duration: 100,
+          easing: Easing.linear
+        })
+      };
+    },
+    [opacity]
+  );
 
   const hookEffect = () => {
     setOpacity(1);
