@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type AddAnimationReduxProps = ConnectedProps<typeof connector>
 
@@ -29,9 +29,9 @@ const AddAnimation: React.FC<AddAnimationProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
-  }
-}
+    iconSize: state.editor.generic.settings.iconSize,
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

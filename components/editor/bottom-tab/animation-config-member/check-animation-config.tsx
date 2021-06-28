@@ -2,7 +2,7 @@ import React from "react";
 import CheckButton from "../../../common/check-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type CheckAnimationConfigReduxProps = ConnectedProps<typeof connector>
 
@@ -23,9 +23,9 @@ const CheckAnimationConfig: React.FC<CheckAnimationConfigProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
-  }
-}
+    iconSize: state.editor.generic.settings.iconSize,
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

@@ -39,8 +39,8 @@ const TogglePages: React.FC<TogglePagesProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    currentPage: state.editor.currentPage,
-    iconSize: state.editor.settings.iconSize
+    currentPage: state.editor.pages.currentPage,
+    iconSize: state.editor.generic.settings.iconSize
   };
 };
 

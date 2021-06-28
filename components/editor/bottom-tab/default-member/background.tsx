@@ -29,7 +29,7 @@ const Background: React.FC<BackgroundProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
+    iconSize: state.editor.generic.settings.iconSize,
   }
 }
 

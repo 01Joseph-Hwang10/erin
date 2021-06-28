@@ -1,18 +1,15 @@
-import { Erin } from "erin";
 import React from "react";
-import { Platform, ViewStyle } from "react-native";
+import { ViewStyle } from "react-native";
 import { StyleProp, StyleSheet } from "react-native";
 import { View } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/root-reducer";
-import { IconMembers } from "../common/types";
 import AddPage from "./top-float/default-member/add-page";
 import CopyPage from "./top-float/default-member/copy-page";
 import DeletePage from "./top-float/default-member/delete-page";
 import LinkToPage from "./top-float/default-member/link-to-page";
 import TogglePages from "./top-float/default-member/toggle-pages";
 import Placeholder from "./base/placeholder";
-import { Shadow } from "react-native-shadow-2";
 import { returnShadowProps } from "./base/constants";
 
 const defaultMembers = [
@@ -45,10 +42,11 @@ const TopFloat: React.FC<TopFloatProps> = ({
     height: iconSize,
     justifyContent: "flex-end",
     alignItems: "flex-end",
-    ...Object(returnShadowProps(45)),
     borderColor: "transparent",
     borderWidth: 1,
   };
+
+  const shadowStyle: StyleProp<ViewStyle> = returnShadowProps(45);
 
   const placeholderStyle: StyleProp<ViewStyle> = {
     width: iconSize * 0.8,
@@ -63,7 +61,7 @@ const TopFloat: React.FC<TopFloatProps> = ({
             const Icon = () => member;
             return <View 
               key={index} 
-              style={[iconWrapperStyle, marginSetter]}
+              style={[iconWrapperStyle, marginSetter, shadowStyle]}
             >
               <Icon />
             </View>;
@@ -82,8 +80,8 @@ const TopFloat: React.FC<TopFloatProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    topFloatCurrent: state.editor.topFloatCurrent,
-    settings: state.editor.settings
+    topFloatCurrent: state.editor.generic.topFloatCurrent,
+    settings: state.editor.generic.settings
   };
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/root-reducer";
-import { StyleSheet, View, Text, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import Placeholder from "./base/placeholder";
 import CreateShape from "./bottom-tab/create-member/create-shape";
 import CreateText from "./bottom-tab/create-member/create-text";
@@ -34,6 +34,9 @@ import NotSave from "./bottom-tab/default-member/not-save";
 import { IconMembers } from "../common/types";
 import IconWrapper from "./base/icon-wrapper";
 import { useState } from "react";
+import { useEffect } from "react";
+import Animated, { Easing, useDerivedValue, withTiming } from "react-native-reanimated";
+import { useAnimatedProps } from "react-native-reanimated";
 
 const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   default: [
@@ -94,6 +97,8 @@ type BottomTabReduxProps = ConnectedProps<typeof connector>
 
 interface BottomTabProps extends BottomTabReduxProps {}
 
+const TRANSITION_DURATION = 50;
+
 const BottomTab: React.FC<BottomTabProps> = ({
   bottomTabCurrent: bottomTabCurrentRaw,
   iconGap
@@ -102,30 +107,73 @@ const BottomTab: React.FC<BottomTabProps> = ({
   const [ bottomTabCurrent, setBottomTabCurrent ] = useState<Erin.Editor.BottomTabMenuType>(bottomTabCurrentRaw);
   const [ visible, setVisible ] = useState<boolean>(false);
 
+  const animationConfig: Animated.WithTimingConfig = {
+    duration: TRANSITION_DURATION,
+    easing: Easing.ease
+  };
+
+  const opacity = useDerivedValue(
+    () => (
+      visible ? 
+        withTiming(1, animationConfig) : 
+        withTiming(0, animationConfig)
+    ),
+    [visible]
+  );
+
+  const animatedStyle = useAnimatedProps(
+    () => {
+      return {
+        opacity: opacity.value
+      };
+    }
+  );
+
   const iconWrapperStyle: StyleProp<ViewStyle> = {
     marginHorizontal: iconGap
   };
 
+  const changeTabWithTransition = (): void => {
+    setVisible(false);
+    setTimeout(() => {
+      setBottomTabCurrent(bottomTabCurrentRaw);
+      setTimeout(() => {
+        setVisible(true);
+      }, 10);
+    }, TRANSITION_DURATION);
+  };
+
+  useEffect(
+    () => {
+      changeTabWithTransition();
+    },
+    [bottomTabCurrentRaw]
+  );
+
   return <View style={styles.root}>
-    {
-      iconMembers?.[bottomTabCurrent]?.map((member, index) => {
-        if (member) {
-          const Icon = () => member;
-          return <IconWrapper
+    <Animated.View
+      style={[styles.wrapper, animatedStyle]}
+    >
+      {
+        iconMembers?.[bottomTabCurrent]?.map((member, index) => {
+          if (member) {
+            const Icon = () => member;
+            return <IconWrapper
+              key={index}
+              wrapperStyle={iconWrapperStyle}
+            >
+              <Icon />
+            </IconWrapper>;
+          }
+          return <View 
             key={index}
-            wrapperStyle={iconWrapperStyle}
+            style={iconWrapperStyle}
           >
-            <Icon />
-          </IconWrapper>;
-        }
-        return <View 
-          key={index}
-          style={iconWrapperStyle}
-        >
-          <Placeholder />
-        </View>;
-      })
-    }
+            <Placeholder />
+          </View>;
+        })
+      }
+    </Animated.View>
   </View>;
     
 };
@@ -133,8 +181,8 @@ const BottomTab: React.FC<BottomTabProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    bottomTabCurrent: state.editor.bottomTabCurrent,
-    iconGap: state.editor.settings.iconGap
+    bottomTabCurrent: state.editor.generic.bottomTabCurrent,
+    iconGap: state.editor.generic.settings.iconGap
   };
 };
 
@@ -147,6 +195,11 @@ export default connector(BottomTab);
 const styles = StyleSheet.create({
   root: {
     backgroundColor: COLORS.DARK.primary,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  wrapper: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",

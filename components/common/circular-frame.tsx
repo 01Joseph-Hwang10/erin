@@ -1,6 +1,6 @@
 import React from "react";
-import { View, ViewStyle, StyleProp, Text } from "react-native";
-import { Shadow } from "react-native-shadow-2";
+import { View, ViewStyle, StyleProp } from "react-native";
+import { returnShadowProps } from "../editor/base/constants";
 
 interface CircularFrameProps {
     size: number,
@@ -9,7 +9,7 @@ interface CircularFrameProps {
     borderColor?: string,
     borderWidth?: number,
     backgroundColor?: string,
-    style?: ViewStyle,
+    style?: StyleProp<ViewStyle>,
     shadow?: boolean,
     shadowLevel?: number,
 }
@@ -34,36 +34,25 @@ const CircularFrame: React.FC<CircularFrameProps> = ({
     height: size,
     borderRadius,
     backgroundColor,
-    ...( border ? {
-      borderColor,
-      borderWidth,
-    } : {
-      borderWidth: 0
-    }),
-    ...customStyle,
     justifyContent: "center",
     alignItems: "center",
   };
 
+  const shadowOptions: StyleProp<ViewStyle> = shadow && shadowLevel ? returnShadowProps(shadowLevel) : {};
+
+  const borderOptions: StyleProp<ViewStyle> = 
+    border ? 
+      { borderColor, borderWidth } : 
+      ( shadow ? 
+        { borderColor: "transparent", borderWidth: 1 } : 
+        {} 
+      );
   
-  const RenderItem: React.FC = () => (
-    <View style={stylingOptions}>
+  return (
+    <View style={[stylingOptions, shadowOptions, borderOptions, customStyle]}>
       {children}
     </View>
   );
-
-  if (shadow && shadowLevel) {
-    return <Shadow 
-      distance={shadowLevel}
-      radius={borderRadius}
-      // startColor={"#c5c5c5"}
-      // finalColor={"#000"}
-      offset={[0,shadowLevel * 0.5]}
-    >
-      <RenderItem />
-    </Shadow>;
-  }
-  return <RenderItem />;
 
 };
 

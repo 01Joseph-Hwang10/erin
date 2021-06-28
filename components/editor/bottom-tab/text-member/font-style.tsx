@@ -30,7 +30,7 @@ const FontStyle: React.FC<FontStyleProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
+    iconSize: state.editor.generic.settings.iconSize,
   }
 }
 

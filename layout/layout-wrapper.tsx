@@ -6,7 +6,7 @@ import { Dispatch } from "redux";
 import { setScreenSpec, SetScreenSpecInput } from "../redux/slices/screen";
 import MobileLayout from "./mobile-layout";
 import { WIDTH_CONSTANT, MARGIN_CONSTANT } from "../components/editor/base/constants";
-import { configureIconLayout, ConfigureIconLayoutInput } from "../redux/slices/editor";
+import { configureIconLayout, ConfigureIconLayoutInput } from "../redux/slices/editor/editor-generic";
 
 type LayoutWrapperReduxProps = ConnectedProps<typeof connector>
 

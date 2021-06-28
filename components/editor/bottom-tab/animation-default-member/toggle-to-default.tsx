@@ -3,7 +3,7 @@ import PressButton from "../../base/press-button";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type ToggleToDefaultReduxProps = ConnectedProps<typeof connector>
 
@@ -29,9 +29,9 @@ const ToggleToDefault: React.FC<ToggleToDefaultProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
-  }
-}
+    iconSize: state.editor.generic.settings.iconSize,
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

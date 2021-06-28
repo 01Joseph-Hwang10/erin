@@ -2,7 +2,7 @@ import React from "react";
 import XButton from "../../../common/x-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type DeleteAnimationReduxProps = ConnectedProps<typeof connector>
 
@@ -23,9 +23,9 @@ const DeleteAnimation: React.FC<DeleteAnimationProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
-  }
-}
+    iconSize: state.editor.generic.settings.iconSize,
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

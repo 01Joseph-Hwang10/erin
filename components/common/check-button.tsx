@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from "react-redux";
 type CheckButtonReduxProps = ConnectedProps<typeof connector>
 
 interface CheckButtonProps extends CheckButtonReduxProps {
-    onPress: (e: GestureResponderEvent) => void
+    onPress: (((event: GestureResponderEvent) => void) & (() => void)) | undefined
 }
 
 const CheckButton: React.FC<CheckButtonProps> = ({
@@ -29,7 +29,7 @@ const CheckButton: React.FC<CheckButtonProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize
+    iconSize: state.editor.generic.settings.iconSize
   };
 };
 

@@ -29,7 +29,7 @@ const Music: React.FC<MusicProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
+    iconSize: state.editor.generic.settings.iconSize,
   }
 }
 

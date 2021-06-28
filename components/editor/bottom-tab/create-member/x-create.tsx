@@ -4,18 +4,21 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 import { Dispatch } from "redux";
-import { setBottomTabCurrent, SetBottomTabCurrentInput } from "../../../../redux/slices/editor";
+import { setBottomTabCurrent, SetBottomTabCurrentInput } from "../../../../redux/slices/editor/editor-generic";
+import { setCreationPoint, SetCreationPointInput } from "@slices/editor/editor-handle";
 
 type XCreateReduxProps = ConnectedProps<typeof connector>
 
 interface XCreateProps extends XCreateReduxProps {}
 
 const XCreate: React.FC<XCreateProps> = ({
-  setBottomTabCurrent: SetBottomTabCurrent,
   iconSize,
+  setBottomTabCurrent: SetBottomTabCurrent,
+  setCreationPoint: SetCreationPoint
 }) => {
 
   const onPress = () => {
+    SetCreationPoint({ x: null, y: null });
     SetBottomTabCurrent("default");
   };
 
@@ -26,13 +29,14 @@ const XCreate: React.FC<XCreateProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
+    iconSize: state.editor.generic.settings.iconSize,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload))
+    setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
+    setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload))
   };
 };
 

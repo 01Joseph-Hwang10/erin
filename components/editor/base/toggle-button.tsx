@@ -33,7 +33,7 @@ class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState>
 
       return (
         <TouchableOpacity
-          onPress={onPress}
+          onPressIn={onPress}
         >
           <Icon />
         </TouchableOpacity>

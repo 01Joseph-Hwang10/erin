@@ -23,7 +23,7 @@ const Placeholder: React.FC<PlaceholderProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize
+    iconSize: state.editor.generic.settings.iconSize
   };
 };
 

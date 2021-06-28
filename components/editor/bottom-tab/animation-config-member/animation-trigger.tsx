@@ -3,7 +3,7 @@ import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type AnimationTriggerReduxProps = ConnectedProps<typeof connector>
 
@@ -30,9 +30,9 @@ const AnimationTrigger: React.FC<AnimationTriggerProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.settings.iconSize,
-  }
-}
+    iconSize: state.editor.generic.settings.iconSize,
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 
