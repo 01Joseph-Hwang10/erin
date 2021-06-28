@@ -2,7 +2,8 @@ import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface EditorHandleState {
   focusedComponent: number, // if no focused component, -1,
-  creationPoint: SetCreationPointInput
+  creationPoint: SetCreationPointInput,
+  autoZIndex: number
 }
 
 const initialState: EditorHandleState = {
@@ -10,7 +11,8 @@ const initialState: EditorHandleState = {
   creationPoint: {
     x: null,
     y: null,
-  }
+  },
+  autoZIndex: 3
 };
 
 export type SetFocusedComponentInput = number;
@@ -34,17 +36,28 @@ const setCreationPointReducer: CaseReducer<
   state.creationPoint = creationPoint;
 };
 
+export type SetAutoZIndexInput = number;
+
+const setAutoZIndexReducer: CaseReducer<
+  EditorHandleState,
+  PayloadAction<SetAutoZIndexInput>
+> = (state, { payload: autoZIndex }) => {
+  state.autoZIndex = autoZIndex;
+};
+
 export const {
   reducer,
   actions: {
     setFocusedComponent,
-    setCreationPoint
+    setCreationPoint,
+    setAutoZIndex
   }
 } = createSlice({
   name: "editorSlice",
   initialState,
   reducers: {
     setFocusedComponent: setFocusedComponentReducer,
-    setCreationPoint: setCreationPointReducer
+    setCreationPoint: setCreationPointReducer,
+    setAutoZIndex: setAutoZIndexReducer
   }
 });

@@ -68,7 +68,7 @@ export namespace Erin {
             trigger: AnimationTrigger
         }
 
-        type ComponentTypes = string // Temporal declaration. Need to decide what to include in components
+        type ComponentTypes = "text" | "shape" | "sticker" | "image" // Temporal declaration. Need to decide what to include in components
 
         export interface ComponentInterface {
             id: number, // Id should be the index of the array

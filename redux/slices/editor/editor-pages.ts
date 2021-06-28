@@ -8,7 +8,14 @@ export interface EditorPagesState {
 }
 
 const initialState: EditorPagesState = {
-  pages: [],
+  pages: [
+    {
+      id: 0,
+      components: [],
+      animations: [],
+      autoZIndex: 2
+    }
+  ],
   currentPage: 1, // Index of pages but +1
   config: {
     background: "YOU_NEED_TO_MAKE_DEFAULT_LETTER_PAPER",

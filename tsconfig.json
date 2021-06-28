@@ -16,6 +16,9 @@
       "@slices/*": [
         "redux/slices/*"
       ],
+      "@redux/*": [
+        "redux/*"
+      ],
       "@layout/*": [
         "layout/*"
       ],
