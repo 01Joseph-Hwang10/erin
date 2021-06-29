@@ -1,10 +1,9 @@
 import React from "react";
-import XButton from "../../../common/x-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants";
-import { Alert } from "react-native";
-import { voidFunction } from "../../../../src/constants";
+import { BOTTOM_MARGIN, ICON_COLOR } from "../../base/constants";
+import { Feather } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
 
 type DeleteComponentReduxProps = ConnectedProps<typeof connector>
 
@@ -12,42 +11,29 @@ interface DeleteComponentProps extends DeleteComponentReduxProps {}
 
 const DeleteComponent: React.FC<DeleteComponentProps> = ({
   iconSize,
-  popAtEditor
 }) => {
 
-  const onPress = () => {
-    Alert.alert(
-      "Erin",
-      "변경사항을 저장하지 않았어요! 정말 나가도 괜찮으시겠어요?",
-      [
-        { 
-          text: "아니요", 
-          style: "cancel", 
-          onPress: voidFunction
-        },
-        {
-          text: "예",
-          style: "destructive",
-          // If the user confirmed, then we dispatch the action we blocked earlier
-          // This will continue the action that had triggered the removal of the screen
-          onPress: popAtEditor,
-        },
-      ]
-    );
-  };
-
-  return <XButton 
-    onPress={onPress}
-  />;
+  return <View style={styles.root}>
+    <Feather name="x-circle" size={iconSize} color={ICON_COLOR} />
+  </View>;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-    popAtEditor: state.navigation.popAtEditor
   };
 };
 
 const connector = connect(mapStateToProps, { });
 
 export default connector(DeleteComponent);
+
+
+const styles = StyleSheet.create({
+  root: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: BOTTOM_MARGIN
+  }
+});

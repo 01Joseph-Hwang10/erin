@@ -17,6 +17,7 @@ module.exports = function(api) {
             "@slices": "./redux/slices",
             "@layout": "./layout",
             "@src": "./src",
+            "@assets": "./assets",
           }
         }
       ],

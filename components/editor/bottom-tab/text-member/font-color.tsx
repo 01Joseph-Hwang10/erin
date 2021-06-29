@@ -4,13 +4,17 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 import PressButton from "../../base/press-button";
+import { Dispatch } from "redux";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
 
 type FontColorReduxProps = ConnectedProps<typeof connector>
 
 interface FontColorProps extends FontColorReduxProps {}
 
 const FontColor: React.FC<FontColorProps> = ({
-  iconSize
+  iconSize,
+  bottomFloatCurrent,
+  setBottomFloatCurrent: SetBottomFloatCurrent
 }) => {
 
   const renderIcon = () => (
@@ -18,7 +22,11 @@ const FontColor: React.FC<FontColorProps> = ({
   );
 
   const onPress = () => {
-    // Needa do sth here
+    if (bottomFloatCurrent === "fontColor") {
+      SetBottomFloatCurrent("none");
+    } else {
+      SetBottomFloatCurrent("fontColor");
+    }
   };
   
   return <PressButton 
@@ -30,9 +38,16 @@ const FontColor: React.FC<FontColorProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
+    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent
   };
 };
 
-const connector = connect(mapStateToProps, { });
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(FontColor);

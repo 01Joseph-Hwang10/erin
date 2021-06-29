@@ -1,59 +1,52 @@
-import fontStyle, { FontStyles } from "./font-style.data";
 import React from "react";
 import { FlatList } from "react-native-gesture-handler";
 import PressButton from "@components/editor/base/press-button";
 import CircularFrame from "@components/common/circular-frame";
 import { RootState } from "@redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { StyleProp, TextStyle, Text, ViewStyle, StyleSheet } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Dispatch } from "redux";
-import { setFontStyleState, SetFontStyleStateInput } from "@slices/editor/editor-states";
+import { setFontColorState, SetFontColorStateInput } from "@slices/editor/editor-states";
 import { useEffect } from "react";
+import { basicColors, NamedColors } from "@src/color-palette";
 import { BOTTOM_MARGIN } from "@components/editor/base/constants";
 
-type FontStyleListReduxProps = ConnectedProps<typeof connector>
+type FontColorListReduxProps = ConnectedProps<typeof connector>
 
-interface FontStyleListProps extends FontStyleListReduxProps {}
+interface FontColorListProps extends FontColorListReduxProps {}
 
-const FontStyleList: React.FC<FontStyleListProps> = ({
+const FontColorList: React.FC<FontColorListProps> = ({
   settings: {
     iconSize,
     iconGap
   },
-  setFontStyleState: SetFontStyleState
+  setFontColorState: SetFontColorState
 }) => {
 
   const floatIconSize = iconSize * (2/3);
   const floatIconGap = iconGap * (3/4);
 
-  const renderItem = ({ item: font }: { item: FontStyles }) => {
+  const renderItem = ({ item: color }: { item: NamedColors | string }) => {
 
-    const textStyle: StyleProp<TextStyle> = {
-      fontFamily: font,
-      fontSize: floatIconSize / 2,
-    };
-    
     const wrapperStyle: StyleProp<ViewStyle> = {
       marginHorizontal: floatIconGap
-    }
+    };
 
     const FontPreview = () => (
       <CircularFrame
         size={floatIconSize}
         border={true}
-        borderColor={"white"}
+        borderColor={"grey"}
         borderWidth={2}
-        backgroundColor={"transparent"}
+        backgroundColor={color}
         shadow={true}
         shadowLevel={45}
         style={wrapperStyle}
-      >
-        <Text style={textStyle}>가</Text>
-      </CircularFrame>
+      ></CircularFrame>
     );
 
     const onPress = () => {
-      SetFontStyleState(font)
+      SetFontColorState(color);
     };
 
     return <PressButton 
@@ -66,13 +59,13 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
 
   useEffect(() => {
     return () => {
-      SetFontStyleState(null)
-    }
-  }, [])
+      SetFontColorState(null);
+    };
+  }, []);
 
   return <FlatList 
     horizontal={true}
-    data={fontStyle}
+    data={basicColors}
     renderItem={renderItem}
     keyExtractor={keyExtractor}
     style={styles.root}
@@ -81,19 +74,20 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    settings: state.editor.generic.settings
+    settings: state.editor.generic.settings,
+
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setFontStyleState: (payload: SetFontStyleStateInput) => dispatch(setFontStyleState(payload))
-  }
-}
+    setFontColorState: (payload: SetFontColorStateInput) => dispatch(setFontColorState(payload))
+  };
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(FontStyleList);
+export default connector(FontColorList);
 
 const styles = StyleSheet.create({
   root: {

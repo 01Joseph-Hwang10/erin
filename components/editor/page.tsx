@@ -32,13 +32,14 @@ class Page extends Component<PageProps, PageState> {
       });
     }
 
-    public pushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id">): void => {
+    public pushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id" | "zIndex">): void => {
       this.setState(prevState => ({
         components: [
           ...prevState.components, 
           {
             ...component,
-            id: prevState.components.length
+            id: prevState.components.length,
+            zIndex: prevState.autoZIndex
           }
         ],
         autoZIndex: prevState.autoZIndex + 1

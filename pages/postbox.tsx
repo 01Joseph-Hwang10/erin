@@ -7,6 +7,7 @@ import { RootState } from "../redux/root-reducer";
 import { Dispatch } from "redux";
 import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import { connect, ConnectedProps } from "react-redux";
+import { useFonts } from "expo-font";
 
 type PostboxNavigationProp = StackNavigationProp<
   StackParamList,
@@ -25,12 +26,40 @@ const Postbox: React.FC<PostboxProps> = ({
   setLoading: SetLoading
 }) => {
 
+  const [ loaded ] = useFonts({
+    "NotoSansKR-Thin": require("@assets/fonts/NotoSansKR-Thin.otf"),
+    "Gaegu-Light": require("@assets/fonts/Gaegu-Light.ttf"),
+    "Sunflower-Bold": require("@assets/fonts/Sunflower-Bold.ttf"),
+    "NotoSansKR-Light": require("@assets/fonts/NotoSansKR-Light.otf"),
+    "NotoSansKR-Bold": require("@assets/fonts/NotoSansKR-Bold.otf"),
+    "Gaegu-Bold": require("@assets/fonts/Gaegu-Bold.ttf"),
+    "Sunflower-Medium": require("@assets/fonts/Sunflower-Medium.ttf"),
+    "Sunflower-Light": require("@assets/fonts/Sunflower-Light.ttf"),
+    "SingleDay-Regular": require("@assets/fonts/SingleDay-Regular.ttf"),
+    "NotoSansKR-Regular": require("@assets/fonts/NotoSansKR-Regular.otf"),
+    "NotoSansKR-Medium": require("@assets/fonts/NotoSansKR-Medium.otf"),
+    "NotoSansKR-Black": require("@assets/fonts/NotoSansKR-Black.otf"),
+    "NanumGothic-Regular": require("@assets/fonts/NanumGothic-Regular.ttf"),
+    "NanumGothic-ExtraBold": require("@assets/fonts/NanumGothic-ExtraBold.ttf"),
+    "NanumGothic-Bold": require("@assets/fonts/NanumGothic-Bold.ttf"),
+    "Jua-Regular": require("@assets/fonts/Jua-Regular.ttf"),
+    "Gaegu-Regular": require("@assets/fonts/Gaegu-Regular.ttf"),
+  });
+
   const navigateToEditor = () => {
     SetLoading(true);
   };
 
   const handleNavigate = () => {
-    navigation.navigate("editor");
+    const loading = setInterval(
+      () => {
+        if (loaded) {
+          clearInterval(loading);
+          navigation.navigate("editor");
+        }
+      },
+      100
+    );
   };
 
   return (

@@ -36,17 +36,40 @@ const setBottomTabCurrentReducer: CaseReducer<
   state.bottomTabCurrent = bottomTabCurrent;
 };
 
+export type SetTopFloatCurrentInput = Erin.Editor.TopFloatMenuType
+
+const setTopFloatCurrentReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetTopFloatCurrentInput>
+> = (state, { payload: topFloatCurrent }) => {
+  state.topFloatCurrent = topFloatCurrent;
+};
+
+export type SetBottomFloatCurrentInput = Erin.Editor.BottomFloatMenuType
+
+const setBottomFloatCurrentReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetBottomFloatCurrentInput>
+> = (state, { payload: bottomFloatCurrent }) => {
+  state.bottomFloatCurrent = bottomFloatCurrent;
+};
+
+
 export const {
   reducer,
   actions: {
     configureIconLayout,
-    setBottomTabCurrent
+    setBottomTabCurrent,
+    setTopFloatCurrent,
+    setBottomFloatCurrent
   }
 } = createSlice({
   name: "editorSlice",
   initialState,
   reducers: {
     configureIconLayout: configureIconLayoutReducer,
-    setBottomTabCurrent: setBottomTabCurrentReducer
+    setBottomTabCurrent: setBottomTabCurrentReducer,
+    setTopFloatCurrent: setTopFloatCurrentReducer,
+    setBottomFloatCurrent: setBottomFloatCurrentReducer
   }
 });

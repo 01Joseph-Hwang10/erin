@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/root-reducer";
-import { setBottomTabCurrent, SetBottomTabCurrentInput } from "../../redux/slices/editor/editor-generic";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput } from "../../redux/slices/editor/editor-generic";
 import { HandlerStateChangeEvent, TapGestureHandler, TapGestureHandlerEventPayload } from "react-native-gesture-handler";
 import { SetCreationPointInput } from "@slices/editor/editor-handle";
 import { setCreationPoint } from "@slices/editor/editor-handle";
@@ -21,14 +21,17 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
   public setToCreateMode = (): void => {
     if (!this.props.animationMode) {
       this.props.setBottomTabCurrent("create");
+      this.props.setBottomFloatCurrent("none");
     }
   }
 
   private updateCreationPoint = (
     { nativeEvent: { x, y } }: 
       HandlerStateChangeEvent<TapGestureHandlerEventPayload>): void => {
-    this.setToCreateMode();
-    this.props.setCreationPoint({ x, y });
+    if ( this.props.focusedComponent === -1) {
+      this.setToCreateMode();
+      this.props.setCreationPoint({ x, y });
+    }
   }
 
   componentDidUpdate(prevProps: WorkspaceProps) {
@@ -86,14 +89,16 @@ const mapStateToProps = (state: RootState) => {
     creationPoint: state.editor.handle.creationPoint,
     pages: state.editor.pages.pages,
     currentPage: state.editor.pages.currentPage,
-    focusedComponentType: state.editor.handle.focusedComponentType
+    focusedComponentType: state.editor.handle.focusedComponentType,
+    focusedComponent: state.editor.handle.focusedComponent
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
-    setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload))
+    setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload)),
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
   };
 };
 
@@ -105,5 +110,6 @@ const styles = StyleSheet.create({
   root: {
     width: "100%",
     height: "100%",
+    zIndex: 1
   },
 });

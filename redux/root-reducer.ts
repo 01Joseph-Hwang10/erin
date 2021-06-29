@@ -8,6 +8,7 @@ import { reducer as editorHandleReducer } from "./slices/editor/editor-handle";
 import { reducer as editorPagesReducer } from "./slices/editor/editor-pages";
 import { reducer as editorPublishReducer } from "./slices/editor/editor-publish";
 import { reducer as editorTestReducer } from "./slices/editor/editor-test";
+import { reducer as editorStatesReducer } from "@slices/editor/editor-states";
 
 const rootReducer = combineReducers({
   screen: screenReducer,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     handle: editorHandleReducer,
     pages: editorPagesReducer,
     publish: editorPublishReducer,
-    test: editorTestReducer
+    test: editorTestReducer,
+    states: editorStatesReducer
   })
 });
 

@@ -35,9 +35,7 @@ const Editor: React.FC<EditorProps> = ({
 }) => {
 
   const [ firstAccess, setFirstAccess ] = useState(true);
-  const [text, setText] = useState("");
-  // const hasUnsavedChanges = Boolean(text);
-  const hasUnsavedChanges = false;
+  const hasUnsavedChanges = true; // Temporal value
 
   const handleConfirm = () => {
     navigation.pop();

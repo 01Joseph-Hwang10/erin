@@ -33,7 +33,12 @@ export namespace Erin {
 
         export type TopFloatMenuType = "default" | "pages"
 
-        export type BottomFloatMenuType = "none" | "animation" | "delete"
+        export type BottomFloatMenuType = 
+            | "none" 
+            | "animationTimeline" 
+            | "deleteComponent"
+            | "fontColor"
+            | "fontStyle"
 
         type BackgroundType = "image" | "color" | "pattern"
 
@@ -70,10 +75,22 @@ export namespace Erin {
 
         type ComponentTypes = "text" | "shape" | "sticker" | "image" // Temporal declaration. Need to decide what to include in components
 
+        export interface TextConfig {
+            fontFamily: string,
+            color: string,
+        }
+
+        export type ShapeConfig = unknown
+        
+        export type StickerConfig = unknown
+
+        export type ImageConfig = unknown
+
         export interface ComponentInterface {
             id: number, // Id should be the index of the array
             type: ComponentTypes,
-            animationId: number, // If no animation, -1
+            animationId: number, // If no animation, -1,
+            zIndex: number
         }
 
         type Component = ComponentInterface | null

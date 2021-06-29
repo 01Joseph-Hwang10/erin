@@ -4,6 +4,7 @@ import COLORS from "../../../src/colors";
 export const WIDTH_CONSTANT = 1/9;
 export const MARGIN_CONSTANT = (1- WIDTH_CONSTANT * 7) * ( 1 / (14) );
 export const ICON_COLOR = COLORS.DARK.sharp;
+export const BOTTOM_MARGIN = 10;
 
 export const returnShadowProps = (shadowLevel: number): StyleProp<ViewStyle> => {
   if (Platform.OS === "android") {
