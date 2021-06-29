@@ -1,11 +1,9 @@
 import React from "react";
-import { BackHandler, Alert } from "react-native";
 import Editor from "../pages/editor";
 import Viewer from "../pages/viewer";
-import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Main from "./main";
-import { voidFunction } from "../src/constants";
 
 
 export type StackParamList = {

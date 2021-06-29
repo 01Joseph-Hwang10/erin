@@ -1,9 +1,9 @@
+import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { useRef } from "react";
-import ToggleButton from "../../base/toggle-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
+import PressButton from "../../base/press-button";
 
 type FontStyleReduxProps = ConnectedProps<typeof connector>
 
@@ -13,26 +13,25 @@ const FontStyle: React.FC<FontStyleProps> = ({
   iconSize
 }) => {
 
-  const icons: JSX.Element[] = []; // You need to add styles
-
-  const buttonRef = useRef<ToggleButton>(null);
+  const renderIcon = () => (
+    <Feather name="edit" size={iconSize} color={ICON_COLOR} />
+  );
 
   const onPress = () => {
-    // sth
+    // Needa do sth here
   };
-
-  return <ToggleButton 
-    ref={buttonRef}
+  
+  return <PressButton 
+    icon={renderIcon}
     onPress={onPress}
-    icons={icons}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

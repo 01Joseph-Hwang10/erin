@@ -1,27 +1,33 @@
 import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Erin } from "erin";
 
 export interface EditorHandleState {
   focusedComponent: number, // if no focused component, -1,
+  focusedComponentType: Erin.Editor.ComponentTypes | "none",
   creationPoint: SetCreationPointInput,
-  autoZIndex: number
+  pushComponent?: SetPushComponentInput;
 }
 
 const initialState: EditorHandleState = {
   focusedComponent: -1,
+  focusedComponentType: "none",
   creationPoint: {
     x: null,
     y: null,
   },
-  autoZIndex: 3
 };
 
-export type SetFocusedComponentInput = number;
+export type SetFocusedComponentInput = {
+  focusedComponent: number,
+  focusedComponentType: Erin.Editor.ComponentTypes | "none"
+}
 
 const setFocusedComponentReducer: CaseReducer<
   EditorHandleState,
   PayloadAction<SetFocusedComponentInput>
-> = (state, { payload: focusedComponent }) => {
+> = (state, { payload: { focusedComponent, focusedComponentType } }) => {
   state.focusedComponent = focusedComponent;
+  state.focusedComponentType = focusedComponentType;
 };
 
 export type SetCreationPointInput = {
@@ -36,13 +42,13 @@ const setCreationPointReducer: CaseReducer<
   state.creationPoint = creationPoint;
 };
 
-export type SetAutoZIndexInput = number;
+export type SetPushComponentInput = (component: Omit<Erin.Editor.ComponentInterface, "id">) => void
 
-const setAutoZIndexReducer: CaseReducer<
+const setPushComponentReducer: CaseReducer<
   EditorHandleState,
-  PayloadAction<SetAutoZIndexInput>
-> = (state, { payload: autoZIndex }) => {
-  state.autoZIndex = autoZIndex;
+  PayloadAction<SetPushComponentInput>
+> = (state, { payload: pushComponent }) => {
+  state.pushComponent = pushComponent;
 };
 
 export const {
@@ -50,7 +56,7 @@ export const {
   actions: {
     setFocusedComponent,
     setCreationPoint,
-    setAutoZIndex
+    setPushComponent
   }
 } = createSlice({
   name: "editorSlice",
@@ -58,6 +64,6 @@ export const {
   reducers: {
     setFocusedComponent: setFocusedComponentReducer,
     setCreationPoint: setCreationPointReducer,
-    setAutoZIndex: setAutoZIndexReducer
+    setPushComponent: setPushComponentReducer
   }
 });

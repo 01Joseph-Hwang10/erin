@@ -13,7 +13,7 @@ interface ToggleButtonState {
 
 class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState> {
     
-    public state = {
+    public state: ToggleButtonState = {
       iconIndex: 0
     }
 

@@ -7,8 +7,14 @@ import Placeholder from "./workspace/erin-components/placeholder";
 import ErinText from "./workspace/erin-components/text/text";
 import Stickers from "./workspace/erin-components/stickers/stickers";
 import ErrorComponent from "./workspace/erin-components/error-component";
+import { Dispatch } from "redux";
+import { setPushComponent, SetPushComponentInput } from "@slices/editor/editor-handle";
+import { connect, ConnectedProps } from "react-redux";
+import RNShake from "react-native-shake";
 
-interface PageProps {
+type PageReduxProps = ConnectedProps<typeof connector>
+
+interface PageProps extends PageReduxProps {
     page: Erin.Editor.Page
 }
 
@@ -16,11 +22,26 @@ interface PageState extends Erin.Editor.Page {}
 
 class Page extends Component<PageProps, PageState> {
 
-    public state = this.props.page
+    public state: PageState = this.props.page
 
-    private pushComponent = (component: Erin.Editor.Component) => {
+    private resetPage = () => {
+      this.setState({
+        components: [],
+        animations: [],
+        autoZIndex: 2,
+      });
+    }
+
+    public pushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id">): void => {
       this.setState(prevState => ({
-        components: [...prevState.components, component]
+        components: [
+          ...prevState.components, 
+          {
+            ...component,
+            id: prevState.components.length
+          }
+        ],
+        autoZIndex: prevState.autoZIndex + 1
       }));
     }
 
@@ -34,6 +55,15 @@ class Page extends Component<PageProps, PageState> {
       }));
     }
 
+    componentDidMount() {
+      this.props.setPushComponent(this.pushComponent);
+      RNShake.addListener(this.resetPage);
+    }
+
+    componentWillUnmount() {
+      RNShake.removeAllListeners();
+    }
+
     render(): React.ReactNode {
       return (
         <View style={styles.root}>
@@ -44,7 +74,11 @@ class Page extends Component<PageProps, PageState> {
               } else {
                 switch (component.type) {
                 case "text":
-                  return <ErinText key={index} />;
+                  return <ErinText 
+                    key={index} 
+                    id={component.id}
+                    zIndex={this.state.autoZIndex}
+                  />;
                 case "shape":
                   return <Shape key={index} />;
                 case "sticker":
@@ -60,7 +94,15 @@ class Page extends Component<PageProps, PageState> {
     }
 }
 
-export default Page;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setPushComponent: (payload: SetPushComponentInput) => dispatch(setPushComponent(payload))
+  };
+};
+
+const connector = connect(null, mapDispatchToProps);
+
+export default connector(Page);
 
 
 const styles = StyleSheet.create({

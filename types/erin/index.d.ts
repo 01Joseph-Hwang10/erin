@@ -27,7 +27,7 @@ export namespace Erin {
             | "text" 
             | "shape"
             // | "image"
-            // | "sticker" 
+            | "sticker" 
             | "animationDefault" 
             | "animationConfig"
 
@@ -74,7 +74,6 @@ export namespace Erin {
             id: number, // Id should be the index of the array
             type: ComponentTypes,
             animationId: number, // If no animation, -1
-            layout: Erin.Common.RectPosSpec
         }
 
         type Component = ComponentInterface | null

@@ -31,6 +31,26 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
     this.props.setCreationPoint({ x, y });
   }
 
+  componentDidUpdate(prevProps: WorkspaceProps) {
+    const newComponentType = this.props.focusedComponentType;
+    if (prevProps.focusedComponentType !== newComponentType) {
+      switch (newComponentType) {
+      case "text":
+        this.props.setBottomTabCurrent("text");
+        break;
+      case "shape":
+        this.props.setBottomTabCurrent("shape");
+        break;
+      case "sticker":
+        this.props.setBottomTabCurrent("sticker");
+        break;
+      default:
+        this.props.setBottomTabCurrent("default");
+        break;
+      }
+    }
+  }
+
   render(): React.ReactNode {
 
     const {
@@ -65,7 +85,8 @@ const mapStateToProps = (state: RootState) => {
     animationMode: state.editor.animation.animationMode,
     creationPoint: state.editor.handle.creationPoint,
     pages: state.editor.pages.pages,
-    currentPage: state.editor.pages.currentPage
+    currentPage: state.editor.pages.currentPage,
+    focusedComponentType: state.editor.handle.focusedComponentType
   };
 };
 

@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -53,7 +53,27 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>UIStatusBarStyle</key>
-  <string>UIStatusBarStyleDefault</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Gaegu-Bold.ttf</string>
+		<string>Gaegu-Light.ttf</string>
+		<string>Gaegu-Regular.ttf</string>
+		<string>Jua-Regular.ttf</string>
+		<string>NanumGothic-Bold.ttf</string>
+		<string>NanumGothic-ExtraBold.ttf</string>
+		<string>NanumGothic-Regular.ttf</string>
+		<string>NotoSansKR-Black.otf</string>
+		<string>NotoSansKR-Bold.otf</string>
+		<string>NotoSansKR-Light.otf</string>
+		<string>NotoSansKR-Medium.otf</string>
+		<string>NotoSansKR-Regular.otf</string>
+		<string>NotoSansKR-Thin.otf</string>
+		<string>SingleDay-Regular.ttf</string>
+		<string>Sunflower-Bold.ttf</string>
+		<string>Sunflower-Light.ttf</string>
+		<string>Sunflower-Medium.ttf</string>
+	</array>
 </dict>
 </plist>
