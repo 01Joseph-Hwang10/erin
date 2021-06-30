@@ -9,7 +9,7 @@ import {
   setBottomTabCurrent, 
   SetBottomTabCurrentInput 
 } from "../../redux/slices/editor/editor-generic";
-import { HandlerStateChangeEvent, TapGestureHandler, TapGestureHandlerEventPayload } from "react-native-gesture-handler";
+import { TapGestureHandlerStateChangeEvent, TapGestureHandler, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { SetCreationPointInput } from "@slices/editor/editor-handle";
 import { setCreationPoint } from "@slices/editor/editor-handle";
 import CreationPoint from "@components/editor/workspace/creation-point";
@@ -30,12 +30,10 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
     }
   }
 
-  private zIndex = 1;
-
-  private updateCreationPoint = (
+  private onTapHandlerStateChange = (
     { nativeEvent: { x, y } }: 
-      HandlerStateChangeEvent<TapGestureHandlerEventPayload>): void => {
-    if ( this.zIndex === this.props.maxZIndex ) {
+      TapGestureHandlerStateChangeEvent): void => {
+    if ( this.props.focusedComponent === -1 && this.props.focusedComponentType === "none" ) {
       this.setToCreateMode();
       this.props.setCreationPoint({ x, y });
     }
@@ -43,10 +41,8 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
 
   
   componentDidUpdate(prevProps: WorkspaceProps) {
-    // console.log(this.props.maxZIndex);
-    const newComponentType = this.props.focusedComponentType;
-    if (prevProps.focusedComponentType !== newComponentType) {
-      switch (newComponentType) {
+    if (prevProps.focusedComponentType !== this.props.focusedComponentType) {
+      switch (this.props.focusedComponentType) {
       case "text":
         this.props.setBottomTabCurrent("text");
         break;
@@ -75,7 +71,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
 
     return (
       <TapGestureHandler
-        onHandlerStateChange={this.updateCreationPoint}
+        onHandlerStateChange={this.onTapHandlerStateChange}
       >
         <View style={styles.root}>
           {
@@ -100,7 +96,6 @@ const mapStateToProps = (state: RootState) => {
     currentPage: state.editor.pages.currentPage,
     focusedComponentType: state.editor.handle.focusedComponentType,
     focusedComponent: state.editor.handle.focusedComponent,
-    maxZIndex: state.editor.handle.maxZIndex
   };
 };
 

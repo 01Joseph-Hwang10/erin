@@ -26,7 +26,7 @@ import XCreate from "./bottom-tab/create-member/x-create";
 import CreateSticker from "./bottom-tab/create-member/create-sticker";
 import NotSave from "./bottom-tab/default-member/not-save";
 import { IconMembers } from "../common/types";
-import ChangeText from "./bottom-tab/text-member/change-text";
+// import ChangeText from "./bottom-tab/text-member/change-text";
 
 const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   default: [
@@ -59,7 +59,7 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   text: [
     <FontColor key={0} />,
     <FontStyle key={1} />,
-    <ChangeText key={2} />,
+    null,
     null,
     null,
     null,

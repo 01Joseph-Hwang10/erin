@@ -5,34 +5,28 @@ import {
   SetCreationPointInput, 
   setFocusedComponent, 
   SetFocusedComponentInput, 
-  updateMaxZIndex, 
-  UpdateMaxZIndexInput 
 } from "@slices/editor/editor-handle";
 import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
 import { TextStyle } from "react-native";
 import { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet } from "react-native";
-import { View, Text } from "react-native";
+import { View, Text, Animated } from "react-native";
 import { 
   PanGestureHandler, 
   RotationGestureHandler, 
   PinchGestureHandler, 
-  TapGestureHandlerGestureEvent, 
   PanGestureHandlerGestureEvent, 
   PinchGestureHandlerGestureEvent, 
   RotationGestureHandlerGestureEvent,
   TextInput, 
-  TapGestureHandler
+  TapGestureHandler,
+  PanGestureHandlerStateChangeEvent,
+  State,
+  RotationGestureHandlerStateChangeEvent,
+  PinchGestureHandlerStateChangeEvent,
+  TapGestureHandlerStateChangeEvent
 } from "react-native-gesture-handler";
-import Animated, { 
-  useAnimatedStyle,
-  useAnimatedGestureHandler,
-  useSharedValue
-} from "react-native-reanimated";
-import { runOnJS } from "react-native-reanimated";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 
@@ -44,264 +38,325 @@ interface ErinTextProps extends ErinTextReduxProps {
   animationId?: number,
 }
 
-const defaultFont: FontStyles = "Gaegu-Bold";
+interface ErinTextState {
+  fontColor: string,
+  fontStyle: FontStyles,
+  text: string,
+  onInteraction: boolean
+}
 
-const ErinText: React.FC<ErinTextProps> = ({
-  creationPoint: { x, y },
-  setCreationPoint: SetCreationPoint,
-  zIndex,
-  id,
-  setFocusedComponent: SetFocusedComponent,
-  setTextOnEditState: SetTextOnEditState,
-  focusedComponent,
-  textOnEdit,
-  fontColor: fontColorRaw,
-  fontStyle: fontStyleRaw,
-  updateMaxZIndex: UpdateMaxZIndex,
-  maxZIndex,
-  screenWidth
-}) => {
+// const defaultFont: FontStyles = "Gaegu-Bold";
 
-  const [ firstAccess, setFirstAccess ] = useState<boolean>(true);
-  const [ fontColor, setFontColor ] = useState<string>("white");
-  const [ fontStyle, setFontStyle ] = useState<FontStyles>(defaultFont);
-  const [ text, setText ] = useState<string>("");
+class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
-  const tapHandlerRef = React.createRef();
-  const panHandlerRef = React.createRef();
-  const pinchHandlerRef = React.createRef();
-  const rotationHandlerRef = React.createRef();
+  public state: ErinTextState = {
+    fontColor: 'white',
+    fontStyle: 'Gaegu-Bold',
+    text: '',
+    onInteraction: false
+  }
 
-  const posX = useSharedValue(0);
-  const posY = useSharedValue(0);
-  const scale = useSharedValue(0);
-  const rotation = useSharedValue(0);
+  private setFontColor: (fontColor: string) => void;
+  private setFontStyle: (fontStyle: FontStyles) => void;
+  private setText: (text: string) => void;
+  private setOnInteraction: (onInteraction: boolean) => void;
 
-  const animatedPosition = useAnimatedStyle(
-    () => {
-      return {
-        top: posY.value,
-        left: posX.value,
-      };
-    },
-    [posX, posY]
-  );
+  private tapHandlerRef = React.createRef<TapGestureHandler>();
+  private panHandlerRef = React.createRef<PanGestureHandler>();
+  private pinchHandlerRef = React.createRef<PinchGestureHandler>();
+  private rotationHandlerRef = React.createRef<RotationGestureHandler>();
+  private posX: Animated.Value;
+  private posY: Animated.Value;
+  private lastPosition: { x: number, y: number };
+  private pinchScale: Animated.Value;
+  private baseScale: Animated.Value;
+  private scale: Animated.AnimatedMultiplication;
+  private lastScale: number;
+  private rotationRaw: Animated.Value;
+  private lastRotationRaw: number;
+  private rotation: Animated.AnimatedModulo;
+  private rotationString: Animated.AnimatedInterpolation;
+  private onPinchGestureEvent: (event: PinchGestureHandlerGestureEvent) => void;
+  private onRotateGestureEvent: (
+    event: RotationGestureHandlerGestureEvent
+  ) => void;
+  private onPanGestureEvent: (event: PanGestureHandlerGestureEvent) => void;
 
-  const animatedScale = useAnimatedStyle(
-    () => {
-      return {
-        transform: [{ scale: scale.value }]
-      };
-    },
-    [scale]
-  );
+  constructor(props: ErinTextProps) {
+    super(props)
+    // state
+    this.setFontColor = (fontColor: string) => {
+      this.setState({ fontColor })
+    }
+    this.setFontStyle = (fontStyle: FontStyles) => {
+      this.setState({ fontStyle })
+    }
+    this.setText = (text: string) => {
+      this.setState({ text })
+    }
+    this.setOnInteraction = (onInteraction: boolean) => {
+      this.setState({ onInteraction })
+    }
 
-  const animatedRotation = useAnimatedStyle(
-    () => {
-      return {
-        transform: [{ rotateZ: `${rotation.value}rad` }]
-      };
-    },
-    [rotation]
-  );
+    // Pan
+    const {
+      x, y
+    } = props.creationPoint
+    this.lastPosition = {
+      x: x ? x : 0,
+      y: y ? y : 0
+    }
+    this.posX = new Animated.Value(0)
+    this.posY = new Animated.Value(0)
+    this.onPanGestureEvent = Animated.event(
+      [
+        { nativeEvent: 
+          {
+            translationX: this.posX,
+            translationY: this.posY
+          }
+        }
+      ],
+      { useNativeDriver: true }
+    )
 
-  const setToDefault = () => {
-    SetFocusedComponent({
-      focusedComponent: -1,
-      focusedComponentType: "none"
-    });
-    SetTextOnEditState(false);
+    // Scale
+    this.baseScale = new Animated.Value(1)
+    this.pinchScale = new Animated.Value(1)
+    this.scale = Animated.multiply( this.baseScale, this.pinchScale )
+    this.lastScale = 1
+    this.onPinchGestureEvent = Animated.event(
+      [{ nativeEvent: { scale: this.pinchScale } }],
+      { useNativeDriver: true }
+    )
+
+    // Rotation
+    this.rotationRaw = new Animated.Value(0)
+    this.lastRotationRaw = 0
+    this.rotation = Animated.modulo(this.rotationRaw, 360)
+    this.rotationString = this.rotation.interpolate({
+      inputRange: [0, 360],
+      outputRange: ['0rad', '360rad']
+    })
+    this.onRotateGestureEvent = Animated.event(
+      [{ nativeEvent: { rotation: this.rotationRaw }}],
+      { useNativeDriver: true }
+    )
+  }
+
+  private onPanHandlerStateChange = (
+    {
+      nativeEvent: {
+        oldState,
+        translationX,
+        translationY
+      }
+    }: PanGestureHandlerStateChangeEvent
+  ) => {
+    if (oldState === State.ACTIVE) {
+      this.setOnInteraction(true)
+      this.lastPosition.x += translationX;
+      this.lastPosition.y += translationY;
+      this.posX.setOffset(this.lastPosition.x);
+      this.posY.setOffset(this.lastPosition.y);
+      this.posX.setValue(0)
+      this.posY.setValue(0)
+    }
+  }
+
+  private onRotateHandlerStateChange = (
+    {
+      nativeEvent: {
+        oldState,
+        rotation
+      }
+    }: RotationGestureHandlerStateChangeEvent
+  ) => {
+    if (oldState === State.ACTIVE) {
+      this.setOnInteraction(true)
+      this.lastRotationRaw += rotation;
+      this.rotationRaw.setOffset(this.lastRotationRaw);
+      this.rotationRaw.setValue(0);
+    }
   };
 
-  const focusToThis = () => {
-    SetFocusedComponent({
-      focusedComponent: id,
+  private onPinchHandlerStateChange = (
+    {
+      nativeEvent: {
+        oldState,
+        scale
+      }
+    }: PinchGestureHandlerStateChangeEvent
+  ) => {
+    if (oldState === State.ACTIVE) {
+      this.setOnInteraction(true)
+      this.lastScale *= scale;
+      this.baseScale.setValue(this.lastScale);
+      this.pinchScale.setValue(1);
+    }
+  };
+
+  private onTapHandlerStateChange = (
+    {
+      nativeEvent: {
+        oldState
+      }
+    }: TapGestureHandlerStateChangeEvent
+  ) => {
+    if (oldState === State.ACTIVE) {
+      this.setOnInteraction(true)
+      this.props.setTextOnEditState(true)
+    }
+  }
+
+  private textStyle: StyleProp<TextStyle> = {
+    fontSize: 50,
+    color: this.state.fontColor,
+    fontFamily: this.state.fontStyle
+  }
+
+  private rootStyle: StyleProp<ViewStyle> = {
+    minWidth: this.props.screenWidth / 3
+  }
+
+  private setToDefault = () => {
+    this.props.setFocusedComponent({
+      focusedComponent: -1,
+      focusedComponentType: 'none'
+    })
+    this.props.setTextOnEditState(false)
+  }
+
+  componentDidMount = () => {
+    this.posX.setOffset(this.lastPosition.x)
+    this.posY.setOffset(this.lastPosition.y)
+    this.props.setCreationPoint({ x: null, y: null });
+    this.props.setFocusedComponent({
+      focusedComponent: this.props.id,
       focusedComponentType: "text"
     });
-  };
+    this.props.setTextOnEditState(true);
+  }
 
-  const accountThis = () => {
-    if (zIndex !== maxZIndex) {
-      UpdateMaxZIndex(zIndex);
-    }
-  };
+  componentDidUpdate = (_: ErinTextProps, prevState: ErinTextState) => {
 
-  const cleanUp = () => {
-    if ( maxZIndex === 1) return;
-    if (zIndex === maxZIndex) {
-      UpdateMaxZIndex(1);
-    }
-  };
-
-
-  const panGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
-    onStart: () => {
-      runOnJS(accountThis)();
-    },
-    onActive: ({ x, y }) => {
-      if (zIndex === maxZIndex) {
-        posX.value = x,
-        posY.value = y;
+    if (this.props.focusedComponent === this.props.id) {
+      const {
+        fontColor,
+        fontStyle
+      } = this.props
+      if (fontColor) {
+        this.setFontColor(fontColor)
       }
-    },
-    onEnd: () => {
-      runOnJS(cleanUp)();
-    }
-  });
-
-  const tapGestureHandler = useAnimatedGestureHandler<TapGestureHandlerGestureEvent>({
-    onStart: () => {
-      runOnJS(accountThis)();
-    },
-    onActive: () => {
-      if (zIndex === maxZIndex) {
-        runOnJS(focusToThis)();
-      }
-    },
-    onEnd: () => {
-      runOnJS(cleanUp)();
-    }
-  });
-
-  const pinchGestureHandler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
-    onStart: () => {
-      runOnJS(accountThis)();
-    },
-    onActive: ({ scale: newScale }) => {
-      if (zIndex === maxZIndex) {
-        scale.value = scale.value * newScale;
-      }
-    },
-    onEnd: () => {
-      runOnJS(cleanUp)();
-    }
-  });
-
-  const rotationGestureHandler = useAnimatedGestureHandler<RotationGestureHandlerGestureEvent>({
-    onStart: () => {
-      runOnJS(accountThis)();
-    },
-    onActive: ({ rotation: newRotation }) => {
-      if (zIndex === maxZIndex) {
-        rotation.value = rotation.value + newRotation;
-      }
-    },
-    onEnd: () => {
-      runOnJS(cleanUp)();
-    }
-  });
-
-  useEffect(() => {
-    if (firstAccess) {
-      if ( x && y ) {
-        posX.value = x;
-        posY.value = y;
-      }
-      SetCreationPoint({ x: null, y: null });
-      SetFocusedComponent({
-        focusedComponent: id,
-        focusedComponentType: "text"
-      });
-      setFirstAccess(false);
-      SetTextOnEditState(true);
-    } else {
-      if (focusedComponent === id) {
-        if (fontColorRaw) {
-          setFontColor(fontColorRaw);
-        }
-        if (fontStyleRaw) {
-          setFontStyle(fontStyleRaw);
-        }
+      if (fontStyle) {
+        this.setFontStyle(fontStyle)
       }
     }
-  }, [fontStyleRaw, fontColorRaw]);
 
-  const rootStyle: StyleProp<ViewStyle> = {
-    zIndex,
-    width: screenWidth / 3
-  };
+    if ( prevState.onInteraction !== this.state.onInteraction ) {
+      if (this.state.onInteraction) {
+        this.props.setFocusedComponent({
+          focusedComponent: this.props.id,
+          focusedComponentType: "text"
+        });
+      } else {
+        this.props.setFocusedComponent({
+          focusedComponent: -1,
+          focusedComponentType: 'none'
+        })
+      }
+    }
+    
+  }
 
-  const textStyle: StyleProp<TextStyle> = {
-    fontSize: 60,
-    fontFamily: fontStyle,
-    color: fontColor,
-    zIndex: zIndex + 1
-  };
-
-  return <PanGestureHandler
-    ref={panHandlerRef}
-    onGestureEvent={panGestureHandler}
-    simultaneousHandlers={[
-      rotationHandlerRef, 
-      pinchHandlerRef, 
-      tapHandlerRef
-    ]}
-  >
-    <Animated.View style={[
-      styles.root,
-      animatedPosition,
-      rootStyle
-    ]}>
-      <RotationGestureHandler
-        ref={rotationHandlerRef}
-        onGestureEvent={rotationGestureHandler}
-        simultaneousHandlers={[
-          panHandlerRef,
-          pinchHandlerRef,
-          tapHandlerRef
-        ]}
-      >
-        <Animated.View style={[
-          styles.wrapper,
-          animatedRotation
+  render(): React.ReactNode {
+    return <PanGestureHandler
+      ref={this.panHandlerRef}
+      onGestureEvent={this.onPanGestureEvent}
+      onHandlerStateChange={this.onPanHandlerStateChange}
+      simultaneousHandlers={[
+        this.rotationHandlerRef,
+        this.pinchHandlerRef,
+        this.tapHandlerRef
+      ]}
+    >
+      <Animated.View style={[
+          styles.root,
+          this.rootStyle,
+          {
+            transform: 
+            [
+              {
+                translateX: this.posX
+              },
+              {
+                translateY: this.posY
+              },
+              {
+                scale: this.scale
+              },
+              {
+                rotateZ: this.rotationString
+              }
+            ]
+          }
         ]}>
-          <PinchGestureHandler
-            ref={pinchHandlerRef}
-            onGestureEvent={pinchGestureHandler}
-            simultaneousHandlers={[
-              panHandlerRef,
-              rotationHandlerRef,
-              tapHandlerRef
-            ]}
-          >
-            <Animated.View style={[
-              styles.wrapper,
-              animatedScale
-            ]}>
-              <TapGestureHandler
-                onGestureEvent={tapGestureHandler}
-                ref={tapHandlerRef}
-                simultaneousHandlers={[
-                  panHandlerRef,
-                  rotationHandlerRef,
-                  pinchHandlerRef
-                ]}
-              >
-                <Animated.View
-                  style={styles.wrapper}
+        <RotationGestureHandler
+          ref={this.rotationHandlerRef}
+          onGestureEvent={this.onRotateGestureEvent}
+          onHandlerStateChange={this.onRotateHandlerStateChange}
+          simultaneousHandlers={[
+            this.panHandlerRef,
+            this.pinchHandlerRef,
+            this.tapHandlerRef
+          ]}
+        >
+          <Animated.View style={styles.wrapper}>
+            <PinchGestureHandler
+              ref={this.pinchHandlerRef}
+              onGestureEvent={this.onPinchGestureEvent}
+              onHandlerStateChange={this.onPinchHandlerStateChange}
+              simultaneousHandlers={[
+                this.panHandlerRef,
+                this.rotationHandlerRef,
+                this.tapHandlerRef
+              ]}
+            >
+              <Animated.View style={styles.wrapper}>
+                <TapGestureHandler
+                  ref={this.tapHandlerRef}
+                  onHandlerStateChange={this.onTapHandlerStateChange}
+                  simultaneousHandlers={[
+                    this.panHandlerRef,
+                    this.rotationHandlerRef,
+                    this.pinchHandlerRef
+                  ]}
                 >
+                  <Animated.View style={styles.wrapper}>
                   {
-                    focusedComponent === id && textOnEdit ? 
+                    this.props.focusedComponent === this.props.id && this.props.textOnEdit ? 
                       <TextInput 
-                        onChangeText={setText}
-                        value={text}
+                        onChangeText={this.setText}
+                        value={this.state.text}
                         placeholder="내용을 입력해 주세요!"
-                        onBlur={setToDefault}
-                        onSubmitEditing={setToDefault}
                         autoFocus={true}
-                        style={textStyle}
+                        style={this.textStyle}
+                        onSubmitEditing={this.setToDefault}
+                        onBlur={this.setToDefault}
                       /> :
-                      <Text style={textStyle}>{text}</Text>
+                      <Text style={this.textStyle}>{this.state.text}</Text>
                   }
-                </Animated.View>
-              </TapGestureHandler>
-            </Animated.View>
-          </PinchGestureHandler>
-        </Animated.View>
-      </RotationGestureHandler>
-    </Animated.View>
-  </PanGestureHandler>;
-};
+                  </Animated.View>
+                </TapGestureHandler>
+              </Animated.View>
+            </PinchGestureHandler>
+          </Animated.View>
+        </RotationGestureHandler>
+      </Animated.View>
+    </PanGestureHandler>
+  }
+
+}
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -310,7 +365,6 @@ const mapStateToProps = (state: RootState) => {
     textOnEdit: state.editor.states.textOnEdit,
     fontColor: state.editor.states.fontColor,
     fontStyle: state.editor.states.fontStyle,
-    maxZIndex: state.editor.handle.maxZIndex,
     screenWidth: state.screen.screenSpec.width
   };
 };
@@ -320,7 +374,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload)),
     setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload)),
     setTextOnEditState: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload)),
-    updateMaxZIndex: (payload: UpdateMaxZIndexInput) => dispatch(updateMaxZIndex(payload))
   };
 };
 
@@ -333,7 +386,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "orange",
-    position: "absolute"
+    position: "absolute",
+    padding: 10
   },
   wrapper: {
     justifyContent: "center",

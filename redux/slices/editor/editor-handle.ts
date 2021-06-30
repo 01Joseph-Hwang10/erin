@@ -14,7 +14,6 @@ export interface EditorHandleState {
   creationPoint: CreationPoint,
   pushComponent?: PushComponent,
   onDrag: boolean,
-  maxZIndex: number
 }
 
 const initialState: EditorHandleState = {
@@ -25,7 +24,6 @@ const initialState: EditorHandleState = {
     y: null,
   },
   onDrag: false,
-  maxZIndex: 1 // workspace's zIndex
 };
 
 export type SetFocusedComponentInput = {
@@ -68,20 +66,6 @@ const setOnDragReducer: CaseReducer<
   state.onDrag = onDrag;
 };
 
-export type UpdateMaxZIndexInput = number
-
-const updateMaxZIndexReducer: CaseReducer<
-  EditorHandleState,
-  PayloadAction<UpdateMaxZIndexInput>
-> = (state, { payload: maxZIndex }) => {
-  if (
-    maxZIndex === 1 ||
-    state.maxZIndex < maxZIndex
-  ) {
-    state.maxZIndex = maxZIndex;
-  }
-};
-
 export const {
   reducer,
   actions: {
@@ -89,7 +73,6 @@ export const {
     setCreationPoint,
     setPushComponent,
     setOnDrag,
-    updateMaxZIndex
   }
 } = createSlice({
   name: "editorSlice",
@@ -99,6 +82,5 @@ export const {
     setCreationPoint: setCreationPointReducer,
     setPushComponent: setPushComponentReducer,
     setOnDrag: setOnDragReducer,
-    updateMaxZIndex: updateMaxZIndexReducer
   }
 });
