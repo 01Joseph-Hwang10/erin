@@ -1,4 +1,4 @@
-import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
@@ -18,7 +18,7 @@ const FontColor: React.FC<FontColorProps> = ({
 }) => {
 
   const renderIcon = () => (
-    <Feather name="edit" size={iconSize} color={ICON_COLOR} />
+    <Ionicons name="color-palette" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {

@@ -3,7 +3,12 @@ import { StyleSheet, View } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/root-reducer";
-import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput } from "../../redux/slices/editor/editor-generic";
+import { 
+  setBottomFloatCurrent, 
+  SetBottomFloatCurrentInput, 
+  setBottomTabCurrent, 
+  SetBottomTabCurrentInput 
+} from "../../redux/slices/editor/editor-generic";
 import { HandlerStateChangeEvent, TapGestureHandler, TapGestureHandlerEventPayload } from "react-native-gesture-handler";
 import { SetCreationPointInput } from "@slices/editor/editor-handle";
 import { setCreationPoint } from "@slices/editor/editor-handle";
@@ -25,16 +30,20 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
     }
   }
 
+  private zIndex = 1;
+
   private updateCreationPoint = (
     { nativeEvent: { x, y } }: 
       HandlerStateChangeEvent<TapGestureHandlerEventPayload>): void => {
-    if ( this.props.focusedComponent === -1) {
+    if ( this.zIndex === this.props.maxZIndex ) {
       this.setToCreateMode();
       this.props.setCreationPoint({ x, y });
     }
   }
 
+  
   componentDidUpdate(prevProps: WorkspaceProps) {
+    // console.log(this.props.maxZIndex);
     const newComponentType = this.props.focusedComponentType;
     if (prevProps.focusedComponentType !== newComponentType) {
       switch (newComponentType) {
@@ -90,7 +99,8 @@ const mapStateToProps = (state: RootState) => {
     pages: state.editor.pages.pages,
     currentPage: state.editor.pages.currentPage,
     focusedComponentType: state.editor.handle.focusedComponentType,
-    focusedComponent: state.editor.handle.focusedComponent
+    focusedComponent: state.editor.handle.focusedComponent,
+    maxZIndex: state.editor.handle.maxZIndex
   };
 };
 
@@ -98,7 +108,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload)),
-    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
   };
 };
 

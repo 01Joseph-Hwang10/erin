@@ -1,4 +1,4 @@
-import { Feather } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
@@ -18,7 +18,7 @@ const FontStyle: React.FC<FontStyleProps> = ({
 }) => {
 
   const renderIcon = () => (
-    <Feather name="edit" size={iconSize} color={ICON_COLOR} />
+    <FontAwesome5 name="font" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {

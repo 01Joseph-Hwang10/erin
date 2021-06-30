@@ -4,13 +4,16 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 import PressButton from "../../base/press-button";
+import { Dispatch } from "redux";
+import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
 
 type CreateShapeReduxProps = ConnectedProps<typeof connector>
 
 interface CreateShapeProps extends CreateShapeReduxProps {}
 
 const CreateShape: React.FC<CreateShapeProps> = ({
-  iconSize
+  iconSize,
+  setTextOnEditState: SetTextOnEditState
 }) => {
 
   const renderIcon = () => (
@@ -18,7 +21,7 @@ const CreateShape: React.FC<CreateShapeProps> = ({
   );
 
   const onPress = () => {
-    // Needa do sth here
+    SetTextOnEditState(true);
   };
   
   return <PressButton 
@@ -33,6 +36,12 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const connector = connect(mapStateToProps, { });
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setTextOnEditState: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload))
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(CreateShape);

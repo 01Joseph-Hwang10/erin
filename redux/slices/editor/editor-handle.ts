@@ -13,7 +13,8 @@ export interface EditorHandleState {
   focusedComponentType: Erin.Editor.ComponentTypes | "none",
   creationPoint: CreationPoint,
   pushComponent?: PushComponent,
-  onDrag: boolean
+  onDrag: boolean,
+  maxZIndex: number
 }
 
 const initialState: EditorHandleState = {
@@ -23,7 +24,8 @@ const initialState: EditorHandleState = {
     x: null,
     y: null,
   },
-  onDrag: false
+  onDrag: false,
+  maxZIndex: 1 // workspace's zIndex
 };
 
 export type SetFocusedComponentInput = {
@@ -66,13 +68,28 @@ const setOnDragReducer: CaseReducer<
   state.onDrag = onDrag;
 };
 
+export type UpdateMaxZIndexInput = number
+
+const updateMaxZIndexReducer: CaseReducer<
+  EditorHandleState,
+  PayloadAction<UpdateMaxZIndexInput>
+> = (state, { payload: maxZIndex }) => {
+  if (
+    maxZIndex === 1 ||
+    state.maxZIndex < maxZIndex
+  ) {
+    state.maxZIndex = maxZIndex;
+  }
+};
+
 export const {
   reducer,
   actions: {
     setFocusedComponent,
     setCreationPoint,
     setPushComponent,
-    setOnDrag
+    setOnDrag,
+    updateMaxZIndex
   }
 } = createSlice({
   name: "editorSlice",
@@ -81,6 +98,7 @@ export const {
     setFocusedComponent: setFocusedComponentReducer,
     setCreationPoint: setCreationPointReducer,
     setPushComponent: setPushComponentReducer,
-    setOnDrag: setOnDragReducer
+    setOnDrag: setOnDragReducer,
+    updateMaxZIndex: updateMaxZIndexReducer
   }
 });

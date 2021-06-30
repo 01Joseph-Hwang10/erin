@@ -54,8 +54,8 @@ const Postbox: React.FC<PostboxProps> = ({
     const loading = setInterval(
       () => {
         if (loaded) {
-          clearInterval(loading);
           navigation.navigate("editor");
+          clearInterval(loading);
         }
       },
       100
