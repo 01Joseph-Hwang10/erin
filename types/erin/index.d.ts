@@ -37,7 +37,7 @@ export namespace Erin {
             | "none" 
             | "animationTimeline" 
             | "deleteComponent"
-            | "fontColor"
+            | "colorPicker"
             | "fontStyle"
 
         type BackgroundType = "image" | "color" | "pattern"

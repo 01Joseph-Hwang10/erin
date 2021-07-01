@@ -1,4 +1,5 @@
 import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RectSpecType } from "@slices/screen";
 import { Erin } from "erin";
 
 export interface EditorGenericState {
@@ -6,6 +7,7 @@ export interface EditorGenericState {
     topFloatCurrent: Erin.Editor.TopFloatMenuType,
     bottomFloatCurrent: Erin.Editor.BottomFloatMenuType,
     settings: Erin.Editor.Settings,
+    workspaceSpec: RectSpecType
 }
 
 const initialState: EditorGenericState = {
@@ -16,6 +18,10 @@ const initialState: EditorGenericState = {
     iconSize: 1,
     iconGap: 1
   },
+  workspaceSpec: {
+    width: 1,
+    height: 1
+  }
 };
 
 export type ConfigureIconLayoutInput = Erin.Editor.Settings;
@@ -54,6 +60,15 @@ const setBottomFloatCurrentReducer: CaseReducer<
   state.bottomFloatCurrent = bottomFloatCurrent;
 };
 
+export type SetWorkspaceSpecInput = RectSpecType
+
+const setWorkspaceSpecReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetWorkspaceSpecInput>
+> = (state, { payload: workspaceSpec }) => {
+  state.workspaceSpec = workspaceSpec;
+};
+
 
 export const {
   reducer,
@@ -61,7 +76,8 @@ export const {
     configureIconLayout,
     setBottomTabCurrent,
     setTopFloatCurrent,
-    setBottomFloatCurrent
+    setBottomFloatCurrent,
+    setWorkspaceSpec
   }
 } = createSlice({
   name: "editorSlice",
@@ -70,6 +86,7 @@ export const {
     configureIconLayout: configureIconLayoutReducer,
     setBottomTabCurrent: setBottomTabCurrentReducer,
     setTopFloatCurrent: setTopFloatCurrentReducer,
-    setBottomFloatCurrent: setBottomFloatCurrentReducer
+    setBottomFloatCurrent: setBottomFloatCurrentReducer,
+    setWorkspaceSpec: setWorkspaceSpecReducer
   }
 });

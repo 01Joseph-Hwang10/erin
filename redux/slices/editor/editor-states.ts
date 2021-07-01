@@ -3,13 +3,13 @@ import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface EditorStatesState {
     fontStyle: FontStyles | null,
-    fontColor: string | null,
+    pickedColor: string | null,
     textOnEdit: boolean
 }
 
 const initialState: EditorStatesState = {
   fontStyle: null,
-  fontColor: null,
+  pickedColor: null,
   textOnEdit: false
 };
 
@@ -22,13 +22,13 @@ const setFontStyleStateReducer: CaseReducer<
   state.fontStyle = fontStyle;
 };
 
-export type SetFontColorStateInput = string | null
+export type SetPickedColorStateInput = string | null
 
-const setFontColorStateReducer: CaseReducer<
+const setPickedColorStateReducer: CaseReducer<
     EditorStatesState,
-    PayloadAction<SetFontColorStateInput>
-> = (state, { payload: fontColor }) => {
-  state.fontColor = fontColor;
+    PayloadAction<SetPickedColorStateInput>
+> = (state, { payload: pickedColor }) => {
+  state.pickedColor = pickedColor;
 };
 
 export type SetTextOnEditStateInput = boolean
@@ -44,7 +44,7 @@ export const {
   reducer,
   actions: {
     setFontStyleState,
-    setFontColorState,
+    setPickedColorState,
     setTextOnEditState
   }
 } = createSlice({
@@ -52,7 +52,7 @@ export const {
   initialState,
   reducers: {
     setFontStyleState: setFontStyleStateReducer,
-    setFontColorState: setFontColorStateReducer,
+    setPickedColorState: setPickedColorStateReducer,
     setTextOnEditState: setTextOnEditStateReducer
   }
 });

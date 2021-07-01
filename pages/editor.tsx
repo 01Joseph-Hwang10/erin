@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BackHandler, StyleSheet } from "react-native";
+import { BackHandler, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BottomTab from "../components/editor/bottom-tab";
@@ -14,6 +14,7 @@ import { Dispatch } from "redux";
 import { setCurrentPage, SetCurrentPageInput, setPopAtEditor, SetPopAtEditorInput } from "../redux/slices/navigation";
 import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import COLORS from "../src/colors";
+import { RootState } from "@redux/root-reducer";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -31,7 +32,8 @@ const Editor: React.FC<EditorProps> = ({
   navigation,
   setCurrentPage: SetCurrentPage,
   setPopAtEditor: SetPopAtEditor,
-  setLoading: SetLoading
+  setLoading: SetLoading,
+  workspaceHeight
 }) => {
 
   const [ firstAccess, setFirstAccess ] = useState(true);
@@ -78,6 +80,10 @@ const Editor: React.FC<EditorProps> = ({
   }, [hasUnsavedChanges]
   );
 
+  const floatLayoutStyle: StyleProp<ViewStyle> = {
+    height: workspaceHeight
+  };
+
   return (
     <>
       <SafeAreaView style={styles.safeFirst} />
@@ -86,8 +92,14 @@ const Editor: React.FC<EditorProps> = ({
           <View style={styles.workspaceWrapper}>
             <Workspace />
             <View style={styles.floatWrapper}>
-              <TopFloat />
-              <BottomFloat />
+              <View style={styles.floatbox}>
+                <View style={styles.floatWrapperWrapper}>
+                  <TopFloat />
+                </View>
+                <View style={styles.floatWrapperWrapper}>
+                  <BottomFloat />
+                </View>
+              </View>
             </View>
           </View>
           <View style={styles.toolbarWrapper}>
@@ -99,6 +111,11 @@ const Editor: React.FC<EditorProps> = ({
   );
 };
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    workspaceHeight: state.editor.generic.workspaceSpec.height
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
@@ -108,7 +125,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 // export default React.memo(Editor);
 export default connector(Editor);
@@ -119,13 +136,21 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   floatWrapper: {
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    width: "100%",
-    height: "100%",
     top: 0,
-    left: 0
+    left: 0,  
+    width: "100%",
+    height: "100%"
+  },
+  floatbox: {
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  floatWrapperWrapper: {
+    width: "100%",
   },
   toolbarWrapper: {
     flex: 1

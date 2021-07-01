@@ -13,7 +13,7 @@ const PressButton: React.FC<PressButtonProps> = ({
   onPress
 }) => {
   return (
-    <TouchableOpacity
+    <TouchableOpacity 
       onPressIn={onPress}
     >
       <Icon />

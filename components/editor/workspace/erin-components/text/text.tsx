@@ -42,7 +42,6 @@ interface ErinTextState {
   fontColor: string,
   fontStyle: FontStyles,
   text: string,
-  onInteraction: boolean
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -53,18 +52,17 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     fontColor: 'white',
     fontStyle: 'Gaegu-Bold',
     text: '',
-    onInteraction: false
   }
 
   private setFontColor: (fontColor: string) => void;
   private setFontStyle: (fontStyle: FontStyles) => void;
   private setText: (text: string) => void;
-  private setOnInteraction: (onInteraction: boolean) => void;
 
   private tapHandlerRef = React.createRef<TapGestureHandler>();
   private panHandlerRef = React.createRef<PanGestureHandler>();
   private pinchHandlerRef = React.createRef<PinchGestureHandler>();
   private rotationHandlerRef = React.createRef<RotationGestureHandler>();
+  private period = 2 * Math.PI
   private posX: Animated.Value;
   private posY: Animated.Value;
   private lastPosition: { x: number, y: number };
@@ -94,9 +92,6 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.setText = (text: string) => {
       this.setState({ text })
     }
-    this.setOnInteraction = (onInteraction: boolean) => {
-      this.setState({ onInteraction })
-    }
 
     // Pan
     const {
@@ -113,7 +108,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         { nativeEvent: 
           {
             translationX: this.posX,
-            translationY: this.posY
+            translationY: this.posY,
           }
         }
       ],
@@ -133,10 +128,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     // Rotation
     this.rotationRaw = new Animated.Value(0)
     this.lastRotationRaw = 0
-    this.rotation = Animated.modulo(this.rotationRaw, 360)
+    this.rotation = Animated.modulo(this.rotationRaw, this.period)
     this.rotationString = this.rotation.interpolate({
-      inputRange: [0, 360],
-      outputRange: ['0rad', '360rad']
+      inputRange: [0, this.period],
+      outputRange: ['0rad', `${this.period}rad`]
     })
     this.onRotateGestureEvent = Animated.event(
       [{ nativeEvent: { rotation: this.rotationRaw }}],
@@ -154,7 +149,15 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     }: PanGestureHandlerStateChangeEvent
   ) => {
     if (oldState === State.ACTIVE) {
-      this.setOnInteraction(true)
+      if (
+        this.props.focusedComponent !== this.props.id ||
+        this.props.focusedComponentType !== 'text'
+        ) {
+          this.props.setFocusedComponent({
+            focusedComponent: this.props.id,
+            focusedComponentType: "text"
+          });
+        }
       this.lastPosition.x += translationX;
       this.lastPosition.y += translationY;
       this.posX.setOffset(this.lastPosition.x);
@@ -173,7 +176,15 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     }: RotationGestureHandlerStateChangeEvent
   ) => {
     if (oldState === State.ACTIVE) {
-      this.setOnInteraction(true)
+      if (
+        this.props.focusedComponent !== this.props.id ||
+        this.props.focusedComponentType !== 'text'
+        ) {
+          this.props.setFocusedComponent({
+            focusedComponent: this.props.id,
+            focusedComponentType: "text"
+          });
+        }
       this.lastRotationRaw += rotation;
       this.rotationRaw.setOffset(this.lastRotationRaw);
       this.rotationRaw.setValue(0);
@@ -189,7 +200,15 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     }: PinchGestureHandlerStateChangeEvent
   ) => {
     if (oldState === State.ACTIVE) {
-      this.setOnInteraction(true)
+      if (
+        this.props.focusedComponent !== this.props.id ||
+        this.props.focusedComponentType !== 'text'
+        ) {
+          this.props.setFocusedComponent({
+            focusedComponent: this.props.id,
+            focusedComponentType: "text"
+          });
+        }
       this.lastScale *= scale;
       this.baseScale.setValue(this.lastScale);
       this.pinchScale.setValue(1);
@@ -204,8 +223,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     }: TapGestureHandlerStateChangeEvent
   ) => {
     if (oldState === State.ACTIVE) {
-      this.setOnInteraction(true)
-      this.props.setTextOnEditState(true)
+      this.props.setFocusedComponent({
+        focusedComponent: this.props.id,
+        focusedComponentType: "text"
+      });
     }
   }
 
@@ -220,10 +241,6 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   private setToDefault = () => {
-    this.props.setFocusedComponent({
-      focusedComponent: -1,
-      focusedComponentType: 'none'
-    })
     this.props.setTextOnEditState(false)
   }
 
@@ -238,32 +255,18 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.props.setTextOnEditState(true);
   }
 
-  componentDidUpdate = (_: ErinTextProps, prevState: ErinTextState) => {
+  componentDidUpdate = (prevProps: ErinTextProps) => {
 
     if (this.props.focusedComponent === this.props.id) {
-      const {
-        fontColor,
-        fontStyle
-      } = this.props
-      if (fontColor) {
-        this.setFontColor(fontColor)
+      if (prevProps.pickedColor !== this.props.pickedColor) {
+        if (this.props.pickedColor) {
+          this.setFontColor(this.props.pickedColor)
+        }
       }
-      if (fontStyle) {
-        this.setFontStyle(fontStyle)
-      }
-    }
-
-    if ( prevState.onInteraction !== this.state.onInteraction ) {
-      if (this.state.onInteraction) {
-        this.props.setFocusedComponent({
-          focusedComponent: this.props.id,
-          focusedComponentType: "text"
-        });
-      } else {
-        this.props.setFocusedComponent({
-          focusedComponent: -1,
-          focusedComponentType: 'none'
-        })
+      if (prevProps.fontStyle !== this.props.fontStyle) {
+        if (this.props.fontStyle) {
+          this.setFontStyle(this.props.fontStyle)
+        }
       }
     }
     
@@ -362,8 +365,9 @@ const mapStateToProps = (state: RootState) => {
   return {
     creationPoint: state.editor.handle.creationPoint,
     focusedComponent: state.editor.handle.focusedComponent,
+    focusedComponentType: state.editor.handle.focusedComponentType,
     textOnEdit: state.editor.states.textOnEdit,
-    fontColor: state.editor.states.fontColor,
+    pickedColor: state.editor.states.pickedColor,
     fontStyle: state.editor.states.fontStyle,
     screenWidth: state.screen.screenSpec.width
   };

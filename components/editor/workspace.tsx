@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Animated, LayoutChangeEvent } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/root-reducer";
@@ -7,10 +7,12 @@ import {
   setBottomFloatCurrent, 
   SetBottomFloatCurrentInput, 
   setBottomTabCurrent, 
-  SetBottomTabCurrentInput 
+  SetBottomTabCurrentInput, 
+  setWorkspaceSpec, 
+  SetWorkspaceSpecInput
 } from "../../redux/slices/editor/editor-generic";
-import { TapGestureHandlerStateChangeEvent, TapGestureHandler, TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { SetCreationPointInput } from "@slices/editor/editor-handle";
+import { TapGestureHandlerStateChangeEvent, TapGestureHandler, TouchableWithoutFeedback, State } from "react-native-gesture-handler";
+import { SetCreationPointInput, setFocusedComponent, SetFocusedComponentInput } from "@slices/editor/editor-handle";
 import { setCreationPoint } from "@slices/editor/editor-handle";
 import CreationPoint from "@components/editor/workspace/creation-point";
 import Page from "./page";
@@ -25,23 +27,37 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
 
   public setToCreateMode = (): void => {
     if (!this.props.animationMode) {
+      this.props.setFocusedComponent({
+        focusedComponent: -1,
+        focusedComponentType: 'none'
+      })
       this.props.setBottomTabCurrent("create");
       this.props.setBottomFloatCurrent("none");
     }
   }
 
   private onTapHandlerStateChange = (
-    { nativeEvent: { x, y } }: 
+    { nativeEvent: {
+      x,
+      y,
+      oldState
+    } }: 
       TapGestureHandlerStateChangeEvent): void => {
-    if ( this.props.focusedComponent === -1 && this.props.focusedComponentType === "none" ) {
-      this.setToCreateMode();
-      this.props.setCreationPoint({ x, y });
-    }
+        if (oldState === State.ACTIVE) {
+          this.setToCreateMode();
+          this.props.setCreationPoint({ x, y });
+        }
   }
 
+  private onWorkspaceLayout = (
+    { nativeEvent: { layout: { width, height } } }: LayoutChangeEvent
+  ) => {
+    this.props.setWorkspaceSpec({ width, height })
+  }
   
   componentDidUpdate(prevProps: WorkspaceProps) {
     if (prevProps.focusedComponentType !== this.props.focusedComponentType) {
+
       switch (this.props.focusedComponentType) {
       case "text":
         this.props.setBottomTabCurrent("text");
@@ -56,6 +72,13 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
         this.props.setBottomTabCurrent("default");
         break;
       }
+
+      if (this.props.focusedComponentType !== 'none') {
+        this.props.setCreationPoint({ x: null, y: null })
+      }
+    }
+    if (prevProps.bottomTabCurrent !== this.props.bottomTabCurrent) {
+      this.props.setBottomTabCurrent(this.props.bottomTabCurrent)
     }
   }
 
@@ -73,7 +96,10 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       <TapGestureHandler
         onHandlerStateChange={this.onTapHandlerStateChange}
       >
-        <View style={styles.root}>
+        <Animated.View 
+          style={styles.root}
+          onLayout={this.onWorkspaceLayout}
+        >
           {
             x && y && 
             <CreationPoint 
@@ -82,7 +108,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
             />
           }
           <Page page={pages[currentPage-1]} />
-        </View>
+        </Animated.View>
       </TapGestureHandler>
     );
   }
@@ -96,6 +122,7 @@ const mapStateToProps = (state: RootState) => {
     currentPage: state.editor.pages.currentPage,
     focusedComponentType: state.editor.handle.focusedComponentType,
     focusedComponent: state.editor.handle.focusedComponent,
+    bottomTabCurrent: state.editor.generic.bottomTabCurrent
   };
 };
 
@@ -104,6 +131,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload)),
     setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+    setWorkspaceSpec: (payload: SetWorkspaceSpecInput) => dispatch(setWorkspaceSpec(payload)),
+    setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload))
   };
 };
 

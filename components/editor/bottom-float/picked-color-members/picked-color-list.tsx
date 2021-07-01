@@ -6,21 +6,21 @@ import { RootState } from "@redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Dispatch } from "redux";
-import { setFontColorState, SetFontColorStateInput } from "@slices/editor/editor-states";
+import { setPickedColorState, SetPickedColorStateInput } from "@slices/editor/editor-states";
 import { useEffect } from "react";
 import { basicColors, NamedColors } from "@src/color-palette";
 import { BOTTOM_MARGIN } from "@components/editor/base/constants";
 
-type FontColorListReduxProps = ConnectedProps<typeof connector>
+type PickedColorListReduxProps = ConnectedProps<typeof connector>
 
-interface FontColorListProps extends FontColorListReduxProps {}
+interface PickedColorListProps extends PickedColorListReduxProps {}
 
-const FontColorList: React.FC<FontColorListProps> = ({
+const PickedColorList: React.FC<PickedColorListProps> = ({
   settings: {
     iconSize,
     iconGap
   },
-  setFontColorState: SetFontColorState
+  setPickedColorState: SetPickedColorState,
 }) => {
 
   const floatIconSize = iconSize * (2/3);
@@ -39,14 +39,14 @@ const FontColorList: React.FC<FontColorListProps> = ({
         borderColor={"grey"}
         borderWidth={2}
         backgroundColor={color}
-        shadow={true}
-        shadowLevel={45}
+        shadow={false}
+        // shadowLevel={45}
         style={wrapperStyle}
       ></CircularFrame>
     );
 
     const onPress = () => {
-      SetFontColorState(color);
+      SetPickedColorState(color);
     };
 
     return <PressButton 
@@ -59,7 +59,7 @@ const FontColorList: React.FC<FontColorListProps> = ({
 
   useEffect(() => {
     return () => {
-      SetFontColorState(null);
+      SetPickedColorState(null);
     };
   }, []);
 
@@ -69,29 +69,29 @@ const FontColorList: React.FC<FontColorListProps> = ({
     renderItem={renderItem}
     keyExtractor={keyExtractor}
     style={styles.root}
+    scrollEnabled={true}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     settings: state.editor.generic.settings,
-
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setFontColorState: (payload: SetFontColorStateInput) => dispatch(setFontColorState(payload))
+    setPickedColorState: (payload: SetPickedColorStateInput) => dispatch(setPickedColorState(payload))
   };
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(FontColorList);
+export default connector(PickedColorList);
 
 const styles = StyleSheet.create({
   root: {
-    paddingBottom: BOTTOM_MARGIN,
-    width: "100%"
+    paddingVertical: BOTTOM_MARGIN,
+    zIndex: 9999
   }
 });

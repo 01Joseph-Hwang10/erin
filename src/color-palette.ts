@@ -1,5 +1,6 @@
 
 export const basicColors: NamedColors[] = [
+  "transparent",
   "white",
   "black",
   "lightskyblue",
@@ -20,7 +21,7 @@ export const basicColors: NamedColors[] = [
   "lightgrey",
   "lightslategray",
   "grey",
-  "slategrey"
+  "slategrey",
 ];
 
 export type NamedColors = 
@@ -171,6 +172,7 @@ export type NamedColors =
   | "whitesmoke"
   | "yellow"
   | "yellowgreen"
+  | "transparent"
 
 export const namedColors: NamedColors[] = [
   "aliceblue",
@@ -320,6 +322,7 @@ export const namedColors: NamedColors[] = [
   "whitesmoke",
   "yellow",
   "yellowgreen",
+  "transparent"
 ];
 
 export const colors = [

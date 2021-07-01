@@ -17,14 +17,14 @@ interface FontStyleListProps extends FontStyleListReduxProps {}
 
 const FontStyleList: React.FC<FontStyleListProps> = ({
   settings: {
-    iconSize,
-    iconGap
+    iconSize: floatIconSize,
+    iconGap: floatIconGap,
   },
   setFontStyleState: SetFontStyleState
 }) => {
 
-  const floatIconSize = iconSize * (2/3);
-  const floatIconGap = iconGap * (3/4);
+  // const floatIconSize = iconSize * (2/3);
+  // const floatIconGap = iconGap * (3/4);
 
   const renderItem = ({ item: font }: { item: FontStyles }) => {
 
@@ -35,7 +35,7 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
     
     const wrapperStyle: StyleProp<ViewStyle> = {
       marginHorizontal: floatIconGap
-    }
+    };
 
     const FontPreview = () => (
       <CircularFrame
@@ -44,8 +44,8 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
         borderColor={"white"}
         borderWidth={2}
         backgroundColor={"transparent"}
-        shadow={true}
-        shadowLevel={45}
+        shadow={false}
+        // shadowLevel={45}
         style={wrapperStyle}
       >
         <Text style={textStyle}>가</Text>
@@ -53,7 +53,7 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
     );
 
     const onPress = () => {
-      SetFontStyleState(font)
+      SetFontStyleState(font);
     };
 
     return <PressButton 
@@ -66,9 +66,9 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
 
   useEffect(() => {
     return () => {
-      SetFontStyleState(null)
-    }
-  }, [])
+      SetFontStyleState(null);
+    };
+  }, []);
 
   return <FlatList 
     horizontal={true}
@@ -76,6 +76,7 @@ const FontStyleList: React.FC<FontStyleListProps> = ({
     renderItem={renderItem}
     keyExtractor={keyExtractor}
     style={styles.root}
+    scrollEnabled={true}
   />;
 };
 
@@ -88,8 +89,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setFontStyleState: (payload: SetFontStyleStateInput) => dispatch(setFontStyleState(payload))
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -97,7 +98,7 @@ export default connector(FontStyleList);
 
 const styles = StyleSheet.create({
   root: {
-    paddingBottom: BOTTOM_MARGIN,
-    width: "100%"
+    paddingVertical: BOTTOM_MARGIN,
+    zIndex: 9999
   }
 });

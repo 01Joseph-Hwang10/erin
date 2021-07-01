@@ -18,7 +18,7 @@ const FontColor: React.FC<FontColorProps> = ({
 }) => {
 
   const renderIcon = () => (
-    <Ionicons name="color-palette" size={iconSize} color={ICON_COLOR} />
+    <Ionicons name="color-fill" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {

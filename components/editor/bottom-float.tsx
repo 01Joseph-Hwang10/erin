@@ -4,7 +4,7 @@ import { View, StyleSheet } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import AnimationTimeline from "./bottom-float/animation-timeline-members/animation-timeline";
 import DeleteComponent from "./bottom-float/delete-members/delete-component";
-import FontColorList from "./bottom-float/font-color-members/font-color-list";
+import FontColorList from "./bottom-float/picked-color-members/picked-color-list";
 import FontStyleList from "./bottom-float/font-style-members/font-style-list";
 
 type BottomFloatReduxProps = ConnectedProps<typeof connector>
@@ -19,7 +19,7 @@ class BottomFloat extends React.Component<BottomFloatProps> {
       return <AnimationTimeline />;
     case "deleteComponent":
       return <DeleteComponent />;
-    case "fontColor":
+    case "colorPicker":
       return <FontColorList />;
     case "fontStyle":
       return <FontStyleList />;

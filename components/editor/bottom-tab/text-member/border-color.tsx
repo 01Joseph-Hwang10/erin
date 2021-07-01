@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
@@ -18,7 +18,7 @@ const FontColor: React.FC<FontColorProps> = ({
 }) => {
 
   const renderIcon = () => (
-    <Ionicons name="color-palette" size={iconSize} color={ICON_COLOR} />
+    <MaterialIcons name="border-color" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
