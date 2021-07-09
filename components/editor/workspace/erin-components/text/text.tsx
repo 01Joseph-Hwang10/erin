@@ -1,3 +1,4 @@
+import { NonableShape } from "@components/common/shapes/shape.types";
 import { FontStyles } from "@components/editor/bottom-float/font-style-members/font-style.data";
 import { RootState } from "@redux/root-reducer";
 import { 
@@ -6,7 +7,19 @@ import {
   setFocusedComponent, 
   SetFocusedComponentInput, 
 } from "@slices/editor/editor-handle";
-import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
+import { 
+  setBackgroundShapeState, 
+  SetBackgroundShapeStateInput, 
+  setColorConsumerState, 
+  SetColorConsumerStateInput, 
+  setFontStyleState, 
+  SetFontStyleStateInput, 
+  setPickedColorState, 
+  SetPickedColorStateInput, 
+  setTextOnEditState, 
+  SetTextOnEditStateInput 
+} from "@slices/editor/editor-states";
+import { RectSpecType } from "@slices/screen";
 import React from "react";
 import { TextStyle } from "react-native";
 import { StyleProp, ViewStyle } from "react-native";
@@ -29,6 +42,7 @@ import {
 } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
+import BackgroundShape from "./background-shape";
 
 type ErinTextReduxProps = ConnectedProps<typeof connector>
 
@@ -42,6 +56,10 @@ interface ErinTextState {
   fontColor: string,
   fontStyle: FontStyles,
   text: string,
+  backgroundColor: string,
+  backgroundShape: NonableShape,
+  focused: boolean,
+  initialRect: RectSpecType
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -49,15 +67,27 @@ interface ErinTextState {
 class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
   public state: ErinTextState = {
-    fontColor: 'white',
-    fontStyle: 'Gaegu-Bold',
-    text: '',
+    fontColor: "white",
+    fontStyle: "Gaegu-Bold",
+    text: "",
+    backgroundColor: "orange",
+    backgroundShape: "none",
+    focused: false,
+    initialRect: {
+      width: 1,
+      height: 1
+    }
   }
 
   private setFontColor: (fontColor: string) => void;
   private setFontStyle: (fontStyle: FontStyles) => void;
   private setText: (text: string) => void;
+  private setBackgroundColor: (backgroundColor: string) => void;
+  private setFocused: (focused: boolean) => void;
+  private setBackgroundShape: (backgroundShape: NonableShape) => void;
+  private setInitialRect: (initialRect: RectSpecType) => void;
 
+  private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
   private panHandlerRef = React.createRef<PanGestureHandler>();
   private pinchHandlerRef = React.createRef<PinchGestureHandler>();
@@ -81,28 +111,40 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private onPanGestureEvent: (event: PanGestureHandlerGestureEvent) => void;
 
   constructor(props: ErinTextProps) {
-    super(props)
+    super(props);
     // state
     this.setFontColor = (fontColor: string) => {
-      this.setState({ fontColor })
-    }
+      this.setState({ fontColor });
+    };
     this.setFontStyle = (fontStyle: FontStyles) => {
-      this.setState({ fontStyle })
-    }
+      this.setState({ fontStyle });
+    };
     this.setText = (text: string) => {
-      this.setState({ text })
-    }
+      this.setState({ text });
+    };
+    this.setBackgroundColor = (backgroundColor: string) => {
+      this.setState({ backgroundColor });
+    };
+    this.setFocused = (focused: boolean) => {
+      this.setState({ focused });
+    };
+    this.setBackgroundShape = (backgroundShape: NonableShape) => {
+      this.setState({ backgroundShape });
+    };
+    this.setInitialRect = (initialRect: RectSpecType) => {
+      this.setState({ initialRect });
+    };
 
     // Pan
     const {
       x, y
-    } = props.creationPoint
+    } = props.creationPoint;
     this.lastPosition = {
       x: x ? x : 0,
       y: y ? y : 0
-    }
-    this.posX = new Animated.Value(0)
-    this.posY = new Animated.Value(0)
+    };
+    this.posX = new Animated.Value(0);
+    this.posY = new Animated.Value(0);
     this.onPanGestureEvent = Animated.event(
       [
         { nativeEvent: 
@@ -113,30 +155,30 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         }
       ],
       { useNativeDriver: true }
-    )
+    );
 
     // Scale
-    this.baseScale = new Animated.Value(1)
-    this.pinchScale = new Animated.Value(1)
-    this.scale = Animated.multiply( this.baseScale, this.pinchScale )
-    this.lastScale = 1
+    this.baseScale = new Animated.Value(1);
+    this.pinchScale = new Animated.Value(1);
+    this.scale = Animated.multiply( this.baseScale, this.pinchScale );
+    this.lastScale = 1;
     this.onPinchGestureEvent = Animated.event(
       [{ nativeEvent: { scale: this.pinchScale } }],
       { useNativeDriver: true }
-    )
+    );
 
     // Rotation
-    this.rotationRaw = new Animated.Value(0)
-    this.lastRotationRaw = 0
-    this.rotation = Animated.modulo(this.rotationRaw, this.period)
+    this.rotationRaw = new Animated.Value(0);
+    this.lastRotationRaw = 0;
+    this.rotation = Animated.modulo(this.rotationRaw, this.period);
     this.rotationString = this.rotation.interpolate({
       inputRange: [0, this.period],
-      outputRange: ['0rad', `${this.period}rad`]
-    })
+      outputRange: ["0rad", `${this.period}rad`]
+    });
     this.onRotateGestureEvent = Animated.event(
       [{ nativeEvent: { rotation: this.rotationRaw }}],
       { useNativeDriver: true }
-    )
+    );
   }
 
   private onPanHandlerStateChange = (
@@ -151,19 +193,19 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     if (oldState === State.ACTIVE) {
       if (
         this.props.focusedComponent !== this.props.id ||
-        this.props.focusedComponentType !== 'text'
-        ) {
-          this.props.setFocusedComponent({
-            focusedComponent: this.props.id,
-            focusedComponentType: "text"
-          });
-        }
+        this.props.focusedComponentType !== "text"
+      ) {
+        this.props.setFocusedComponent({
+          focusedComponent: this.props.id,
+          focusedComponentType: "text"
+        });
+      }
       this.lastPosition.x += translationX;
       this.lastPosition.y += translationY;
       this.posX.setOffset(this.lastPosition.x);
       this.posY.setOffset(this.lastPosition.y);
-      this.posX.setValue(0)
-      this.posY.setValue(0)
+      this.posX.setValue(0);
+      this.posY.setValue(0);
     }
   }
 
@@ -178,13 +220,13 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     if (oldState === State.ACTIVE) {
       if (
         this.props.focusedComponent !== this.props.id ||
-        this.props.focusedComponentType !== 'text'
-        ) {
-          this.props.setFocusedComponent({
-            focusedComponent: this.props.id,
-            focusedComponentType: "text"
-          });
-        }
+        this.props.focusedComponentType !== "text"
+      ) {
+        this.props.setFocusedComponent({
+          focusedComponent: this.props.id,
+          focusedComponentType: "text"
+        });
+      }
       this.lastRotationRaw += rotation;
       this.rotationRaw.setOffset(this.lastRotationRaw);
       this.rotationRaw.setValue(0);
@@ -202,13 +244,13 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     if (oldState === State.ACTIVE) {
       if (
         this.props.focusedComponent !== this.props.id ||
-        this.props.focusedComponentType !== 'text'
-        ) {
-          this.props.setFocusedComponent({
-            focusedComponent: this.props.id,
-            focusedComponentType: "text"
-          });
-        }
+        this.props.focusedComponentType !== "text"
+      ) {
+        this.props.setFocusedComponent({
+          focusedComponent: this.props.id,
+          focusedComponentType: "text"
+        });
+      }
       this.lastScale *= scale;
       this.baseScale.setValue(this.lastScale);
       this.pinchScale.setValue(1);
@@ -237,16 +279,28 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   private rootStyle: StyleProp<ViewStyle> = {
-    minWidth: this.props.screenWidth / 3
+    minWidth: this.props.screenWidth / 3,
   }
 
   private setToDefault = () => {
-    this.props.setTextOnEditState(false)
+    this.props.setTextOnEditState(false);
+    this.measureRootView();
+  }
+
+  private measureRootView = () => {
+    this.rootViewRef.current?.measure(
+      (_, __, width, height) => {
+        this.setInitialRect({
+          width,
+          height
+        });
+      }
+    );
   }
 
   componentDidMount = () => {
-    this.posX.setOffset(this.lastPosition.x)
-    this.posY.setOffset(this.lastPosition.y)
+    this.posX.setOffset(this.lastPosition.x);
+    this.posY.setOffset(this.lastPosition.y);
     this.props.setCreationPoint({ x: null, y: null });
     this.props.setFocusedComponent({
       focusedComponent: this.props.id,
@@ -256,20 +310,32 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   componentDidUpdate = (prevProps: ErinTextProps) => {
-
     if (this.props.focusedComponent === this.props.id) {
-      if (prevProps.pickedColor !== this.props.pickedColor) {
-        if (this.props.pickedColor) {
-          this.setFontColor(this.props.pickedColor)
-        }
+
+      if (!this.state.focused) {
+        this.setFocused(true);
+        this.props.setBackgroundShape(this.state.backgroundShape);
+        this.props.setColorConsumer(null);
+        this.props.setPickedColor(null);
+        this.props.setFontStyle(this.state.fontStyle);
       }
-      if (prevProps.fontStyle !== this.props.fontStyle) {
-        if (this.props.fontStyle) {
-          this.setFontStyle(this.props.fontStyle)
-        }
+
+      if (this.props.pickedColor && prevProps.pickedColor !== this.props.pickedColor) {
+        if (this.props.colorConsumer === "textFontColor") this.setFontColor(this.props.pickedColor);
+        if (this.props.colorConsumer === "textBackgroundColor") this.setBackgroundColor(this.props.pickedColor);
       }
+
+      if (this.props.fontStyle && prevProps.fontStyle !== this.props.fontStyle) {
+        this.setFontStyle(this.props.fontStyle);
+      }
+
+      if (prevProps.backgroundShape !== this.props.backgroundShape) {
+        this.setBackgroundShape(this.props.backgroundShape);
+      }
+
+    } else {
+      if (this.state.focused) this.setFocused(false);
     }
-    
   }
 
   render(): React.ReactNode {
@@ -283,7 +349,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.tapHandlerRef
       ]}
     >
-      <Animated.View style={[
+      <Animated.View 
+        ref={this.rootViewRef}
+        onLayout={this.measureRootView}
+        style={[
           styles.root,
           this.rootStyle,
           {
@@ -336,19 +405,25 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                   ]}
                 >
                   <Animated.View style={styles.wrapper}>
-                  {
-                    this.props.focusedComponent === this.props.id && this.props.textOnEdit ? 
-                      <TextInput 
-                        onChangeText={this.setText}
-                        value={this.state.text}
-                        placeholder="내용을 입력해 주세요!"
-                        autoFocus={true}
-                        style={this.textStyle}
-                        onSubmitEditing={this.setToDefault}
-                        onBlur={this.setToDefault}
-                      /> :
-                      <Text style={this.textStyle}>{this.state.text}</Text>
-                  }
+                    <BackgroundShape
+                      shape={this.state.backgroundShape}
+                      size={this.state.initialRect.width}
+                      backgroundColor={this.state.backgroundColor}
+                    >
+                      {
+                        this.props.focusedComponent === this.props.id && this.props.textOnEdit ? 
+                          <TextInput 
+                            onChangeText={this.setText}
+                            value={this.state.text}
+                            placeholder="내용을 입력해 주세요!"
+                            autoFocus={true}
+                            style={this.textStyle}
+                            onSubmitEditing={this.setToDefault}
+                            onBlur={this.setToDefault}
+                          /> :
+                          <Text style={this.textStyle}>{this.state.text}</Text>
+                      }
+                    </BackgroundShape>
                   </Animated.View>
                 </TapGestureHandler>
               </Animated.View>
@@ -356,7 +431,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           </Animated.View>
         </RotationGestureHandler>
       </Animated.View>
-    </PanGestureHandler>
+    </PanGestureHandler>;
   }
 
 }
@@ -369,7 +444,9 @@ const mapStateToProps = (state: RootState) => {
     textOnEdit: state.editor.states.textOnEdit,
     pickedColor: state.editor.states.pickedColor,
     fontStyle: state.editor.states.fontStyle,
-    screenWidth: state.screen.screenSpec.width
+    screenWidth: state.screen.screenSpec.width,
+    colorConsumer: state.editor.states.colorConsumer,
+    backgroundShape: state.editor.states.backgroundShape
   };
 };
 
@@ -378,6 +455,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload)),
     setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload)),
     setTextOnEditState: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload)),
+    setFontStyle: (payload: SetFontStyleStateInput) => dispatch(setFontStyleState(payload)),
+    setPickedColor: (payload: SetPickedColorStateInput) => dispatch(setPickedColorState(payload)),
+    setColorConsumer: (payload: SetColorConsumerStateInput) => dispatch(setColorConsumerState(payload)),
+    setBackgroundShape: (payload: SetBackgroundShapeStateInput) => dispatch(setBackgroundShapeState(payload))
   };
 };
 
@@ -389,7 +470,6 @@ const styles = StyleSheet.create({
   root: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "orange",
     position: "absolute",
     padding: 10
   },

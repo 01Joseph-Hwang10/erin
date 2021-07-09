@@ -1,10 +1,13 @@
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { GestureResponderEvent } from "react-native";
+import CircularFrame, { CircularFrameProps } from "@components/common/circular-frame";
 
 interface ToggleButtonProps {
     icons: JSX.Element[],
-    onPress?: (((event: GestureResponderEvent) => void) & (() => void)) | undefined
+    onPress?: (((event: GestureResponderEvent) => void) & (() => void)) | undefined,
+    enableCircularFrame?: boolean,
+    circularFrameProps?: CircularFrameProps
 }
 
 interface ToggleButtonState {
@@ -17,12 +20,12 @@ class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState>
       iconIndex: 0
     }
 
-    public getToggleIndex = (): number => {
-      return this.state.iconIndex;
-    }
-
-    public setToggleIndex = (iconIndex: number): void => {
-      this.setState({ iconIndex });
+    public toggleIcon = () => {
+      if ( this.state.iconIndex + 1 === this.props.icons.length ) {
+        this.setState({ iconIndex: 0 });
+      } else {
+        this.setState({ iconIndex: this.state.iconIndex + 1 });
+      }
     }
 
     render(): React.ReactNode {
@@ -35,7 +38,15 @@ class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState>
         <TouchableOpacity
           onPressIn={onPress}
         >
-          <Icon />
+          {
+            this.props.enableCircularFrame && this.props.circularFrameProps ? 
+              (
+                <CircularFrame {...this.props.circularFrameProps}>
+                  <Icon />
+                </CircularFrame>
+              ) :
+              <Icon />
+          }
         </TouchableOpacity>
       );
     }

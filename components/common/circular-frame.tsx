@@ -2,7 +2,7 @@ import React from "react";
 import { View, ViewStyle, StyleProp } from "react-native";
 import { returnShadowProps } from "../editor/base/constants";
 
-interface CircularFrameProps {
+export interface CircularFrameProps {
     size: number,
     children?: React.ReactNode,
     border?: boolean,

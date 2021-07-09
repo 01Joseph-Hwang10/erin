@@ -29,7 +29,7 @@ import { IconMembers } from "../common/types";
 import ChangeText from "./bottom-tab/text-member/change-text";
 import BackgroundShape from "./bottom-tab/text-member/background-shape";
 import BackgroundColor from "./bottom-tab/text-member/background-color";
-import BorderColor from "./bottom-tab/text-member/border-color";
+// import BorderColor from "./bottom-tab/text-member/border-color";
 // import ChangeText from "./bottom-tab/text-member/change-text";
 
 const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
@@ -65,8 +65,8 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     <FontStyle key={1} />,
     <BackgroundShape key={2} />,
     <BackgroundColor key={3} />,
-    <BorderColor key={4} />,
-    <ChangeText key={5} />,
+    <ChangeText key={4} />,
+    null,
     <CheckText key={6} />
   ],
   animationDefault: [

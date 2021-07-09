@@ -6,6 +6,7 @@ import { ICON_COLOR } from "../../base/constants";
 import PressButton from "../../base/press-button";
 import { Dispatch } from "redux";
 import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
+import { setColorConsumerState, SetColorConsumerStateInput, setPickedColorState, SetPickedColorStateInput } from "@slices/editor/editor-states";
 
 type FontColorReduxProps = ConnectedProps<typeof connector>
 
@@ -14,7 +15,9 @@ interface FontColorProps extends FontColorReduxProps {}
 const FontColor: React.FC<FontColorProps> = ({
   iconSize,
   bottomFloatCurrent,
-  setBottomFloatCurrent: SetBottomFloatCurrent
+  setBottomFloatCurrent: SetBottomFloatCurrent,
+  setColorConsumer: SetColorConsumer,
+  setPickedColorState: SetPickedColorState
 }) => {
 
   const renderIcon = () => (
@@ -24,8 +27,11 @@ const FontColor: React.FC<FontColorProps> = ({
   const onPress = () => {
     if (bottomFloatCurrent === "colorPicker") {
       SetBottomFloatCurrent("none");
+      SetColorConsumer(null);
+      SetPickedColorState(null);
     } else {
       SetBottomFloatCurrent("colorPicker");
+      SetColorConsumer("textFontColor");
     }
   };
   
@@ -44,7 +50,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+    setColorConsumer: (payload: SetColorConsumerStateInput) => dispatch(setColorConsumerState(payload)),
+    setPickedColorState: (payload: SetPickedColorStateInput) => dispatch(setPickedColorState(payload))
   };
 };
 
