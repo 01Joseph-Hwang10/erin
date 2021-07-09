@@ -39,6 +39,7 @@ export namespace Erin {
             | "deleteComponent"
             | "colorPicker"
             | "fontStyle"
+            | "editText"
 
         type BackgroundType = "image" | "color" | "pattern"
 

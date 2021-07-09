@@ -24,7 +24,7 @@ const Triangle: React.FC<TriangleProps> = ({
   const halfSize = size / 2;
 
   const rootStyle: StyleProp<ViewStyle> = {
-    backgroundColor,
+    borderBottomColor: backgroundColor,
     borderBottomWidth: triangleHeight,
     borderLeftWidth: halfSize,
     borderRightWidth: halfSize

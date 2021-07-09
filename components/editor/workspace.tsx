@@ -11,7 +11,7 @@ import {
   setWorkspaceSpec, 
   SetWorkspaceSpecInput
 } from "../../redux/slices/editor/editor-generic";
-import { TapGestureHandlerStateChangeEvent, TapGestureHandler, TouchableWithoutFeedback, State } from "react-native-gesture-handler";
+import { TapGestureHandlerStateChangeEvent, TapGestureHandler, State } from "react-native-gesture-handler";
 import { SetCreationPointInput, setFocusedComponent, SetFocusedComponentInput } from "@slices/editor/editor-handle";
 import { setCreationPoint } from "@slices/editor/editor-handle";
 import CreationPoint from "@components/editor/workspace/creation-point";
@@ -29,8 +29,8 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
     if (!this.props.animationMode) {
       this.props.setFocusedComponent({
         focusedComponent: -1,
-        focusedComponentType: 'none'
-      })
+        focusedComponentType: "none"
+      });
       this.props.setBottomTabCurrent("create");
       this.props.setBottomFloatCurrent("none");
     }
@@ -43,16 +43,18 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       oldState
     } }: 
       TapGestureHandlerStateChangeEvent): void => {
-        if (oldState === State.ACTIVE) {
-          this.setToCreateMode();
-          this.props.setCreationPoint({ x, y });
-        }
+    if (oldState === State.ACTIVE) {
+      if (!this.props.textOnEdit) {
+        this.setToCreateMode();
+        this.props.setCreationPoint({ x, y });
+      }
+    }
   }
 
   private onWorkspaceLayout = (
     { nativeEvent: { layout: { width, height } } }: LayoutChangeEvent
   ) => {
-    this.props.setWorkspaceSpec({ width, height })
+    this.props.setWorkspaceSpec({ width, height });
   }
   
   componentDidUpdate(prevProps: WorkspaceProps) {
@@ -73,12 +75,12 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
         break;
       }
 
-      if (this.props.focusedComponentType !== 'none') {
-        this.props.setCreationPoint({ x: null, y: null })
+      if (this.props.focusedComponentType !== "none") {
+        this.props.setCreationPoint({ x: null, y: null });
       }
     }
     if (prevProps.bottomTabCurrent !== this.props.bottomTabCurrent) {
-      this.props.setBottomTabCurrent(this.props.bottomTabCurrent)
+      this.props.setBottomTabCurrent(this.props.bottomTabCurrent);
     }
   }
 
@@ -122,7 +124,8 @@ const mapStateToProps = (state: RootState) => {
     currentPage: state.editor.pages.currentPage,
     focusedComponentType: state.editor.handle.focusedComponentType,
     focusedComponent: state.editor.handle.focusedComponent,
-    bottomTabCurrent: state.editor.generic.bottomTabCurrent
+    bottomTabCurrent: state.editor.generic.bottomTabCurrent,
+    textOnEdit: state.editor.states.textOnEdit
   };
 };
 

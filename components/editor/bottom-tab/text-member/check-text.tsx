@@ -6,7 +6,7 @@ import { ICON_COLOR } from "../../base/constants";
 import { Dispatch } from "redux";
 import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput } from "@slices/editor/editor-generic";
 import { setFocusedComponent, SetFocusedComponentInput } from "@slices/editor/editor-handle";
-import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
+import { StyleProp, View, ViewStyle } from "react-native";
 
 type CheckTextReduxProps = ConnectedProps<typeof connector>
 
@@ -18,13 +18,10 @@ const CheckText: React.FC<CheckTextProps> = ({
   setBottomTabCurrent: SetBottomTabCurrent,
   setFocusedComponent: SetFocusedComponent,
   setBottomFloatCurrent: SetBottomFloatCurrent,
-  setTextOnEditState: SetTextOnEditState
 }) => {
 
   const onPress = () => {
-    if (textOnEdit) {
-      SetTextOnEditState(false);
-    } else {
+    if (!textOnEdit) {
       SetBottomTabCurrent("default");
       SetFocusedComponent({
         focusedComponent: -1,
@@ -34,7 +31,12 @@ const CheckText: React.FC<CheckTextProps> = ({
     }
   };
 
-  return <CheckButton 
+  const placeholderStyle: StyleProp<ViewStyle> = {
+    width: iconSize,
+    height: iconSize
+  };
+
+  return textOnEdit ? <View style={placeholderStyle}></View> : <CheckButton 
     onPress={onPress}
   />;
 };
@@ -51,7 +53,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload)),
     setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
-    setTextOnEditState: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload))
   };
 };
 

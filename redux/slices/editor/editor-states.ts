@@ -9,7 +9,8 @@ interface EditorStatesState {
     pickedColor: string | null,
     textOnEdit: boolean,
     colorConsumer: ColorConsumer,
-    backgroundShape: NonableShape
+    backgroundShape: NonableShape,
+    textContent: string | null
 }
 
 const initialState: EditorStatesState = {
@@ -17,7 +18,8 @@ const initialState: EditorStatesState = {
   pickedColor: null,
   textOnEdit: false,
   colorConsumer: null,
-  backgroundShape: "none"
+  backgroundShape: "none",
+  textContent: null
 };
 
 export type SetFontStyleStateInput = FontStyles | null
@@ -70,6 +72,9 @@ const toggleBackgroundShapeStateReducer: CaseReducer<
 > = (state) => {
   switch (state.backgroundShape) {
   case "rectangle":
+    state.backgroundShape = "roundedRectangle";
+    break;
+  case "roundedRectangle":
     state.backgroundShape = "circle";
     break;
   case "circle":
@@ -92,6 +97,15 @@ const toggleBackgroundShapeStateReducer: CaseReducer<
   }
 };
 
+export type SetTextContentStateInput = string | null
+
+const setTextContentStateReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetTextContentStateInput>
+> = (state, { payload }) => {
+  state.textContent = payload;
+};
+
 export const {
   reducer,
   actions: {
@@ -100,7 +114,8 @@ export const {
     setTextOnEditState,
     setColorConsumerState,
     setBackgroundShapeState,
-    toggleBackgroundShapeState
+    toggleBackgroundShapeState,
+    setTextContentState
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -112,5 +127,6 @@ export const {
     setColorConsumerState: setColorConsumerStateReducer,
     setBackgroundShapeState: setBackgroundShapeStateReducer,
     toggleBackgroundShapeState: toggleBackgroundShapeStateReducer,
+    setTextContentState: setTextContentStateReducer
   }
 });

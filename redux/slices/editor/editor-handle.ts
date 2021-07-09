@@ -8,11 +8,17 @@ type CreationPoint = {
 
 type PushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id" | "zIndex">) => void
 
+type ReadComponent = (componentIndex: number) => Erin.Editor.ComponentInterface | null
+
+type NullComponent = (componentIndex: number) => void;
+
 export interface EditorHandleState {
   focusedComponent: number, // if no focused component, -1,
   focusedComponentType: Erin.Editor.ComponentTypes | "none",
   creationPoint: CreationPoint,
   pushComponent?: PushComponent,
+  readComponent?: ReadComponent,
+  nullComponent?: NullComponent,
   onDrag: boolean,
 }
 
@@ -57,6 +63,24 @@ const setPushComponentReducer: CaseReducer<
   state.pushComponent = pushComponent;
 };
 
+// export type SetReadComponentInput = ReadComponent
+
+// const setReadComponentReducer: CaseReducer<
+// EditorHandleState,
+// PayloadAction<SetReadComponentInput>
+// > = (state, { payload: readComponent }) => {
+// state.readComponent = readComponent;
+// };
+
+// export type SetNullComponentInput = NullComponent
+
+// const setNullComponentReducer: CaseReducer<
+// EditorHandleState,
+// PayloadAction<SetNullComponentInput>
+// > = (state, { payload: nullComponent }) => {
+// state.nullComponent = nullComponent;
+// };
+
 export type SetOnDragInput = boolean
 
 const setOnDragReducer: CaseReducer<
@@ -73,6 +97,8 @@ export const {
     setCreationPoint,
     setPushComponent,
     setOnDrag,
+    // setReadComponent,
+    // setNullComponent
   }
 } = createSlice({
   name: "editorSlice",
@@ -82,5 +108,7 @@ export const {
     setCreationPoint: setCreationPointReducer,
     setPushComponent: setPushComponentReducer,
     setOnDrag: setOnDragReducer,
+    // setReadComponent: setReadComponentReducer,
+    // setNullComponent: setNullComponentReducer
   }
 });

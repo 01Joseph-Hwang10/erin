@@ -17,7 +17,8 @@ const FontColor: React.FC<FontColorProps> = ({
   bottomFloatCurrent,
   setBottomFloatCurrent: SetBottomFloatCurrent,
   setColorConsumer: SetColorConsumer,
-  setPickedColorState: SetPickedColorState
+  setPickedColorState: SetPickedColorState,
+  colorConsumer
 }) => {
 
   const renderIcon = () => (
@@ -26,9 +27,13 @@ const FontColor: React.FC<FontColorProps> = ({
 
   const onPress = () => {
     if (bottomFloatCurrent === "colorPicker") {
-      SetBottomFloatCurrent("none");
-      SetColorConsumer(null);
-      SetPickedColorState(null);
+      if ( colorConsumer !== "textFontColor" ) {
+        SetColorConsumer("textFontColor");
+      } else {
+        SetBottomFloatCurrent("none");
+        SetColorConsumer(null);
+        SetPickedColorState(null);
+      }
     } else {
       SetBottomFloatCurrent("colorPicker");
       SetColorConsumer("textFontColor");
@@ -44,7 +49,8 @@ const FontColor: React.FC<FontColorProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent
+    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent,
+    colorConsumer: state.editor.states.colorConsumer
   };
 };
 

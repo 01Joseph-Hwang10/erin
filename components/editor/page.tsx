@@ -8,7 +8,10 @@ import ErinText from "./workspace/erin-components/text/text";
 import Stickers from "./workspace/erin-components/stickers/stickers";
 import ErrorComponent from "./workspace/erin-components/error-component";
 import { Dispatch } from "redux";
-import { setPushComponent, SetPushComponentInput } from "@slices/editor/editor-handle";
+import { 
+  setPushComponent, 
+  SetPushComponentInput, 
+} from "@slices/editor/editor-handle";
 import { connect, ConnectedProps } from "react-redux";
 import RNShake from "react-native-shake";
 
@@ -56,6 +59,10 @@ class Page extends Component<PageProps, PageState> {
       }));
     }
 
+    // private readComponent = (componentIndex: number): 
+    // Erin.Editor.ComponentInterface | null => 
+    // this.state.components[componentIndex]
+
     componentDidMount() {
       this.props.setPushComponent(this.pushComponent);
       RNShake.addListener(this.resetPage);
@@ -97,7 +104,7 @@ class Page extends Component<PageProps, PageState> {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setPushComponent: (payload: SetPushComponentInput) => dispatch(setPushComponent(payload))
+    setPushComponent: (payload: SetPushComponentInput) => dispatch(setPushComponent(payload)),
   };
 };
 

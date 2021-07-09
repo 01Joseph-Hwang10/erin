@@ -1,6 +1,7 @@
 import { NonableShape } from "@components/common/shapes/shape.types";
 import { FontStyles } from "@components/editor/bottom-float/font-style-members/font-style.data";
 import { RootState } from "@redux/root-reducer";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
 import { 
   setCreationPoint, 
   SetCreationPointInput, 
@@ -16,6 +17,8 @@ import {
   SetFontStyleStateInput, 
   setPickedColorState, 
   SetPickedColorStateInput, 
+  setTextContentState, 
+  SetTextContentStateInput, 
   setTextOnEditState, 
   SetTextOnEditStateInput 
 } from "@slices/editor/editor-states";
@@ -59,10 +62,12 @@ interface ErinTextState {
   backgroundColor: string,
   backgroundShape: NonableShape,
   focused: boolean,
-  initialRect: RectSpecType
+  size: number
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
+
+const initialSize = 40;
 
 class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
@@ -73,10 +78,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     backgroundColor: "orange",
     backgroundShape: "none",
     focused: false,
-    initialRect: {
-      width: 1,
-      height: 1
-    }
+    size: initialSize
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -85,7 +87,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setBackgroundColor: (backgroundColor: string) => void;
   private setFocused: (focused: boolean) => void;
   private setBackgroundShape: (backgroundShape: NonableShape) => void;
-  private setInitialRect: (initialRect: RectSpecType) => void;
+  private setSize: (size: number) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
@@ -131,8 +133,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.setBackgroundShape = (backgroundShape: NonableShape) => {
       this.setState({ backgroundShape });
     };
-    this.setInitialRect = (initialRect: RectSpecType) => {
-      this.setState({ initialRect });
+    this.setSize = (size: number) => {
+      this.setState({ size });
     };
 
     // Pan
@@ -272,28 +274,14 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     }
   }
 
-  private textStyle: StyleProp<TextStyle> = {
-    fontSize: 50,
-    color: this.state.fontColor,
-    fontFamily: this.state.fontStyle
-  }
-
   private rootStyle: StyleProp<ViewStyle> = {
     minWidth: this.props.screenWidth / 3,
   }
 
-  private setToDefault = () => {
-    this.props.setTextOnEditState(false);
-    this.measureRootView();
-  }
-
   private measureRootView = () => {
     this.rootViewRef.current?.measure(
-      (_, __, width, height) => {
-        this.setInitialRect({
-          width,
-          height
-        });
+      (_, __, width) => {
+        this.setSize(width / this.lastScale);
       }
     );
   }
@@ -307,6 +295,11 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       focusedComponentType: "text"
     });
     this.props.setTextOnEditState(true);
+    this.props.setBottomFloatCurrent("editText");
+    this.props.setBackgroundShape(this.state.backgroundShape);
+    this.props.setColorConsumer(null);
+    this.props.setPickedColor(null);
+    this.props.setFontStyle(this.state.fontStyle);
   }
 
   componentDidUpdate = (prevProps: ErinTextProps) => {
@@ -333,6 +326,19 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.setBackgroundShape(this.props.backgroundShape);
       }
 
+      if ( prevProps.textOnEdit !== this.props.textOnEdit && this.props.textOnEdit ) {
+        this.props.setTextContent(this.state.text);
+      }
+
+      if ( prevProps.textContent !== this.props.textContent ) {
+        if ( this.props.textContent ) {
+          this.setText(this.props.textContent);
+        } else {
+          this.setText("");
+        }
+        this.measureRootView();
+      }
+
     } else {
       if (this.state.focused) this.setFocused(false);
     }
@@ -351,7 +357,6 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     >
       <Animated.View 
         ref={this.rootViewRef}
-        onLayout={this.measureRootView}
         style={[
           styles.root,
           this.rootStyle,
@@ -407,22 +412,16 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                   <Animated.View style={styles.wrapper}>
                     <BackgroundShape
                       shape={this.state.backgroundShape}
-                      size={this.state.initialRect.width}
+                      size={this.state.size}
                       backgroundColor={this.state.backgroundColor}
                     >
-                      {
-                        this.props.focusedComponent === this.props.id && this.props.textOnEdit ? 
-                          <TextInput 
-                            onChangeText={this.setText}
-                            value={this.state.text}
-                            placeholder="내용을 입력해 주세요!"
-                            autoFocus={true}
-                            style={this.textStyle}
-                            onSubmitEditing={this.setToDefault}
-                            onBlur={this.setToDefault}
-                          /> :
-                          <Text style={this.textStyle}>{this.state.text}</Text>
-                      }
+                      <Text style={[
+                        styles.text,
+                        {
+                          fontFamily: this.state.fontStyle,
+                          color: this.state.fontColor
+                        }
+                      ]}>{this.state.text}</Text>
                     </BackgroundShape>
                   </Animated.View>
                 </TapGestureHandler>
@@ -446,7 +445,8 @@ const mapStateToProps = (state: RootState) => {
     fontStyle: state.editor.states.fontStyle,
     screenWidth: state.screen.screenSpec.width,
     colorConsumer: state.editor.states.colorConsumer,
-    backgroundShape: state.editor.states.backgroundShape
+    backgroundShape: state.editor.states.backgroundShape,
+    textContent: state.editor.states.textContent
   };
 };
 
@@ -458,7 +458,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setFontStyle: (payload: SetFontStyleStateInput) => dispatch(setFontStyleState(payload)),
     setPickedColor: (payload: SetPickedColorStateInput) => dispatch(setPickedColorState(payload)),
     setColorConsumer: (payload: SetColorConsumerStateInput) => dispatch(setColorConsumerState(payload)),
-    setBackgroundShape: (payload: SetBackgroundShapeStateInput) => dispatch(setBackgroundShapeState(payload))
+    setBackgroundShape: (payload: SetBackgroundShapeStateInput) => dispatch(setBackgroundShapeState(payload)),
+    setTextContent: (payload: SetTextContentStateInput) => dispatch(setTextContentState(payload)),
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
   };
 };
 
@@ -477,5 +479,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+  },
+  text: {
+    fontSize: initialSize
   }
 });

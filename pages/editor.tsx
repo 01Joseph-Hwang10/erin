@@ -33,7 +33,6 @@ const Editor: React.FC<EditorProps> = ({
   setCurrentPage: SetCurrentPage,
   setPopAtEditor: SetPopAtEditor,
   setLoading: SetLoading,
-  workspaceHeight
 }) => {
 
   const [ firstAccess, setFirstAccess ] = useState(true);
@@ -79,10 +78,6 @@ const Editor: React.FC<EditorProps> = ({
     return () => BackHandler.removeEventListener("hardwareBackPress", backHandler);
   }, [hasUnsavedChanges]
   );
-
-  const floatLayoutStyle: StyleProp<ViewStyle> = {
-    height: workspaceHeight
-  };
 
   return (
     <>
@@ -142,7 +137,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,  
     width: "100%",
-    height: "100%"
+    height: "100%",
+    zIndex: 9999
   },
   floatbox: {
     flex: 1,
