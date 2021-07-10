@@ -4,13 +4,16 @@ import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type ColorConsumer = "textFontColor" | "textBackgroundColor" | null
 
+export type TextAlign = "center" | "left" | "right" | "justify"
+
 interface EditorStatesState {
     fontStyle: FontStyles | null,
     pickedColor: string | null,
     textOnEdit: boolean,
     colorConsumer: ColorConsumer,
     backgroundShape: NonableShape,
-    textContent: string | null
+    textContent: string | null,
+    textAlign: TextAlign
 }
 
 const initialState: EditorStatesState = {
@@ -19,7 +22,8 @@ const initialState: EditorStatesState = {
   textOnEdit: false,
   colorConsumer: null,
   backgroundShape: "none",
-  textContent: null
+  textContent: null,
+  textAlign: "justify"
 };
 
 export type SetFontStyleStateInput = FontStyles | null
@@ -78,9 +82,6 @@ const toggleBackgroundShapeStateReducer: CaseReducer<
     state.backgroundShape = "circle";
     break;
   case "circle":
-    state.backgroundShape = "triangle";
-    break;
-  case "triangle":
     state.backgroundShape = "heart";
     break;
   case "heart":
@@ -106,6 +107,36 @@ const setTextContentStateReducer: CaseReducer<
   state.textContent = payload;
 };
 
+export type SetTextAlignStateInput = TextAlign
+
+const setTextAlignStateReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetTextAlignStateInput>
+> = (state, { payload: newTextAlign }) => {
+  state.textAlign = newTextAlign;
+};
+
+const toggleTextAlignStateReducer: CaseReducer<
+  EditorStatesState
+> = (state) => {
+  switch (state.textAlign) {
+  case "justify":
+    state.textAlign = "center";
+    break;
+  case "center":
+    state.textAlign = "left";
+    break;
+  case "left":
+    state.textAlign = "right";
+    break;
+  case "right":
+    state.textAlign = "justify";
+    break;
+  default:
+    break;
+  }
+};
+
 export const {
   reducer,
   actions: {
@@ -115,7 +146,9 @@ export const {
     setColorConsumerState,
     setBackgroundShapeState,
     toggleBackgroundShapeState,
-    setTextContentState
+    setTextContentState,
+    setTextAlignState,
+    toggleTextAlignState
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -127,6 +160,8 @@ export const {
     setColorConsumerState: setColorConsumerStateReducer,
     setBackgroundShapeState: setBackgroundShapeStateReducer,
     toggleBackgroundShapeState: toggleBackgroundShapeStateReducer,
-    setTextContentState: setTextContentStateReducer
+    setTextContentState: setTextContentStateReducer,
+    setTextAlignState: setTextAlignStateReducer,
+    toggleTextAlignState: toggleTextAlignStateReducer
   }
 });

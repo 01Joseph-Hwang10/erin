@@ -15,6 +15,11 @@ interface BottomFloatProps extends BottomFloatReduxProps {}
 class BottomFloat extends React.Component<BottomFloatProps> {
 
   render(): React.ReactNode {
+
+    if (this.props.onDrag) {
+      return <DeleteComponent />;
+    }
+
     switch (this.props.bottomFloatCurrent) {
     case "animationTimeline":
       return <AnimationTimeline />;
@@ -29,12 +34,14 @@ class BottomFloat extends React.Component<BottomFloatProps> {
     default:
       return <View style={styles.root}></View>;
     }
+    
   }
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
-    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent
+    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent,
+    onDrag: state.editor.handle.onDrag
   };
 };
 

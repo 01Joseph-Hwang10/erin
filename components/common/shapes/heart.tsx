@@ -48,6 +48,12 @@ const Heart: React.FC<HeartProps> = ({
     height: "100%"
   } : {};
 
+  const wrapperStyle: StyleProp<ViewStyle> = {
+    transform: [
+      { translateY: size / 6 }
+    ]
+  };
+
   return (
     <View style={heartStyle}>
       <View style={[
@@ -64,7 +70,7 @@ const Heart: React.FC<HeartProps> = ({
         rightHeartStyle
       ]} 
       />
-      <View style={[styles.childrenWrapper, fillStyle]}>
+      <View style={[styles.childrenWrapper, fillStyle, wrapperStyle]}>
         {children}
       </View>
     </View>

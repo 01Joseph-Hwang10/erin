@@ -15,7 +15,8 @@ const Star: React.FC<StarProps> = ({
   size,
   backgroundColor,
   children,
-  fill
+  fill,
+  style
 }) => {
 
   const starfiveStyle: StyleProp<ViewStyle> = {
@@ -56,12 +57,18 @@ const Star: React.FC<StarProps> = ({
     height: "100%"
   } : {};
 
+  const wrapperStyle: StyleProp<ViewStyle> = {
+    transform: [
+      { translateX: size / 15 }
+    ]
+  };
+
   return (
-    <View style={starfiveStyle}>
+    <View style={[starfiveStyle, style]}>
       <View style={[styles.starfiveTop, starfiveTopStyle]} />
       <View style={[styles.starfiveBefore, starFiveBeforeStyle]} />
       <View style={[styles.starfiveAfter, starFiveAfterStyle]} />
-      <View style={[styles.childrenWrapper, fillStyle]}>
+      <View style={[styles.childrenWrapper, fillStyle, wrapperStyle]}>
         {children}
       </View>
     </View>

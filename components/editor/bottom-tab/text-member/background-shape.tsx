@@ -15,12 +15,13 @@ import None from "@components/common/shapes/none";
 import { StyleProp, ViewStyle } from "react-native";
 import { shapeToIndex } from "./background-shape.function";
 import { useEffect } from "react";
+import { CircularFrameProps } from "@components/common/circular-frame";
 
 type ShapeReduxProps = ConnectedProps<typeof connector>
 
 interface ShapeProps extends ShapeReduxProps {}
 
-const iconColor = "grey";
+const iconColor = "white";
 
 const Shape: React.FC<ShapeProps> = ({
   iconSize,
@@ -29,50 +30,63 @@ const Shape: React.FC<ShapeProps> = ({
 }) => {
 
   const roundedRectangleStyle: StyleProp<ViewStyle> = {
-    borderRadius: 10
+    borderRadius: 3
   };
+
+  const starStyle: StyleProp<ViewStyle> = {
+    transform: [
+      { translateY: ( 1 / 10 ) * iconSize },
+      { translateX: ( 1 / 25 ) * iconSize * (-1) }
+    ]
+  };
+
+  const halfSize = iconSize / 2;
 
   /* Shapes I'll gonna make: rectangle, circle, heart, star, triangle */
   const icons: JSX.Element[] = [
     <None 
       key={0}
-      size={iconSize}
+      size={iconSize * 2 / 3}
       color={iconColor}
     />,
     <Rectangle 
       key={1}
-      width={iconSize}
-      height={iconSize}
+      width={halfSize}
+      height={halfSize}
       backgroundColor={iconColor}
     />,
     <Rectangle 
       key={2}
-      width={iconSize}
-      height={iconSize}
+      width={halfSize}
+      height={halfSize}
       backgroundColor={iconColor}
       style={roundedRectangleStyle}
     />,
     <Circle 
       key={3}
-      size={iconSize}
-      backgroundColor={iconColor}
-    />,
-    <Triangle 
-      key={4}
-      size={iconSize}
+      size={halfSize}
       backgroundColor={iconColor}
     />,
     <Heart 
-      key={5}
-      size={iconSize}
+      key={4}
+      size={halfSize}
       backgroundColor={iconColor}
     />,
     <Star 
-      key={6}
-      size={iconSize / 2}
+      key={5}
+      size={halfSize}
       backgroundColor={iconColor}
+      style={starStyle}
     />
   ];
+
+  const circularFrameProps: CircularFrameProps = {
+    size: iconSize,
+    border: true,
+    borderColor: "white",
+    borderWidth: 2.5,
+    backgroundColor: "transparent"
+  };
 
   const buttonRef = useRef<ToggleButton>(null);
 
@@ -92,6 +106,8 @@ const Shape: React.FC<ShapeProps> = ({
     ref={buttonRef}
     onPress={onPress}
     icons={icons}
+    enableCircularFrame={true}
+    circularFrameProps={circularFrameProps}
   />;
 };
 

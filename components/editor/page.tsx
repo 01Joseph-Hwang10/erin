@@ -9,6 +9,8 @@ import Stickers from "./workspace/erin-components/stickers/stickers";
 import ErrorComponent from "./workspace/erin-components/error-component";
 import { Dispatch } from "redux";
 import { 
+  setNullComponent,
+  SetNullComponentInput,
   setPushComponent, 
   SetPushComponentInput, 
 } from "@slices/editor/editor-handle";
@@ -49,7 +51,7 @@ class Page extends Component<PageProps, PageState> {
       }));
     }
 
-    private nullCopmonent = (componentIndex: number) => {
+    public nullCopmonent = (componentIndex: number) => {
       this.setState(prevState => ({
         components: [
           ...prevState.components.slice(0, componentIndex),
@@ -65,6 +67,7 @@ class Page extends Component<PageProps, PageState> {
 
     componentDidMount() {
       this.props.setPushComponent(this.pushComponent);
+      this.props.setNullComponent(this.nullCopmonent);
       RNShake.addListener(this.resetPage);
     }
 
@@ -105,6 +108,7 @@ class Page extends Component<PageProps, PageState> {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setPushComponent: (payload: SetPushComponentInput) => dispatch(setPushComponent(payload)),
+    setNullComponent: (payload: SetNullComponentInput) => dispatch(setNullComponent(payload))
   };
 };
 

@@ -6,7 +6,11 @@ import {
   setCreationPoint, 
   SetCreationPointInput, 
   setFocusedComponent, 
-  SetFocusedComponentInput, 
+  SetFocusedComponentInput,
+  setOnDeletionArea,
+  SetOnDeletionAreaInput,
+  setOnDrag,
+  SetOnDragInput, 
 } from "@slices/editor/editor-handle";
 import { 
   setBackgroundShapeState, 
@@ -17,14 +21,15 @@ import {
   SetFontStyleStateInput, 
   setPickedColorState, 
   SetPickedColorStateInput, 
+  setTextAlignState, 
+  SetTextAlignStateInput, 
   setTextContentState, 
   SetTextContentStateInput, 
   setTextOnEditState, 
-  SetTextOnEditStateInput 
+  SetTextOnEditStateInput, 
+  TextAlign
 } from "@slices/editor/editor-states";
-import { RectSpecType } from "@slices/screen";
 import React from "react";
-import { TextStyle } from "react-native";
 import { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet } from "react-native";
 import { View, Text, Animated } from "react-native";
@@ -35,7 +40,6 @@ import {
   PanGestureHandlerGestureEvent, 
   PinchGestureHandlerGestureEvent, 
   RotationGestureHandlerGestureEvent,
-  TextInput, 
   TapGestureHandler,
   PanGestureHandlerStateChangeEvent,
   State,
@@ -62,7 +66,8 @@ interface ErinTextState {
   backgroundColor: string,
   backgroundShape: NonableShape,
   focused: boolean,
-  size: number
+  size: number,
+  textAlign: TextAlign
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -78,7 +83,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     backgroundColor: "orange",
     backgroundShape: "none",
     focused: false,
-    size: initialSize
+    size: initialSize,
+    textAlign: "justify"
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -88,6 +94,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setFocused: (focused: boolean) => void;
   private setBackgroundShape: (backgroundShape: NonableShape) => void;
   private setSize: (size: number) => void;
+  private setTextAlign: (textAlign: TextAlign) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
@@ -135,6 +142,9 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     };
     this.setSize = (size: number) => {
       this.setState({ size });
+    };
+    this.setTextAlign = (textAlign: TextAlign) => {
+      this.setState({ textAlign });
     };
 
     // Pan
@@ -188,11 +198,18 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       nativeEvent: {
         oldState,
         translationX,
-        translationY
+        translationY,
+        absoluteX,
+        absoluteY
       }
     }: PanGestureHandlerStateChangeEvent
   ) => {
+    console.log({ absoluteX, absoluteY});
+    if (oldState === State.BEGAN) {
+      this.props.setOnDrag(true);
+    }
     if (oldState === State.ACTIVE) {
+      this.props.setOnDrag(false);
       if (
         this.props.focusedComponent !== this.props.id ||
         this.props.focusedComponentType !== "text"
@@ -311,6 +328,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.props.setColorConsumer(null);
         this.props.setPickedColor(null);
         this.props.setFontStyle(this.state.fontStyle);
+        this.props.setTextAlign(this.state.textAlign);
       }
 
       if (this.props.pickedColor && prevProps.pickedColor !== this.props.pickedColor) {
@@ -328,6 +346,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
       if ( prevProps.textOnEdit !== this.props.textOnEdit && this.props.textOnEdit ) {
         this.props.setTextContent(this.state.text);
+      }
+
+      if ( prevProps.textAlign !== this.props.textAlign ) {
+        this.setTextAlign(this.props.textAlign);
       }
 
       if ( prevProps.textContent !== this.props.textContent ) {
@@ -419,7 +441,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                         styles.text,
                         {
                           fontFamily: this.state.fontStyle,
-                          color: this.state.fontColor
+                          color: this.state.fontColor,
+                          textAlign: this.state.textAlign
                         }
                       ]}>{this.state.text}</Text>
                     </BackgroundShape>
@@ -446,7 +469,9 @@ const mapStateToProps = (state: RootState) => {
     screenWidth: state.screen.screenSpec.width,
     colorConsumer: state.editor.states.colorConsumer,
     backgroundShape: state.editor.states.backgroundShape,
-    textContent: state.editor.states.textContent
+    textContent: state.editor.states.textContent,
+    textAlign: state.editor.states.textAlign,
+    deletionArea: state.editor.handle.deletionArea
   };
 };
 
@@ -460,7 +485,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setColorConsumer: (payload: SetColorConsumerStateInput) => dispatch(setColorConsumerState(payload)),
     setBackgroundShape: (payload: SetBackgroundShapeStateInput) => dispatch(setBackgroundShapeState(payload)),
     setTextContent: (payload: SetTextContentStateInput) => dispatch(setTextContentState(payload)),
-    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+    setTextAlign: (payload: SetTextAlignStateInput) => dispatch(setTextAlignState(payload)),
+    setOnDrag: (payload: SetOnDragInput) => dispatch(setOnDrag(payload)),
+    setOnDeletionArea: (payload: SetOnDeletionAreaInput) => dispatch(setOnDeletionArea(payload))
   };
 };
 

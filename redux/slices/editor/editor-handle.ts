@@ -6,6 +6,13 @@ type CreationPoint = {
   y: number | null
 }
 
+type DeletionArea = {
+  xmin: number,
+  ymin: number,
+  xmax: number,
+  ymax: number,
+}
+
 type PushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id" | "zIndex">) => void
 
 type ReadComponent = (componentIndex: number) => Erin.Editor.ComponentInterface | null
@@ -20,6 +27,8 @@ export interface EditorHandleState {
   readComponent?: ReadComponent,
   nullComponent?: NullComponent,
   onDrag: boolean,
+  deletionArea: DeletionArea,
+  onDeletionArea: boolean
 }
 
 const initialState: EditorHandleState = {
@@ -30,6 +39,13 @@ const initialState: EditorHandleState = {
     y: null,
   },
   onDrag: false,
+  deletionArea: {
+    xmin: 1,
+    ymin: 1,
+    xmax: 1,
+    ymax: 1,
+  },
+  onDeletionArea: false
 };
 
 export type SetFocusedComponentInput = {
@@ -72,14 +88,14 @@ const setPushComponentReducer: CaseReducer<
 // state.readComponent = readComponent;
 // };
 
-// export type SetNullComponentInput = NullComponent
+export type SetNullComponentInput = NullComponent
 
-// const setNullComponentReducer: CaseReducer<
-// EditorHandleState,
-// PayloadAction<SetNullComponentInput>
-// > = (state, { payload: nullComponent }) => {
-// state.nullComponent = nullComponent;
-// };
+const setNullComponentReducer: CaseReducer<
+EditorHandleState,
+PayloadAction<SetNullComponentInput>
+> = (state, { payload: nullComponent }) => {
+  state.nullComponent = nullComponent;
+};
 
 export type SetOnDragInput = boolean
 
@@ -90,6 +106,24 @@ const setOnDragReducer: CaseReducer<
   state.onDrag = onDrag;
 };
 
+export type SetDeletionAreaInput = DeletionArea
+
+const setDeletionAreaReducer: CaseReducer<
+  EditorHandleState,
+  PayloadAction<SetDeletionAreaInput>
+> = (state, { payload: deletionArea }) => {
+  state.deletionArea = deletionArea;
+};
+
+export type SetOnDeletionAreaInput = boolean
+
+const setOnDeletionAreaReducer: CaseReducer<
+  EditorHandleState,
+  PayloadAction<SetOnDeletionAreaInput>
+> = (state, { payload: onDeletionArea }) => {
+  state.onDeletionArea = onDeletionArea;
+};
+
 export const {
   reducer,
   actions: {
@@ -98,7 +132,9 @@ export const {
     setPushComponent,
     setOnDrag,
     // setReadComponent,
-    // setNullComponent
+    setNullComponent,
+    setDeletionArea,
+    setOnDeletionArea,
   }
 } = createSlice({
   name: "editorSlice",
@@ -109,6 +145,8 @@ export const {
     setPushComponent: setPushComponentReducer,
     setOnDrag: setOnDragReducer,
     // setReadComponent: setReadComponentReducer,
-    // setNullComponent: setNullComponentReducer
+    setNullComponent: setNullComponentReducer,
+    setDeletionArea: setDeletionAreaReducer,
+    setOnDeletionArea: setOnDeletionAreaReducer,
   }
 });
