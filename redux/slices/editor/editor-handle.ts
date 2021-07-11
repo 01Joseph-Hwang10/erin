@@ -6,13 +6,6 @@ type CreationPoint = {
   y: number | null
 }
 
-type DeletionArea = {
-  xmin: number,
-  ymin: number,
-  xmax: number,
-  ymax: number,
-}
-
 type PushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id" | "zIndex">) => void
 
 type ReadComponent = (componentIndex: number) => Erin.Editor.ComponentInterface | null
@@ -27,7 +20,7 @@ export interface EditorHandleState {
   readComponent?: ReadComponent,
   nullComponent?: NullComponent,
   onDrag: boolean,
-  deletionArea: DeletionArea,
+  deletionArea: Erin.Common.MinMaxSpec,
   onDeletionArea: boolean
 }
 
@@ -106,7 +99,7 @@ const setOnDragReducer: CaseReducer<
   state.onDrag = onDrag;
 };
 
-export type SetDeletionAreaInput = DeletionArea
+export type SetDeletionAreaInput = Erin.Common.MinMaxSpec
 
 const setDeletionAreaReducer: CaseReducer<
   EditorHandleState,

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import org.unimodules.core.interfaces.Package;
 
-import com.BV.LinearGradient.LinearGradientPackage;
 
 public class BasePackageList {
   public List<Package> getPackageList() {
@@ -17,8 +16,7 @@ public class BasePackageList {
         new expo.modules.imageloader.ImageLoaderPackage(),
         new expo.modules.keepawake.KeepAwakePackage(),
         new expo.modules.splashscreen.SplashScreenPackage(),
-        new expo.modules.updates.UpdatesPackage(),
-        new LinearGradientPackage()
+        new expo.modules.updates.UpdatesPackage()
     );
   }
 }

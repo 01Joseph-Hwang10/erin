@@ -8,6 +8,11 @@ import { StyleProp } from "react-native";
 import { Dispatch } from "redux";
 import { setDeletionArea, SetDeletionAreaInput } from "@slices/editor/editor-handle";
 import { useRef } from "react";
+import { useDerivedValue, withTiming } from "react-native-reanimated";
+import { Easing } from "react-native-reanimated";
+import { useAnimatedProps } from "react-native-reanimated";
+import { useEffect } from "react";
+import COLORS from "@src/colors";
 
 type DeleteComponentReduxProps = ConnectedProps<typeof connector>
 
@@ -15,7 +20,11 @@ interface DeleteComponentProps extends DeleteComponentReduxProps {}
 
 const DeleteComponent: React.FC<DeleteComponentProps> = ({
   iconSize,
-  setDeletionArea: SetDeletionArea
+  setDeletionArea: SetDeletionArea,
+  onDeletionArea,
+  focusedComponent,
+  nullComponent,
+  onDrag,
 }) => {
 
   const shadowStyle: StyleProp<ViewStyle> = returnShadowProps(45);
@@ -34,23 +43,36 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
     );
   };
 
+  useEffect(
+    () => {
+      if ( onDeletionArea && !onDrag && nullComponent ) {
+        nullComponent(focusedComponent);
+      }
+    },
+    [onDeletionArea, onDrag]
+  );
+
   return <View 
     style={[styles.root, shadowStyle]}
     ref={rootViewRef}
     onLayout={onRootViewLayout}
   >
-    <Feather name="x-circle" size={iconSize} color={ICON_COLOR} />
+    <Feather name="x-circle" size={iconSize} color={onDeletionArea && onDrag ? COLORS.DARK.highlight : COLORS.DARK.sharp} />
   </View>;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
+    onDeletionArea: state.editor.handle.onDeletionArea,
+    focusedComponent: state.editor.handle.focusedComponent,
+    nullComponent: state.editor.handle.nullComponent,
+    onDrag: state.editor.handle.onDrag
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setDeletionArea: (payload: SetDeletionAreaInput) => dispatch(setDeletionArea(payload))
+  setDeletionArea: (payload: SetDeletionAreaInput) => dispatch(setDeletionArea(payload)),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

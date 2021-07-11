@@ -50,6 +50,7 @@ import {
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import BackgroundShape from "./background-shape";
+import { decideHover } from "./text.function";
 
 type ErinTextReduxProps = ConnectedProps<typeof connector>
 
@@ -204,7 +205,22 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       }
     }: PanGestureHandlerStateChangeEvent
   ) => {
-    console.log({ absoluteX, absoluteY});
+    if (
+      decideHover(
+        { x: absoluteX, y: absoluteY },
+        this.props.deletionArea
+      ) && 
+      this.props.focusedComponent === this.props.id
+    ) {
+      if (!this.props.onDeletionArea) {
+        this.props.setOnDeletionArea(true);
+      }
+    } else {
+      if (this.props.onDeletionArea) {
+        this.props.setOnDeletionArea(false);
+      }
+    }
+    
     if (oldState === State.BEGAN) {
       this.props.setOnDrag(true);
     }
@@ -471,7 +487,8 @@ const mapStateToProps = (state: RootState) => {
     backgroundShape: state.editor.states.backgroundShape,
     textContent: state.editor.states.textContent,
     textAlign: state.editor.states.textAlign,
-    deletionArea: state.editor.handle.deletionArea
+    deletionArea: state.editor.handle.deletionArea,
+    onDeletionArea: state.editor.handle.onDeletionArea
   };
 };
 

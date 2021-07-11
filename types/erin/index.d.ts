@@ -16,6 +16,13 @@ export namespace Erin {
 
         export interface RectPosSpec extends PositionSpec, RectangleSpec { }
 
+        export interface MinMaxSpec {
+            xmin: number,
+            xmax: number,
+            ymin: number,
+            ymax: number
+        }
+
         export type AppPageNames = "main" | "friends" | "postbox" | "myPage" | "editor" | "viewer" | "not-main"
     }
 
