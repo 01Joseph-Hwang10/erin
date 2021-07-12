@@ -1,18 +1,14 @@
 import React from "react";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { BOTTOM_MARGIN, ICON_COLOR, returnShadowProps } from "../../base/constants";
+import { BOTTOM_MARGIN, ICON_COLOR } from "../../base/constants";
 import { Feather } from "@expo/vector-icons";
-import { StyleSheet, View, ViewStyle } from "react-native";
-import { StyleProp } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Dispatch } from "redux";
 import { setDeletionArea, SetDeletionAreaInput } from "@slices/editor/editor-handle";
 import { useRef } from "react";
-import { useDerivedValue, withTiming } from "react-native-reanimated";
-import { Easing } from "react-native-reanimated";
-import { useAnimatedProps } from "react-native-reanimated";
 import { useEffect } from "react";
-import COLORS from "@src/colors";
+import { LinearGradient } from 'expo-linear-gradient'
 
 type DeleteComponentReduxProps = ConnectedProps<typeof connector>
 
@@ -26,8 +22,6 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
   nullComponent,
   onDrag,
 }) => {
-
-  const shadowStyle: StyleProp<ViewStyle> = returnShadowProps(45);
 
   const rootViewRef = useRef<View>(null);
   const onRootViewLayout = () => {
@@ -52,13 +46,17 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
     [onDeletionArea, onDrag]
   );
 
-  return <View 
-    style={[styles.root, shadowStyle]}
-    ref={rootViewRef}
-    onLayout={onRootViewLayout}
+  return <LinearGradient
+    colors={['rgba(0,0,0,0.8)', 'transparent']}
   >
-    <Feather name="x-circle" size={iconSize} color={onDeletionArea && onDrag ? COLORS.DARK.highlight : COLORS.DARK.sharp} />
-  </View>;
+    <View 
+      style={styles.root}
+      ref={rootViewRef}
+      onLayout={onRootViewLayout}
+    >
+      <Feather name="x-circle" size={onDeletionArea && onDrag ? iconSize * 1.2 : iconSize} color={ICON_COLOR} />
+    </View>;
+  </LinearGradient>
 };
 
 const mapStateToProps = (state: RootState) => {
