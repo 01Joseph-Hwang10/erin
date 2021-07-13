@@ -20,6 +20,7 @@ import {
   SetOnDragInput, 
 } from "@slices/editor/editor-handle";
 import { 
+  initialFontSize,
   setBackgroundShapeState, 
   SetBackgroundShapeStateInput, 
   setColorConsumerState, 
@@ -37,7 +38,7 @@ import {
   TextAlign
 } from "@slices/editor/editor-states";
 import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { LayoutChangeEvent, StyleProp, ViewStyle } from "react-native";
 import { StyleSheet } from "react-native";
 import { View, Text, Animated } from "react-native";
 import { 
@@ -76,12 +77,15 @@ interface ErinTextState {
   focused: boolean,
   size: number,
   textAlign: TextAlign,
-  firstMount: boolean
+  firstMount: boolean,
+  fontSize: number,
+  textShift: {
+    x: number,
+    y: number
+  }
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
-
-// const initialSize = 40;
 
 class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
@@ -92,9 +96,14 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     backgroundColor: "orange",
     backgroundShape: "none",
     focused: false,
-    size: this.props.fontSize,
+    size: initialFontSize,
     textAlign: "justify",
-    firstMount: true
+    firstMount: true,
+    fontSize: initialFontSize,
+    textShift: {
+      x: 0,
+      y: 0
+    }
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -106,6 +115,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setSize: (size: number) => void;
   private setTextAlign: (textAlign: TextAlign) => void;
   private setFirstMount: (firstMount: boolean) => void;
+  private setFontSize: (fontSize: number) => void;
+  private setTextShift: (textShift: { x: number, y: number }) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
@@ -159,6 +170,12 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     };
     this.setFirstMount = (firstMount: boolean) => {
       this.setState({ firstMount });
+    };
+    this.setFontSize = (fontSize: number) => {
+      this.setState({ fontSize });
+    };
+    this.setTextShift = (textShift: { x: number, y: number }) => {
+      this.setState({ textShift });
     };
 
     // Pan
@@ -355,6 +372,20 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     );
   }
 
+  private onTextLayout = ({
+    nativeEvent: {
+      layout: {
+        width,
+        height
+      }
+    }
+  }: LayoutChangeEvent) => {
+    this.setTextShift({
+      x: width / 2,
+      y: height
+    });
+  }
+
   componentDidMount = () => {
     this.posX.setOffset(this.lastPosition.x);
     this.posY.setOffset(this.lastPosition.y);
@@ -381,6 +412,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       this.props.setCreationPoint({ x: null, y: null });
       this.props.nullComponent(this.props.id);
       this.props.setBottomTabCurrent("default");
+      this.props.setTopFloatCurrent("default");
       return;
     }
 
@@ -450,10 +482,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
             transform: 
             [
               {
-                translateX: this.posX
+                translateX: Animated.add(this.posX, this.state.textShift.x * (-1))
               },
               {
-                translateY: this.posY
+                translateY: Animated.add(this.posY, this.state.textShift.y * (-1))
               },
               {
                 scale: this.scale
@@ -501,14 +533,17 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                       size={this.state.size}
                       backgroundColor={this.state.backgroundColor}
                     >
-                      <Text style={[
-                        {
-                          fontFamily: this.state.fontStyle,
-                          color: this.state.fontColor,
-                          textAlign: this.state.textAlign,
-                          fontSize: this.state.size
-                        }
-                      ]}>{this.state.text}</Text>
+                      <Text 
+                        style={[
+                          {
+                            fontFamily: this.state.fontStyle,
+                            color: this.state.fontColor,
+                            textAlign: this.state.textAlign,
+                            fontSize: this.state.fontSize,
+                          }
+                        ]}
+                        onLayout={this.onTextLayout}
+                      >{this.state.text}</Text>
                     </BackgroundShape>
                   </Animated.View>
                 </TapGestureHandler>

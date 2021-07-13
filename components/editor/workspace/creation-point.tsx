@@ -16,7 +16,7 @@ interface CreationPointProps {
 }
 
 const POINT_SIZE = 80;
-const HALF_SIZE = POINT_SIZE / 2;
+const HALF_POINT_SIZE = POINT_SIZE / 2;
 const DURATION = 50;
 
 const CreationPoint: React.FC<CreationPointProps> = ({
@@ -69,8 +69,8 @@ const CreationPoint: React.FC<CreationPointProps> = ({
         styles.root,
         animatedScale,
         {
-          top: posY - HALF_SIZE,
-          left: posX - HALF_SIZE,
+          top: posY - HALF_POINT_SIZE,
+          left: posX - HALF_POINT_SIZE,
         },
       ]}
     ></Animated.View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: POINT_SIZE,
     height: POINT_SIZE,
-    borderRadius: HALF_SIZE,
+    borderRadius: HALF_POINT_SIZE,
     backgroundColor: "grey",
     opacity: 0.5,
     borderColor: "darkgrey",

@@ -3,7 +3,14 @@ import CheckButton from "../../../common/check-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
-import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput, setTopFloatCurrent, SetTopFloatCurrentInput } from "@slices/editor/editor-generic";
+import { 
+  setBottomFloatCurrent, 
+  SetBottomFloatCurrentInput, 
+  setBottomTabCurrent, 
+  SetBottomTabCurrentInput, 
+  setTopFloatCurrent, 
+  SetTopFloatCurrentInput 
+} from "@slices/editor/editor-generic";
 import { setFocusedComponent, SetFocusedComponentInput } from "@slices/editor/editor-handle";
 import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
 
@@ -17,22 +24,29 @@ const CheckText: React.FC<CheckTextProps> = ({
   setFocusedComponent: SetFocusedComponent,
   setBottomFloatCurrent: SetBottomFloatCurrent,
   setTextOnEdit: SetTextOnEdit,
-  setTopFloatCurrent: SetTopFloatCurrent
+  setTopFloatCurrent: SetTopFloatCurrent,
+  textContent
 }) => {
 
   const onPress = () => {
+    SetBottomFloatCurrent("none");
     if (textOnEdit) {
       SetTextOnEdit(false);
-      SetTopFloatCurrent("text");
+      if (textContent) {
+        SetTopFloatCurrent("text");
+        return;
+      } else {
+        SetTopFloatCurrent("default");
+        SetBottomTabCurrent("default");
+      }
     } else {
       SetBottomTabCurrent("default");
-      SetFocusedComponent({
-        focusedComponent: -1,
-        focusedComponentType: "none"
-      });
       SetTopFloatCurrent("default");
     }
-    SetBottomFloatCurrent("none");
+    SetFocusedComponent({
+      focusedComponent: -1,
+      focusedComponentType: "none"
+    });
   };
 
   return <CheckButton 
@@ -42,7 +56,8 @@ const CheckText: React.FC<CheckTextProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    textOnEdit: state.editor.states.textOnEdit
+    textOnEdit: state.editor.states.textOnEdit,
+    textContent: state.editor.states.textContent
   };
 };
 

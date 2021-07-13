@@ -8,6 +8,8 @@ import {
   SetBottomFloatCurrentInput, 
   setBottomTabCurrent, 
   SetBottomTabCurrentInput, 
+  setTopFloatCurrent, 
+  SetTopFloatCurrentInput, 
   setWorkspaceSpec, 
   SetWorkspaceSpecInput
 } from "../../redux/slices/editor/editor-generic";
@@ -63,20 +65,19 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       switch (this.props.focusedComponentType) {
       case "text":
         this.props.setBottomTabCurrent("text");
-        break;
-      case "shape":
-        this.props.setBottomTabCurrent("shape");
-        break;
-      case "sticker":
-        this.props.setBottomTabCurrent("sticker");
+        this.props.setTopFloatCurrent("text");
         break;
       default:
         this.props.setBottomTabCurrent("default");
+        this.props.setTopFloatCurrent("default");
         break;
       }
     }
     if (prevProps.bottomTabCurrent !== this.props.bottomTabCurrent) {
       this.props.setBottomTabCurrent(this.props.bottomTabCurrent);
+    }
+    if (prevProps.topFloatCurrent !== this.props.topFloatCurrent) {
+      this.props.setTopFloatCurrent(this.props.topFloatCurrent);
     }
   }
 
@@ -121,7 +122,8 @@ const mapStateToProps = (state: RootState) => {
     focusedComponentType: state.editor.handle.focusedComponentType,
     focusedComponent: state.editor.handle.focusedComponent,
     bottomTabCurrent: state.editor.generic.bottomTabCurrent,
-    textOnEdit: state.editor.states.textOnEdit
+    textOnEdit: state.editor.states.textOnEdit,
+    topFloatCurrent: state.editor.generic.topFloatCurrent
   };
 };
 
@@ -131,7 +133,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setCreationPoint: (payload: SetCreationPointInput) => dispatch(setCreationPoint(payload)),
     setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
     setWorkspaceSpec: (payload: SetWorkspaceSpecInput) => dispatch(setWorkspaceSpec(payload)),
-    setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload))
+    setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload)),
+    setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload))
   };
 };
 

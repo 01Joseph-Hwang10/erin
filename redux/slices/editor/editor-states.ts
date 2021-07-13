@@ -6,6 +6,8 @@ type ColorConsumer = "textFontColor" | "textBackgroundColor" | null
 
 export type TextAlign = "center" | "left" | "right" | "justify"
 
+export const initialFontSize = 40;
+
 interface EditorStatesState {
     fontStyle: FontStyles | null,
     pickedColor: string | null,
@@ -25,7 +27,7 @@ const initialState: EditorStatesState = {
   backgroundShape: "none",
   textContent: null,
   textAlign: "justify",
-  fontSize: 40
+  fontSize: initialFontSize
 };
 
 export type SetFontStyleStateInput = FontStyles | null

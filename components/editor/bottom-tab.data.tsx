@@ -6,9 +6,9 @@ import Music from "./bottom-tab/default-member/music";
 import Save from "./bottom-tab/default-member/save";
 import Send from "./bottom-tab/default-member/send";
 import ToggleToAnimation from "./bottom-tab/default-member/toggle-to-animation";
-import Shape from "./bottom-tab/shape-member/shape";
-import ShapeColor from "./bottom-tab/shape-member/shape-color";
-import ShapePattern from "./bottom-tab/shape-member/shape-pattern";
+// import Shape from "./bottom-tab/shape-member/shape";
+// import ShapeColor from "./bottom-tab/shape-member/shape-color";
+// import ShapePattern from "./bottom-tab/shape-member/shape-pattern";
 import FontColor from "./bottom-tab/text-member/font-color";
 import FontStyle from "./bottom-tab/text-member/font-style";
 import ToggleToDefault from "./bottom-tab/animation-default-member/toggle-to-default";
@@ -19,7 +19,7 @@ import AnimationType from "./bottom-tab/animation-config-member/animation-type";
 import AnimationTrigger from "./bottom-tab/animation-config-member/animation-trigger";
 import TimeDial from "./bottom-tab/animation-config-member/time-dial";
 import { Erin } from "erin";
-import CheckShape from "./bottom-tab/shape-member/check-shape";
+// import CheckShape from "./bottom-tab/shape-member/check-shape";
 import CheckAnimationConfig from "./bottom-tab/animation-config-member/check-animation-config";
 import XCreate from "./bottom-tab/create-member/x-create";
 import CreateSticker from "./bottom-tab/create-member/create-sticker";
@@ -52,15 +52,7 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     null,
     <XCreate key={6} />
   ],
-  shape: [
-    <Shape key={0} />,
-    <ShapeColor key={1} />,
-    <ShapePattern key={2} />,
-    null,
-    null,
-    null,
-    <CheckShape key={6} />,
-  ],
+  shape: [],
   text: [
     <FontColor key={0} />,
     <FontStyle key={1} />,
@@ -68,7 +60,8 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     <BackgroundColor key={3} />,
     <TextAlign key={4} />,
     <FontSize key={5} />,
-    <TextAnimation key={6} />,
+    // <TextAnimation key={6} />,
+    null,
   ],
   animationDefault: [
     <ToggleToDefault key={0} />,

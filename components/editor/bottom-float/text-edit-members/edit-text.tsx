@@ -10,7 +10,7 @@ type EditTextReduxProps = ConnectedProps<typeof connector>
 
 interface EditTextProps extends EditTextReduxProps {}
 
-const fontSize = 20;
+const inputFontSize = 20;
 
 const EditText: React.FC<EditTextProps> = ({
   textContent,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
     color: COLORS.DARK.secondary,
-    fontSize,
+    fontSize: inputFontSize,
   },
   button: {
     backgroundColor: COLORS.DARK.highlight,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontWeight: "bold",
-    fontSize,
+    fontSize: inputFontSize,
     color: COLORS.DARK.secondary,
     paddingVertical: 5
   },
