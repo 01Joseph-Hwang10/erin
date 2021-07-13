@@ -6,7 +6,7 @@ import { ICON_COLOR } from "../../base/constants";
 import PressButton from "../../base/press-button";
 import { Dispatch } from "redux";
 import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
-import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setTopFloatCurrent, SetTopFloatCurrentInput } from "@slices/editor/editor-generic";
 
 type ChangeTextReduxProps = ConnectedProps<typeof connector>
 
@@ -15,7 +15,8 @@ interface ChangeTextProps extends ChangeTextReduxProps {}
 const ChangeText: React.FC<ChangeTextProps> = ({
   iconSize,
   setTextOnEdit,
-  setBottomFloatCurrent: SetBottomFloatCurrent
+  setBottomFloatCurrent: SetBottomFloatCurrent,
+  setTopFloatCurrent: SetTopFloatCurrent
 }) => {
 
   const renderIcon = () => (
@@ -25,6 +26,7 @@ const ChangeText: React.FC<ChangeTextProps> = ({
   const onPress = () => {
     setTextOnEdit(true);
     SetBottomFloatCurrent("editText");
+    SetTopFloatCurrent("editText");
   };
   
   return <PressButton 
@@ -42,7 +44,8 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setTextOnEdit: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload)),
-    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+    setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+    setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload))
   };
 };
 

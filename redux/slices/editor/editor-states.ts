@@ -13,7 +13,8 @@ interface EditorStatesState {
     colorConsumer: ColorConsumer,
     backgroundShape: NonableShape,
     textContent: string | null,
-    textAlign: TextAlign
+    textAlign: TextAlign,
+    fontSize: number
 }
 
 const initialState: EditorStatesState = {
@@ -23,7 +24,8 @@ const initialState: EditorStatesState = {
   colorConsumer: null,
   backgroundShape: "none",
   textContent: null,
-  textAlign: "justify"
+  textAlign: "justify",
+  fontSize: 40
 };
 
 export type SetFontStyleStateInput = FontStyles | null
@@ -137,6 +139,15 @@ const toggleTextAlignStateReducer: CaseReducer<
   }
 };
 
+export type SetFontSizeStateInput = number
+
+const setFontSizeStateReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetFontSizeStateInput>
+> = (state, { payload: fontSize }) => {
+  state.fontSize = fontSize;
+};
+
 export const {
   reducer,
   actions: {
@@ -148,7 +159,8 @@ export const {
     toggleBackgroundShapeState,
     setTextContentState,
     setTextAlignState,
-    toggleTextAlignState
+    toggleTextAlignState,
+    setFontSizeState
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -162,6 +174,7 @@ export const {
     toggleBackgroundShapeState: toggleBackgroundShapeStateReducer,
     setTextContentState: setTextContentStateReducer,
     setTextAlignState: setTextAlignStateReducer,
-    toggleTextAlignState: toggleTextAlignStateReducer
+    toggleTextAlignState: toggleTextAlignStateReducer,
+    setFontSizeState: setFontSizeStateReducer
   }
 });

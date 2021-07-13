@@ -1,7 +1,14 @@
 import { NonableShape } from "@components/common/shapes/shape.types";
 import { FontStyles } from "@components/editor/bottom-float/font-style-members/font-style.data";
 import { RootState } from "@redux/root-reducer";
-import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
+import { 
+  setBottomFloatCurrent, 
+  SetBottomFloatCurrentInput, 
+  setBottomTabCurrent, 
+  SetBottomTabCurrentInput, 
+  setTopFloatCurrent, 
+  SetTopFloatCurrentInput 
+} from "@slices/editor/editor-generic";
 import { 
   setCreationPoint, 
   SetCreationPointInput, 
@@ -74,7 +81,7 @@ interface ErinTextState {
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
 
-const initialSize = 40;
+// const initialSize = 40;
 
 class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
@@ -85,7 +92,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     backgroundColor: "orange",
     backgroundShape: "none",
     focused: false,
-    size: initialSize,
+    size: this.props.fontSize,
     textAlign: "justify",
     firstMount: true
   }
@@ -357,6 +364,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     });
     this.props.setTextOnEditState(true);
     this.props.setBottomFloatCurrent("editText");
+    this.props.setTopFloatCurrent("editText");
     this.props.setBackgroundShape(this.state.backgroundShape);
     this.props.setColorConsumer(null);
     this.props.setPickedColor(null);
@@ -372,6 +380,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     if (!this.props.textOnEdit && !this.state.firstMount && this.state.text.length === 0 && this.props.nullComponent) {
       this.props.setCreationPoint({ x: null, y: null });
       this.props.nullComponent(this.props.id);
+      this.props.setBottomTabCurrent("default");
       return;
     }
 
@@ -493,11 +502,11 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                       backgroundColor={this.state.backgroundColor}
                     >
                       <Text style={[
-                        styles.text,
                         {
                           fontFamily: this.state.fontStyle,
                           color: this.state.fontColor,
-                          textAlign: this.state.textAlign
+                          textAlign: this.state.textAlign,
+                          fontSize: this.state.size
                         }
                       ]}>{this.state.text}</Text>
                     </BackgroundShape>
@@ -530,6 +539,7 @@ const mapStateToProps = (state: RootState) => {
     onDeletionArea: state.editor.handle.onDeletionArea,
     nullComponent: state.editor.handle.nullComponent,
     onDrag: state.editor.handle.onDrag,
+    fontSize: state.editor.states.fontSize
   };
 };
 
@@ -546,7 +556,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
     setTextAlign: (payload: SetTextAlignStateInput) => dispatch(setTextAlignState(payload)),
     setOnDrag: (payload: SetOnDragInput) => dispatch(setOnDrag(payload)),
-    setOnDeletionArea: (payload: SetOnDeletionAreaInput) => dispatch(setOnDeletionArea(payload))
+    setOnDeletionArea: (payload: SetOnDeletionAreaInput) => dispatch(setOnDeletionArea(payload)),
+    setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload)),
+    setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload))
   };
 };
 
@@ -566,7 +578,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  text: {
-    fontSize: initialSize
-  }
 });

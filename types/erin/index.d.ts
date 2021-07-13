@@ -38,7 +38,7 @@ export namespace Erin {
             | "animationDefault" 
             | "animationConfig"
 
-        export type TopFloatMenuType = "default" | "pages"
+        export type TopFloatMenuType = "default" | "pages" | "text" | "editText" | "animationDefault"
 
         export type BottomFloatMenuType = 
             | "none" 

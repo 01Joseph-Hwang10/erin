@@ -4,23 +4,9 @@ import { StyleProp, StyleSheet } from "react-native";
 import { View } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/root-reducer";
-import AddPage from "./top-float/default-member/add-page";
-import CopyPage from "./top-float/default-member/copy-page";
-import DeletePage from "./top-float/default-member/delete-page";
-import LinkToPage from "./top-float/default-member/link-to-page";
-import TogglePages from "./top-float/default-member/toggle-pages";
 import Placeholder from "./base/placeholder";
 import { returnShadowProps } from "./base/constants";
-
-const defaultMembers = [
-  <TogglePages key={0} />,
-  <LinkToPage key={1} />,
-  null,
-  null,
-  <DeletePage key={4} />,
-  <CopyPage key={5} />,
-  <AddPage key={6} />
-];
+import iconMembers from "./top-float.data";
 
 type TopFloatReduxProps = ConnectedProps<typeof connector>
 
@@ -30,7 +16,8 @@ const TopFloat: React.FC<TopFloatProps> = ({
   settings: {
     iconGap,
     iconSize
-  }
+  },
+  topFloatCurrent
 }) => {
 
   const marginSetter: StyleProp<ViewStyle> = {
@@ -56,7 +43,7 @@ const TopFloat: React.FC<TopFloatProps> = ({
   return (
     <View style={styles.root}>
       {
-        defaultMembers.map((member, index) => {
+        iconMembers[topFloatCurrent].map((member, index) => {
           if (member) {
             const Icon = () => member;
             return <View 

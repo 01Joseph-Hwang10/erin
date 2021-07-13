@@ -20,16 +20,16 @@ import AnimationTrigger from "./bottom-tab/animation-config-member/animation-tri
 import TimeDial from "./bottom-tab/animation-config-member/time-dial";
 import { Erin } from "erin";
 import CheckShape from "./bottom-tab/shape-member/check-shape";
-import CheckText from "./bottom-tab/text-member/check-text";
 import CheckAnimationConfig from "./bottom-tab/animation-config-member/check-animation-config";
 import XCreate from "./bottom-tab/create-member/x-create";
 import CreateSticker from "./bottom-tab/create-member/create-sticker";
 import NotSave from "./bottom-tab/default-member/not-save";
 import { IconMembers } from "../common/types";
-import ChangeText from "./bottom-tab/text-member/change-text";
 import BackgroundShape from "./bottom-tab/text-member/background-shape";
 import BackgroundColor from "./bottom-tab/text-member/background-color";
 import TextAlign from "./bottom-tab/text-member/text-align";
+import FontSize from "./bottom-tab/text-member/font-size";
+import TextAnimation from "./bottom-tab/text-member/text-animation";
 // import BorderColor from "./bottom-tab/text-member/border-color";
 // import ChangeText from "./bottom-tab/text-member/change-text";
 
@@ -67,8 +67,8 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     <BackgroundShape key={2} />,
     <BackgroundColor key={3} />,
     <TextAlign key={4} />,
-    <ChangeText key={5} />,
-    <CheckText key={6} />
+    <FontSize key={5} />,
+    <TextAnimation key={6} />,
   ],
   animationDefault: [
     <ToggleToDefault key={0} />,

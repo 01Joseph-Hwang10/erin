@@ -2,48 +2,46 @@ import React from "react";
 import CheckButton from "../../../common/check-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants";
 import { Dispatch } from "redux";
-import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput } from "@slices/editor/editor-generic";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput, setTopFloatCurrent, SetTopFloatCurrentInput } from "@slices/editor/editor-generic";
 import { setFocusedComponent, SetFocusedComponentInput } from "@slices/editor/editor-handle";
-import { StyleProp, View, ViewStyle } from "react-native";
+import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
 
 type CheckTextReduxProps = ConnectedProps<typeof connector>
 
 interface CheckTextProps extends CheckTextReduxProps {}
 
 const CheckText: React.FC<CheckTextProps> = ({
-  iconSize,
   textOnEdit,
   setBottomTabCurrent: SetBottomTabCurrent,
   setFocusedComponent: SetFocusedComponent,
   setBottomFloatCurrent: SetBottomFloatCurrent,
+  setTextOnEdit: SetTextOnEdit,
+  setTopFloatCurrent: SetTopFloatCurrent
 }) => {
 
   const onPress = () => {
-    if (!textOnEdit) {
+    if (textOnEdit) {
+      SetTextOnEdit(false);
+      SetTopFloatCurrent("text");
+    } else {
       SetBottomTabCurrent("default");
       SetFocusedComponent({
         focusedComponent: -1,
         focusedComponentType: "none"
       });
-      SetBottomFloatCurrent("none");
+      SetTopFloatCurrent("default");
     }
+    SetBottomFloatCurrent("none");
   };
 
-  const placeholderStyle: StyleProp<ViewStyle> = {
-    width: iconSize,
-    height: iconSize
-  };
-
-  return textOnEdit ? <View style={placeholderStyle}></View> : <CheckButton 
+  return <CheckButton 
     onPress={onPress}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
-    iconSize: state.editor.generic.settings.iconSize,
     textOnEdit: state.editor.states.textOnEdit
   };
 };
@@ -53,6 +51,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setFocusedComponent: (payload: SetFocusedComponentInput) => dispatch(setFocusedComponent(payload)),
     setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+    setTextOnEdit: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload)),
+    setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload))
   };
 };
 
