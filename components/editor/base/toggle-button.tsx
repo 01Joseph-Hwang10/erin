@@ -40,7 +40,7 @@ class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState>
 
       return (
         <TouchableOpacity
-          onPressIn={onPress}
+          onPress={onPress}
         >
           {
             this.props.enableCircularFrame && this.props.circularFrameProps ? 

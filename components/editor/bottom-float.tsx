@@ -6,7 +6,7 @@ import AnimationTimeline from "./bottom-float/animation-timeline-members/animati
 import DeleteComponent from "./bottom-float/delete-members/delete-component";
 import FontColorList from "./bottom-float/picked-color-members/picked-color-list";
 import FontStyleList from "./bottom-float/font-style-members/font-style-list";
-import EditText from "./bottom-float/text-edit-reducer/edit-text";
+import EditText from "./bottom-float/text-edit-members/edit-text";
 
 type BottomFloatReduxProps = ConnectedProps<typeof connector>
 

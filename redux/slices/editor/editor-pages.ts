@@ -13,7 +13,7 @@ const initialState: EditorPagesState = {
       id: 0,
       components: [],
       animations: [],
-      autoZIndex: 2
+      autoZIndex: 2,
     }
   ],
   currentPage: 1, // Index of pages but +1

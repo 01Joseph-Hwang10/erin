@@ -68,7 +68,8 @@ interface ErinTextState {
   backgroundShape: NonableShape,
   focused: boolean,
   size: number,
-  textAlign: TextAlign
+  textAlign: TextAlign,
+  firstMount: boolean
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -85,7 +86,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     backgroundShape: "none",
     focused: false,
     size: initialSize,
-    textAlign: "justify"
+    textAlign: "justify",
+    firstMount: true
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -96,6 +98,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setBackgroundShape: (backgroundShape: NonableShape) => void;
   private setSize: (size: number) => void;
   private setTextAlign: (textAlign: TextAlign) => void;
+  private setFirstMount: (firstMount: boolean) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
@@ -147,6 +150,9 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.setTextAlign = (textAlign: TextAlign) => {
       this.setState({ textAlign });
     };
+    this.setFirstMount = (firstMount: boolean) => {
+      this.setState({ firstMount });
+    };
 
     // Pan
     const {
@@ -167,7 +173,38 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           }
         }
       ],
-      { useNativeDriver: true }
+      {
+        useNativeDriver: true,
+        listener: ({ 
+          nativeEvent: { 
+            absoluteX, 
+            absoluteY,
+            translationX,
+            translationY,
+          } 
+        }: PanGestureHandlerGestureEvent) => {
+          if (!this.props.onDrag) {
+            if (translationX > 10 || translationY > 10) {
+              this.props.setOnDrag(true);
+            }
+          }
+          if (
+            decideHover(
+              { x: absoluteX, y: absoluteY },
+              this.props.deletionArea
+            ) && 
+            this.props.focusedComponent === this.props.id
+          ) {
+            if (!this.props.onDeletionArea) {
+              this.props.setOnDeletionArea(true);
+            }
+          } else {
+            if (this.props.onDeletionArea) {
+              this.props.setOnDeletionArea(false);
+            }
+          }
+        }
+      },
     );
 
     // Scale
@@ -200,32 +237,24 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         oldState,
         translationX,
         translationY,
-        absoluteX,
-        absoluteY
       }
     }: PanGestureHandlerStateChangeEvent
   ) => {
-    if (
-      decideHover(
-        { x: absoluteX, y: absoluteY },
-        this.props.deletionArea
-      ) && 
-      this.props.focusedComponent === this.props.id
-    ) {
-      if (!this.props.onDeletionArea) {
-        this.props.setOnDeletionArea(true);
-      }
-    } else {
-      if (this.props.onDeletionArea) {
-        this.props.setOnDeletionArea(false);
-      }
-    }
-    
-    if (oldState === State.BEGAN) {
-      this.props.setOnDrag(true);
-    }
     if (oldState === State.ACTIVE) {
       this.props.setOnDrag(false);
+      if (
+        this.props.focusedComponent === this.props.id &&
+        this.props.onDeletionArea &&
+        this.props.nullComponent
+      ) {
+        this.props.setFocusedComponent({
+          focusedComponent: -1,
+          focusedComponentType: "none"
+        });
+        this.props.setOnDeletionArea(false);
+        this.props.nullComponent(this.props.id);
+        return;
+      }
       if (
         this.props.focusedComponent !== this.props.id ||
         this.props.focusedComponentType !== "text"
@@ -322,7 +351,6 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   componentDidMount = () => {
     this.posX.setOffset(this.lastPosition.x);
     this.posY.setOffset(this.lastPosition.y);
-    this.props.setCreationPoint({ x: null, y: null });
     this.props.setFocusedComponent({
       focusedComponent: this.props.id,
       focusedComponentType: "text"
@@ -336,6 +364,17 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   componentDidUpdate = (prevProps: ErinTextProps) => {
+    if (this.state.firstMount && prevProps.textOnEdit && !this.props.textOnEdit) {
+      this.props.setCreationPoint({ x: null, y: null });
+      this.setFirstMount(false);
+    }
+    
+    if (!this.props.textOnEdit && !this.state.firstMount && this.state.text.length === 0 && this.props.nullComponent) {
+      this.props.setCreationPoint({ x: null, y: null });
+      this.props.nullComponent(this.props.id);
+      return;
+    }
+
     if (this.props.focusedComponent === this.props.id) {
 
       if (!this.state.focused) {
@@ -488,7 +527,9 @@ const mapStateToProps = (state: RootState) => {
     textContent: state.editor.states.textContent,
     textAlign: state.editor.states.textAlign,
     deletionArea: state.editor.handle.deletionArea,
-    onDeletionArea: state.editor.handle.onDeletionArea
+    onDeletionArea: state.editor.handle.onDeletionArea,
+    nullComponent: state.editor.handle.nullComponent,
+    onDrag: state.editor.handle.onDrag,
   };
 };
 

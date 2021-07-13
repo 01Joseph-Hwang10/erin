@@ -1,5 +1,5 @@
 import { RootState } from "@redux/root-reducer";
-import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput, setBottomTabCurrent, SetBottomTabCurrentInput } from "@slices/editor/editor-generic";
 import { setTextContentState, SetTextContentStateInput, setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
 import COLORS from "@src/colors";
 import React from "react";
@@ -20,7 +20,8 @@ const EditText: React.FC<EditTextProps> = ({
   setTextOnEdit,
   textContent,
   setTextContent,
-  setBottomFloatCurrent: SetBottomFloatCurrent
+  setBottomFloatCurrent: SetBottomFloatCurrent,
+  setBottomTabCurrent: SetBottomTabCurrent
 }) => {
 
   const [ text, setText ] = useState<string>("");
@@ -30,12 +31,21 @@ const EditText: React.FC<EditTextProps> = ({
     setTextContent(text);
     SetBottomFloatCurrent("none");
   };
+  
+  const cancelEditing = () => {
+    setTextOnEdit(false);
+    SetBottomFloatCurrent("none");
+    SetBottomTabCurrent("default");
+  };
 
   useEffect(
     () => {
       if ( text !== textContent ) {
-        if ( textContent ) setText(textContent);
-        else setText("");
+        if ( textContent ) {
+          setText(textContent);
+        } else {
+          setText("");
+        }
       }
     },
     [textContent]
@@ -53,15 +63,27 @@ const EditText: React.FC<EditTextProps> = ({
           multiline={true}
         />
       </View>
-      <View style={styles.buttonWrapper}>
-        <TouchableOpacity 
-          style={styles.button}
-          onPress={submitTextContent}
-        >
-          <View style={styles.textWrapper}>
-            <Text style={styles.text}>만들기</Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.buttonsWrapper}>
+        <View style={styles.buttonWrapper}>
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={cancelEditing}
+          >
+            <View style={styles.textWrapper}>
+              <Text style={styles.text}>취소</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonWrapper}>
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={submitTextContent}
+          >
+            <View style={styles.textWrapper}>
+              <Text style={styles.text}>만들기</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -74,7 +96,8 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   setTextOnEdit: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload)),
   setTextContent: (payload: SetTextContentStateInput) => dispatch(setTextContentState(payload)),
-  setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+  setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+  setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload))
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -88,19 +111,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    flexDirection: "row"
   },
   textInputWrapper: {
-    flex: 3,
+    width: "100%",
     backgroundColor: COLORS.DARK.sharp,
     borderRadius: 5,
     borderWidth: 2,
     borderColor: COLORS.DARK.secondary,
-    paddingRight: 2
   },
   buttonWrapper: {
     flex: 1,
-    paddingLeft: 2,
   },
   textWrapper: {
     justifyContent: "flex-start",
@@ -120,11 +140,18 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "teal",
     zIndex: 9999,
+    marginVertical: 5
   },
   inputText: {
     fontWeight: "bold",
     fontSize,
     color: COLORS.DARK.secondary,
     paddingVertical: 5
+  },
+  buttonsWrapper: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row"
   }
 });

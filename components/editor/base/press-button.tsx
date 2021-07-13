@@ -12,9 +12,14 @@ const PressButton: React.FC<PressButtonProps> = ({
   icon: Icon,
   onPress
 }) => {
+
+  const onPressWithTimeout = () => {
+    setTimeout(onPress, 50);
+  };
+
   return (
     <TouchableOpacity 
-      onPressIn={onPress}
+      onPressIn={onPressWithTimeout}
     >
       <Icon />
     </TouchableOpacity>

@@ -16,6 +16,8 @@ import {
 } from "@slices/editor/editor-handle";
 import { connect, ConnectedProps } from "react-redux";
 import RNShake from "react-native-shake";
+import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
+import { RootState } from "@redux/root-reducer";
 
 type PageReduxProps = ConnectedProps<typeof connector>
 
@@ -71,6 +73,12 @@ class Page extends Component<PageProps, PageState> {
       RNShake.addListener(this.resetPage);
     }
 
+    componentDidUpdate = (_: PageProps, prevState: PageState) => {
+      if (!this.props.hasUnsavedChanges && JSON.stringify(prevState) !== JSON.stringify(this.state)) {
+        this.props.setHasUnsavedChanges(true);
+      }
+    }
+
     componentWillUnmount() {
       RNShake.removeAllListeners();
     }
@@ -105,14 +113,21 @@ class Page extends Component<PageProps, PageState> {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    setPushComponent: (payload: SetPushComponentInput) => dispatch(setPushComponent(payload)),
-    setNullComponent: (payload: SetNullComponentInput) => dispatch(setNullComponent(payload))
+    hasUnsavedChanges: state.editor.generic.hasUnsavedChanges
   };
 };
 
-const connector = connect(null, mapDispatchToProps);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setPushComponent: (payload: SetPushComponentInput) => dispatch(setPushComponent(payload)),
+    setNullComponent: (payload: SetNullComponentInput) => dispatch(setNullComponent(payload)),
+    setHasUnsavedChanges: (payload: SetHasUnsavedChanges) => dispatch(setHasUnsavedChanges(payload))
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(Page);
 

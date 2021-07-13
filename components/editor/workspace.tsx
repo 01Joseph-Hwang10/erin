@@ -74,10 +74,6 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
         this.props.setBottomTabCurrent("default");
         break;
       }
-
-      if (this.props.focusedComponentType !== "none") {
-        this.props.setCreationPoint({ x: null, y: null });
-      }
     }
     if (prevProps.bottomTabCurrent !== this.props.bottomTabCurrent) {
       this.props.setBottomTabCurrent(this.props.bottomTabCurrent);

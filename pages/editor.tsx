@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { BackHandler, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import React from "react";
+import { BackHandler, StyleSheet } from "react-native";
 import { View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BottomTab from "../components/editor/bottom-tab";
@@ -15,6 +15,7 @@ import { setCurrentPage, SetCurrentPageInput, setPopAtEditor, SetPopAtEditorInpu
 import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import COLORS from "../src/colors";
 import { RootState } from "@redux/root-reducer";
+import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -28,87 +29,91 @@ interface EditorProps extends EditorReduxProps {
   navigation: EditorNavigationProp
 }
 
-const Editor: React.FC<EditorProps> = ({
-  navigation,
-  setCurrentPage: SetCurrentPage,
-  setPopAtEditor: SetPopAtEditor,
-  setLoading: SetLoading,
-}) => {
+class Editor extends React.Component<EditorProps> {
 
-  const [ firstAccess, setFirstAccess ] = useState(true);
-  const hasUnsavedChanges = true; // Temporal value
 
-  const handleConfirm = () => {
-    navigation.pop();
+  private handleConfirm = () => {
+    this.props.navigation.pop();
   };
 
-  useEffect(() => {
-    if (firstAccess) {
-      SetCurrentPage("editor");
-      SetPopAtEditor(handleConfirm);
-      setFirstAccess(false);
-      SetLoading(false);
+  private backHandler = () => {
+    if (this.props.hasUnsavedChanges) {
+      Alert.alert(
+        "Erin",
+        "변경사항을 저장하지 않았어요! 정말 나가도 괜찮으시겠어요?",
+        [
+          { 
+            text: "아니요", 
+            style: "cancel", 
+            onPress: voidFunction,
+          },
+          {
+            text: "예",
+            style: "destructive",
+            // If the user confirmed, then we dispatch the action we blocked earlier
+            // This will continue the action that had triggered the removal of the screen
+            onPress: this.handleConfirm,
+          },
+        ]
+      );
+    } else {
+      this.handleConfirm();
     }
-    const backHandler = () => {
-      if (hasUnsavedChanges) {
-        Alert.alert(
-          "Erin",
-          "변경사항을 저장하지 않았어요! 정말 나가도 괜찮으시겠어요?",
-          [
-            { 
-              text: "아니요", 
-              style: "cancel", 
-              onPress: voidFunction
-            },
-            {
-              text: "예",
-              style: "destructive",
-              // If the user confirmed, then we dispatch the action we blocked earlier
-              // This will continue the action that had triggered the removal of the screen
-              onPress: handleConfirm,
-            },
-          ]
-        );
-      } else {
-        handleConfirm();
-      }
-      return true;
-    };
-    BackHandler.addEventListener("hardwareBackPress", backHandler);
-    return () => BackHandler.removeEventListener("hardwareBackPress", backHandler);
-  }, [hasUnsavedChanges]
-  );
+    return true;
+  };
 
-  return (
-    <>
-      <SafeAreaView style={styles.safeFirst} />
-      <SafeAreaView style={styles.safeSecond}>
-        <View style={styles.root}>
-          <View style={styles.workspaceWrapper}>
-            <Workspace />
-            <View style={styles.floatWrapper}>
-              <View style={styles.floatbox}>
-                <View style={styles.floatWrapperWrapper}>
-                  <TopFloat />
-                </View>
-                <View style={styles.floatWrapperWrapper}>
-                  <BottomFloat />
+  componentDidMount = () => {
+    this.props.setCurrentPage("editor");
+    this.props.setPopAtEditor(this.handleConfirm);
+    this.props.setLoading(false);
+    this.props.setHasUnsavedChanges(false);
+    BackHandler.addEventListener("hardwareBackPress", this.backHandler);
+  }
+
+  componentDidUpdate = (prevProps: EditorProps) => {
+    if (prevProps.hasUnsavedChanges !== this.props.hasUnsavedChanges) {
+      BackHandler.addEventListener("hardwareBackPress", this.backHandler);
+    }
+  }
+
+  componentWillUnmount = () => {
+    BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
+  }
+
+  render = () => {
+    return (
+      <>
+        <SafeAreaView style={styles.safeFirst} />
+        <SafeAreaView style={styles.safeSecond}>
+          <View style={styles.root}>
+            <View style={styles.workspaceWrapper}>
+              <Workspace />
+              <View style={styles.floatWrapper}>
+                <View style={styles.floatbox}>
+                  <View style={styles.floatWrapperWrapper}>
+                    <TopFloat />
+                  </View>
+                  <View style={styles.floatWrapperWrapper}>
+                    <BottomFloat />
+                  </View>
                 </View>
               </View>
             </View>
+            <View style={styles.toolbarWrapper}>
+              <BottomTab />
+            </View>
           </View>
-          <View style={styles.toolbarWrapper}>
-            <BottomTab />
-          </View>
-        </View>
-      </SafeAreaView>
-    </>
-  );
-};
+        </SafeAreaView>
+      </>
+    );
+  }
+}
 
 const mapStateToProps = (state: RootState) => {
   return {
-    workspaceHeight: state.editor.generic.workspaceSpec.height
+    workspaceHeight: state.editor.generic.workspaceSpec.height,
+    stringifiedPages: JSON.stringify(state.editor.pages.pages),
+    hasUnsavedChanges: state.editor.generic.hasUnsavedChanges
   };
 };
 
@@ -116,7 +121,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     setCurrentPage: (payload: SetCurrentPageInput) => dispatch(setCurrentPage(payload)),
     setPopAtEditor: (payload: SetPopAtEditorInput) => dispatch(setPopAtEditor(payload)),
-    setLoading: (payload: SetLoadingInput) => dispatch(setLoading(payload))
+    setLoading: (payload: SetLoadingInput) => dispatch(setLoading(payload)),
+    setHasUnsavedChanges: (payload: SetHasUnsavedChanges) => dispatch(setHasUnsavedChanges(payload))
   };
 };
 
@@ -141,15 +147,17 @@ const styles = StyleSheet.create({
     zIndex: 9999
   },
   floatbox: {
-    flex: 1,
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   floatWrapperWrapper: {
     width: "100%",
   },
   toolbarWrapper: {
-    flex: 1
+    flex: 1,
+    zIndex: 9999
   },
   workspaceWrapper: {
     flex: 8,
