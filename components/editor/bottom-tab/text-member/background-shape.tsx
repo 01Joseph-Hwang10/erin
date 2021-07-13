@@ -4,9 +4,9 @@ import ToggleButton from "../../base/toggle-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import Rectangle from "@components/common/shapes/rectangle";
-import Circle from "@components/common/shapes/circle";
-import Heart from "@components/common/shapes/heart";
-import Star from "@components/common/shapes/star";
+// import Circle from "@components/common/shapes/circle";
+// import Heart from "@components/common/shapes/heart";
+// import Star from "@components/common/shapes/star";
 import { Dispatch } from "redux";
 import { toggleBackgroundShapeState } from "@slices/editor/editor-states";
 import None from "@components/common/shapes/none";
@@ -28,15 +28,15 @@ const Shape: React.FC<ShapeProps> = ({
 }) => {
 
   const roundedRectangleStyle: StyleProp<ViewStyle> = {
-    borderRadius: 3
+    borderRadius: 5
   };
 
-  const starStyle: StyleProp<ViewStyle> = {
-    transform: [
-      { translateY: ( 1 / 10 ) * iconSize },
-      { translateX: ( 1 / 25 ) * iconSize * (-1) }
-    ]
-  };
+  // const starStyle: StyleProp<ViewStyle> = {
+  //   transform: [
+  //     { translateY: ( 1 / 10 ) * iconSize },
+  //     { translateX: ( 1 / 25 ) * iconSize * (-1) }
+  //   ]
+  // };
 
   const halfSize = iconSize / 2;
 
@@ -60,22 +60,22 @@ const Shape: React.FC<ShapeProps> = ({
       backgroundColor={iconColor}
       style={roundedRectangleStyle}
     />,
-    <Circle 
-      key={3}
-      size={halfSize}
-      backgroundColor={iconColor}
-    />,
-    <Heart 
-      key={4}
-      size={halfSize}
-      backgroundColor={iconColor}
-    />,
-    <Star 
-      key={5}
-      size={halfSize}
-      backgroundColor={iconColor}
-      style={starStyle}
-    />
+    // <Circle 
+    //   key={3}
+    //   size={halfSize}
+    //   backgroundColor={iconColor}
+    // />,
+    // <Heart 
+    //   key={4}
+    //   size={halfSize}
+    //   backgroundColor={iconColor}
+    // />,
+    // <Star 
+    //   key={5}
+    //   size={halfSize}
+    //   backgroundColor={iconColor}
+    //   style={starStyle}
+    // />
   ];
 
   const circularFrameProps: CircularFrameProps = {

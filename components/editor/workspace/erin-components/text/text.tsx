@@ -25,6 +25,8 @@ import {
   SetBackgroundShapeStateInput, 
   setColorConsumerState, 
   SetColorConsumerStateInput, 
+  setFontSizeState, 
+  SetFontSizeStateInput, 
   setFontStyleState, 
   SetFontStyleStateInput, 
   setPickedColorState, 
@@ -264,6 +266,17 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       }
     }: PanGestureHandlerStateChangeEvent
   ) => {
+    if (oldState === State.BEGAN) {
+      if (
+        this.props.focusedComponent !== this.props.id ||
+        this.props.focusedComponentType !== "text"
+      ) {
+        this.props.setFocusedComponent({
+          focusedComponent: this.props.id,
+          focusedComponentType: "text"
+        });
+      }
+    }
     if (oldState === State.ACTIVE) {
       this.props.setOnDrag(false);
       if (
@@ -278,15 +291,6 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.props.setOnDeletionArea(false);
         this.props.nullComponent(this.props.id);
         return;
-      }
-      if (
-        this.props.focusedComponent !== this.props.id ||
-        this.props.focusedComponentType !== "text"
-      ) {
-        this.props.setFocusedComponent({
-          focusedComponent: this.props.id,
-          focusedComponentType: "text"
-        });
       }
       this.lastPosition.x += translationX;
       this.lastPosition.y += translationY;
@@ -353,10 +357,15 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     }: TapGestureHandlerStateChangeEvent
   ) => {
     if (oldState === State.ACTIVE) {
-      this.props.setFocusedComponent({
-        focusedComponent: this.props.id,
-        focusedComponentType: "text"
-      });
+      if (
+        this.props.focusedComponent !== this.props.id ||
+        this.props.focusedComponentType !== "text"
+      ) {
+        this.props.setFocusedComponent({
+          focusedComponent: this.props.id,
+          focusedComponentType: "text"
+        });
+      }
     }
   }
 
@@ -382,7 +391,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }: LayoutChangeEvent) => {
     this.setTextShift({
       x: width / 2,
-      y: height
+      y: height / 2
     });
   }
 
@@ -425,6 +434,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.props.setPickedColor(null);
         this.props.setFontStyle(this.state.fontStyle);
         this.props.setTextAlign(this.state.textAlign);
+        this.props.setFontSize(this.state.fontSize);
       }
 
       if (this.props.pickedColor && prevProps.pickedColor !== this.props.pickedColor) {
@@ -446,6 +456,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
 
       if ( prevProps.textAlign !== this.props.textAlign ) {
         this.setTextAlign(this.props.textAlign);
+      }
+
+      if ( prevProps.fontSize !== this.props.fontSize ) {
+        this.setFontSize(this.props.fontSize);
       }
 
       if ( prevProps.textContent !== this.props.textContent ) {
@@ -574,7 +588,7 @@ const mapStateToProps = (state: RootState) => {
     onDeletionArea: state.editor.handle.onDeletionArea,
     nullComponent: state.editor.handle.nullComponent,
     onDrag: state.editor.handle.onDrag,
-    fontSize: state.editor.states.fontSize
+    fontSize: state.editor.states.fontSize,
   };
 };
 
@@ -593,7 +607,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setOnDrag: (payload: SetOnDragInput) => dispatch(setOnDrag(payload)),
     setOnDeletionArea: (payload: SetOnDeletionAreaInput) => dispatch(setOnDeletionArea(payload)),
     setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload)),
-    setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload))
+    setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
+    setFontSize: (payload: SetFontSizeStateInput) => dispatch(setFontSizeState(payload)),
   };
 };
 

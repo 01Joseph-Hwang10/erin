@@ -5,6 +5,7 @@ import PressButton from "../../base/press-button";
 import { Dispatch } from "redux";
 import { Text, StyleSheet } from "react-native";
 import CircularFrame from "@components/common/circular-frame";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
 
 type FontSizeReduxProps = ConnectedProps<typeof connector>
 
@@ -13,6 +14,8 @@ interface FontSizeProps extends FontSizeReduxProps {}
 const FontSize: React.FC<FontSizeProps> = ({
   iconSize,
   fontSize,
+  setBottomFloatCurrent: SetBottomFloatCurrent,
+  bottomFloatCurrent
 }) => {
 
   const renderIcon = () => (
@@ -26,7 +29,13 @@ const FontSize: React.FC<FontSizeProps> = ({
     </CircularFrame>
   );
 
-  const onPress = () => {};
+  const onPress = () => {
+    if (bottomFloatCurrent === "fontSize") {
+      SetBottomFloatCurrent("none");
+    } else {
+      SetBottomFloatCurrent("fontSize");
+    }
+  };
   
   return <PressButton 
     icon={renderIcon}
@@ -37,11 +46,14 @@ const FontSize: React.FC<FontSizeProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-    fontSize: state.editor.states.fontSize
+    fontSize: state.editor.states.fontSize,
+    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({});
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
+});
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

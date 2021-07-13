@@ -47,6 +47,7 @@ export namespace Erin {
             | "colorPicker"
             | "fontStyle"
             | "editText"
+            | "fontSize"
 
         type BackgroundType = "image" | "color" | "pattern"
 

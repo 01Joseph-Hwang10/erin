@@ -3,7 +3,6 @@ import { useRef } from "react";
 import ToggleButton from "../../base/toggle-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { Dispatch } from "redux";
 import { CircularFrameProps } from "@components/common/circular-frame";
 
 type TextAnimationReduxProps = ConnectedProps<typeof connector>
@@ -14,7 +13,7 @@ const TextAnimation: React.FC<TextAnimationProps> = ({
   iconSize,
 }) => {
 
-  /* Effect wanna add: neon, blink, typing, fade in */
+  /* Effect wanna add: blink, typing, fade in, moving */
   const icons: JSX.Element[] = [];
 
   const circularFrameProps: CircularFrameProps = {
@@ -44,8 +43,6 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, {});
 
 export default connector(TextAnimation);

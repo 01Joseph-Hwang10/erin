@@ -7,6 +7,7 @@ import DeleteComponent from "./bottom-float/delete-members/delete-component";
 import FontColorList from "./bottom-float/picked-color-members/picked-color-list";
 import FontStyleList from "./bottom-float/font-style-members/font-style-list";
 import EditText from "./bottom-float/text-edit-members/edit-text";
+import FontSizeSlider from "./bottom-float/font-size-members/font-size-slider";
 
 type BottomFloatReduxProps = ConnectedProps<typeof connector>
 
@@ -31,6 +32,8 @@ class BottomFloat extends React.Component<BottomFloatProps> {
       return <FontStyleList />;
     case "editText":
       return <EditText />;
+    case "fontSize":
+      return <FontSizeSlider />;
     default:
       return <View style={styles.root}></View>;
     }
