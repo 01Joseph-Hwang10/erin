@@ -34,6 +34,7 @@ const TogglePages: React.FC<TogglePagesProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"작업할 레이어를 변경합니다"}
   />;
 };
 

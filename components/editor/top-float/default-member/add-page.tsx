@@ -24,6 +24,7 @@ const AddPage: React.FC<AddPageProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"레이어를 추가합니다"}
   />;
 };
 

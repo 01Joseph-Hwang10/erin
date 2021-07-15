@@ -32,6 +32,7 @@ const ChangeText: React.FC<ChangeTextProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"선택된 텍스트를 수정합니다"}
   />;
 };
 

@@ -30,6 +30,7 @@ const CreateText: React.FC<CreateTextProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"텍스트를 만듭니다"}
   />;
 };
 

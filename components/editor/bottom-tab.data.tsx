@@ -60,8 +60,7 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     <BackgroundColor key={3} />,
     <TextAlign key={4} />,
     <FontSize key={5} />,
-    // <TextAnimation key={6} />,
-    null,
+    <TextAnimation key={6} />,
   ],
   animationDefault: [
     <ToggleToDefault key={0} />,

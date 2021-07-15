@@ -1,48 +1,64 @@
 import React from "react";
 import { useRef } from "react";
-import ToggleButton from "../../base/toggle-button";
+import SwitchButton, { SwitchButton as SwitchButtonComponent } from "../../base/switch-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { CircularFrameProps } from "@components/common/circular-frame";
+import { Dispatch } from "redux";
+import { useEffect } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { toggleTextAnimationState } from "@slices/editor/editor-states";
+import { textAnimationTypeToIndex } from "./text-animation.function";
+import { textAnimationTypes } from "./text-animation.data";
 
 type TextAnimationReduxProps = ConnectedProps<typeof connector>
 
 interface TextAnimationProps extends TextAnimationReduxProps {}
 
+const iconColor = "white";
+
 const TextAnimation: React.FC<TextAnimationProps> = ({
   iconSize,
+  toggleTextAnimation,
+  textAnimationType
 }) => {
 
-  /* Effect wanna add: blink, typing, fade in, moving */
-  const icons: JSX.Element[] = [];
+  const icon = () => (
+    <MaterialIcons size={iconSize} color={iconColor} name="animation" />
+  );
 
-  const circularFrameProps: CircularFrameProps = {
-    size: iconSize,
-    border: true,
-    borderColor: "white",
-    borderWidth: 2.5,
-    backgroundColor: "transparent"
+  const buttonRef = useRef<SwitchButtonComponent>(null);
+
+  const onPress = () => {
+    toggleTextAnimation();
+    buttonRef.current?.toggleItem();
   };
 
-  const buttonRef = useRef<ToggleButton>(null);
+  useEffect(
+    () => {
+      buttonRef.current?.setItemIndex(textAnimationTypeToIndex(textAnimationType));
+    },
+    []
+  );
 
-  const onPress = () => {};
-
-  return <ToggleButton 
+  return <SwitchButton 
     ref={buttonRef}
     onPress={onPress}
-    icons={icons}
-    enableCircularFrame={true}
-    circularFrameProps={circularFrameProps}
+    icon={icon}
+    itemKeys={textAnimationTypes}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
+    textAnimationType: state.editor.states.textAnimationType
   };
 };
 
-const connector = connect(mapStateToProps, {});
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleTextAnimation: () => dispatch(toggleTextAnimationState()),
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(TextAnimation);

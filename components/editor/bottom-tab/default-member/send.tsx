@@ -3,7 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type SendReduxProps = ConnectedProps<typeof connector>
 
@@ -24,14 +24,15 @@ const Send: React.FC<SendProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"편지지를 친구에게 보냅니다"}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

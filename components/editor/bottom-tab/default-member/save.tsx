@@ -25,6 +25,7 @@ const Save: React.FC<SaveProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"편지지의 작업상황을 저장합니다"}
   />;
 };
 

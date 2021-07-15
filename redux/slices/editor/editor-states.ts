@@ -1,6 +1,7 @@
 import { NonableShape } from "@components/common/shapes/shape.types";
 import { FontStyles } from "@components/editor/bottom-float/font-style-members/font-style.data";
 import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Erin } from "erin";
 
 type ColorConsumer = "textFontColor" | "textBackgroundColor" | null
 
@@ -16,7 +17,8 @@ interface EditorStatesState {
     backgroundShape: NonableShape,
     textContent: string | null,
     textAlign: TextAlign,
-    fontSize: number
+    fontSize: number,
+    textAnimationType: Erin.Editor.TextAnimationTypes
 }
 
 const initialState: EditorStatesState = {
@@ -27,7 +29,8 @@ const initialState: EditorStatesState = {
   backgroundShape: "none",
   textContent: null,
   textAlign: "justify",
-  fontSize: initialFontSize
+  fontSize: initialFontSize,
+  textAnimationType: "none"
 };
 
 export type SetFontStyleStateInput = FontStyles | null
@@ -150,6 +153,39 @@ const setFontSizeStateReducer: CaseReducer<
   state.fontSize = fontSize;
 };
 
+export type SetTextAnimationTypeStateInput = Erin.Editor.TextAnimationTypes
+
+const setTextAnimationTypeStateReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetTextAnimationTypeStateInput>
+> = (state, { payload: textAnimationType }) => {
+  state.textAnimationType = textAnimationType;
+};
+
+const toggleTextAnimationStateReducer: CaseReducer<
+  EditorStatesState
+> = (state) => {
+  switch (state.textAnimationType) {
+  case "none":
+    state.textAnimationType = "blink";
+    break;
+  case "blink":
+    state.textAnimationType = "typing";
+    break;
+  case "typing":
+    state.textAnimationType = "fade";
+    break;
+  case "fade":
+    state.textAnimationType = "moving";
+    break;
+  case "moving":
+    state.textAnimationType = "none";
+    break;
+  default:
+    break;
+  }
+};
+
 export const {
   reducer,
   actions: {
@@ -162,7 +198,9 @@ export const {
     setTextContentState,
     setTextAlignState,
     toggleTextAlignState,
-    setFontSizeState
+    setFontSizeState,
+    setTextAnimationTypeState,
+    toggleTextAnimationState
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -177,6 +215,8 @@ export const {
     setTextContentState: setTextContentStateReducer,
     setTextAlignState: setTextAlignStateReducer,
     toggleTextAlignState: toggleTextAlignStateReducer,
-    setFontSizeState: setFontSizeStateReducer
+    setFontSizeState: setFontSizeStateReducer,
+    setTextAnimationTypeState: setTextAnimationTypeStateReducer,
+    toggleTextAnimationState: toggleTextAnimationStateReducer
   }
 });

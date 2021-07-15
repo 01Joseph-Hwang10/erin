@@ -1,19 +1,14 @@
 import React from "react";
 import { useRef } from "react";
-import ToggleButton from "../../base/toggle-button";
+import SwitchButton, { SwitchButton as SwitchButtonComponent } from "../../base/switch-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import Rectangle from "@components/common/shapes/rectangle";
-// import Circle from "@components/common/shapes/circle";
-// import Heart from "@components/common/shapes/heart";
-// import Star from "@components/common/shapes/star";
 import { Dispatch } from "redux";
 import { toggleBackgroundShapeState } from "@slices/editor/editor-states";
-import None from "@components/common/shapes/none";
-import { StyleProp, ViewStyle } from "react-native";
 import { shapeToIndex } from "./background-shape.function";
 import { useEffect } from "react";
-import { CircularFrameProps } from "@components/common/circular-frame";
+import { AntDesign } from "@expo/vector-icons";
+import { textBackgroundShapes } from "./background-shape.data";
 
 type ShapeReduxProps = ConnectedProps<typeof connector>
 
@@ -27,85 +22,29 @@ const Shape: React.FC<ShapeProps> = ({
   backgroundShape
 }) => {
 
-  const roundedRectangleStyle: StyleProp<ViewStyle> = {
-    borderRadius: 5
-  };
+  const icon = () => (
+    <AntDesign size={iconSize} color={iconColor} name="star" />
+  );
 
-  // const starStyle: StyleProp<ViewStyle> = {
-  //   transform: [
-  //     { translateY: ( 1 / 10 ) * iconSize },
-  //     { translateX: ( 1 / 25 ) * iconSize * (-1) }
-  //   ]
-  // };
-
-  const halfSize = iconSize / 2;
-
-  /* Shapes I'll gonna make: rectangle, circle, heart, star, triangle */
-  const icons: JSX.Element[] = [
-    <None 
-      key={0}
-      size={iconSize * 2 / 3}
-      color={iconColor}
-    />,
-    <Rectangle 
-      key={1}
-      width={halfSize}
-      height={halfSize}
-      backgroundColor={iconColor}
-    />,
-    <Rectangle 
-      key={2}
-      width={halfSize}
-      height={halfSize}
-      backgroundColor={iconColor}
-      style={roundedRectangleStyle}
-    />,
-    // <Circle 
-    //   key={3}
-    //   size={halfSize}
-    //   backgroundColor={iconColor}
-    // />,
-    // <Heart 
-    //   key={4}
-    //   size={halfSize}
-    //   backgroundColor={iconColor}
-    // />,
-    // <Star 
-    //   key={5}
-    //   size={halfSize}
-    //   backgroundColor={iconColor}
-    //   style={starStyle}
-    // />
-  ];
-
-  const circularFrameProps: CircularFrameProps = {
-    size: iconSize,
-    border: true,
-    borderColor: "white",
-    borderWidth: 2.5,
-    backgroundColor: "transparent"
-  };
-
-  const buttonRef = useRef<ToggleButton>(null);
+  const buttonRef = useRef<SwitchButtonComponent>(null);
 
   const onPress = () => {
     ToggleBackgroundShape();
-    buttonRef.current?.toggleIcon();
+    buttonRef.current?.toggleItem();
   };
 
   useEffect(
     () => {
-      buttonRef.current?.setIconIndex(shapeToIndex(backgroundShape));
+      buttonRef.current?.setItemIndex(shapeToIndex(backgroundShape));
     },
     []
   );
 
-  return <ToggleButton 
+  return <SwitchButton 
     ref={buttonRef}
     onPress={onPress}
-    icons={icons}
-    enableCircularFrame={true}
-    circularFrameProps={circularFrameProps}
+    icon={icon}
+    itemKeys={textBackgroundShapes}
   />;
 };
 
@@ -117,7 +56,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  toggleBackgroundShape: () => dispatch(toggleBackgroundShapeState())
+  toggleBackgroundShape: () => dispatch(toggleBackgroundShapeState()),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -24,6 +24,7 @@ const CheckButton: React.FC<CheckButtonProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={null}
   />;
 };
 

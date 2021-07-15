@@ -32,6 +32,7 @@ const FontStyle: React.FC<FontStyleProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"텍스트의 폰트를 정합니다"}
   />;
 };
 

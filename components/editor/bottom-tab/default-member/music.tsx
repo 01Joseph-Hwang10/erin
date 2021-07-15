@@ -3,7 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type MusicReduxProps = ConnectedProps<typeof connector>
 
@@ -24,14 +24,15 @@ const Music: React.FC<MusicProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"편지지에 음악을 삽입합니다"}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

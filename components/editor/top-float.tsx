@@ -17,7 +17,8 @@ const TopFloat: React.FC<TopFloatProps> = ({
     iconGap,
     iconSize
   },
-  topFloatCurrent
+  topFloatCurrent,
+  onDrag
 }) => {
 
   const marginSetter: StyleProp<ViewStyle> = {
@@ -39,6 +40,10 @@ const TopFloat: React.FC<TopFloatProps> = ({
     width: iconSize * 0.8,
     height: iconSize
   };
+
+  if (onDrag) {
+    return <View style={placeholderStyle}></View>;
+  }
 
   return (
     <View style={styles.root}>
@@ -68,7 +73,8 @@ const TopFloat: React.FC<TopFloatProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     topFloatCurrent: state.editor.generic.topFloatCurrent,
-    settings: state.editor.generic.settings
+    settings: state.editor.generic.settings,
+    onDrag: state.editor.handle.onDrag
   };
 };
 

@@ -3,7 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type ClearAllReduxProps = ConnectedProps<typeof connector>
 
@@ -30,8 +30,8 @@ const ClearAll: React.FC<ClearAllProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

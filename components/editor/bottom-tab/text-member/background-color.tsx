@@ -43,6 +43,7 @@ const FontColor: React.FC<FontColorProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"텍스트의 배경 색상을 설정합니다"}
   />;
 };
 

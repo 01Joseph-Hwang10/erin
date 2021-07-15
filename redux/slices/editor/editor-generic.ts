@@ -8,7 +8,8 @@ export interface EditorGenericState {
     bottomFloatCurrent: Erin.Editor.BottomFloatMenuType,
     settings: Erin.Editor.Settings,
     workspaceSpec: RectSpecType,
-    hasUnsavedChanges: boolean
+    hasUnsavedChanges: boolean,
+    helpMessage: string | null,
 }
 
 const initialState: EditorGenericState = {
@@ -23,7 +24,8 @@ const initialState: EditorGenericState = {
     width: 1,
     height: 1
   },
-  hasUnsavedChanges: false
+  hasUnsavedChanges: false,
+  helpMessage: null
 };
 
 export type ConfigureIconLayoutInput = Erin.Editor.Settings;
@@ -80,6 +82,14 @@ const setHasUnsavedChangesReducer: CaseReducer<
   state.hasUnsavedChanges = hasUnsavedChanges;
 };
 
+export type SetHelpMessageInput = string | null
+
+const setHelpMessageReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetHelpMessageInput>
+> = (state, { payload: newHelpMessage }) => {
+  state.helpMessage = newHelpMessage;
+};
 
 export const {
   reducer,
@@ -89,7 +99,8 @@ export const {
     setTopFloatCurrent,
     setBottomFloatCurrent,
     setWorkspaceSpec,
-    setHasUnsavedChanges
+    setHasUnsavedChanges,
+    setHelpMessage
   }
 } = createSlice({
   name: "editorSlice",
@@ -100,6 +111,7 @@ export const {
     setTopFloatCurrent: setTopFloatCurrentReducer,
     setBottomFloatCurrent: setBottomFloatCurrentReducer,
     setWorkspaceSpec: setWorkspaceSpecReducer,
-    setHasUnsavedChanges: setHasUnsavedChangesReducer
+    setHasUnsavedChanges: setHasUnsavedChangesReducer,
+    setHelpMessage: setHelpMessageReducer
   }
 });

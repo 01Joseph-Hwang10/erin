@@ -3,7 +3,7 @@ import PressButton from "../../base/press-button";
 import { MaterialIcons } from "@expo/vector-icons";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants"
+import { ICON_COLOR } from "../../base/constants";
 
 type ToggleToAnimationReduxProps = ConnectedProps<typeof connector>
 
@@ -24,14 +24,15 @@ const ToggleToAnimation: React.FC<ToggleToAnimationProps> = ({
   return <PressButton 
     onPress={onPress}
     icon={renderIcon}
+    helpMessage={"애니메이션을 설정합니다"}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-  }
-}
+  };
+};
 
 const connector = connect(mapStateToProps, { });
 

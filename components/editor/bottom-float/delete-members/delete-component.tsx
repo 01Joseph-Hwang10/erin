@@ -8,7 +8,7 @@ import { Dispatch } from "redux";
 import { setDeletionArea, SetDeletionAreaInput } from "@slices/editor/editor-handle";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { LinearGradient } from 'expo-linear-gradient'
+import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { StyleProp } from "react-native";
 
@@ -16,7 +16,7 @@ type DeleteComponentReduxProps = ConnectedProps<typeof connector>
 
 interface DeleteComponentProps extends DeleteComponentReduxProps {}
 
-const onHoverScale = 1.2
+const onHoverScale = 1.2;
 
 const DeleteComponent: React.FC<DeleteComponentProps> = ({
   iconSize,
@@ -26,7 +26,7 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
   screenWidth
 }) => {
 
-  const [padding, setPadding] = useState<number[]>([0, 0])
+  const [padding, setPadding] = useState<number[]>([0, 0]);
 
   const rootViewRef = useRef<View>(null);
   const onRootViewLayout = () => {
@@ -48,7 +48,7 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
         setPadding([
           (1 - ( iconSize / screenWidth )) * 50,
           (1 - ( (iconSize * onHoverScale) / screenWidth )) * 50,
-        ])
+        ]);
       }
     },
     []
@@ -57,16 +57,16 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
   const wrapperStyle: StyleProp<ViewStyle> = {
     paddingHorizontal: onDeletionArea && onDrag ? `${padding[1]}%` : `${padding[0]}%`,
     height: iconSize + BOTTOM_MARGIN * 2
-  }
+  };
 
   return (
     <View 
-        style={[styles.root, styles.center]}
-        ref={rootViewRef}
-        onLayout={onRootViewLayout}
-      >
+      style={[styles.root, styles.center]}
+      ref={rootViewRef}
+      onLayout={onRootViewLayout}
+    >
       <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.3)']}
+        colors={["transparent", "rgba(0,0,0,0.3)"]}
       >
         <View style={[styles.center, wrapperStyle]}>
           <Feather name="x-circle" 
@@ -76,7 +76,7 @@ const DeleteComponent: React.FC<DeleteComponentProps> = ({
         </View>
       </LinearGradient>
     </View>
-  )
+  );
 };
 
 const mapStateToProps = (state: RootState) => {
@@ -99,10 +99,10 @@ export default connector(DeleteComponent);
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
+    width: "100%",
   },
   center: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

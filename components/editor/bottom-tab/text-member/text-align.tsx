@@ -1,6 +1,6 @@
 import React from "react";
 import { useRef } from "react";
-import ToggleButton from "../../base/toggle-button";
+import ToggleButton, { ToggleButton as ToggleButtonComponent } from "../../base/toggle-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
@@ -27,7 +27,7 @@ const Shape: React.FC<ShapeProps> = ({
     <Feather key={3} name="align-right" size={iconSize} color="white" />,
   ];
 
-  const buttonRef = useRef<ToggleButton>(null);
+  const buttonRef = useRef<ToggleButtonComponent>(null);
 
   const onPress = () => {
     toggleTextAlign();
@@ -45,6 +45,7 @@ const Shape: React.FC<ShapeProps> = ({
     ref={buttonRef}
     onPress={onPress}
     icons={icons}
+    helpMessage={"텍스트를 어떻게 정렬할지 설정합니다"}
   />;
 };
 

@@ -33,16 +33,25 @@ import {
   SetPickedColorStateInput, 
   setTextAlignState, 
   SetTextAlignStateInput, 
+  setTextAnimationTypeState, 
+  SetTextAnimationTypeStateInput, 
   setTextContentState, 
   SetTextContentStateInput, 
   setTextOnEditState, 
   SetTextOnEditStateInput, 
   TextAlign
 } from "@slices/editor/editor-states";
+import { Erin } from "erin";
 import React from "react";
-import { LayoutChangeEvent, StyleProp, ViewStyle } from "react-native";
-import { StyleSheet } from "react-native";
-import { View, Text, Animated } from "react-native";
+import { 
+  LayoutChangeEvent, 
+  StyleProp, 
+  ViewStyle,
+  StyleSheet,
+  View, 
+  Text, 
+  Animated,
+} from "react-native";
 import { 
   PanGestureHandler, 
   RotationGestureHandler, 
@@ -60,6 +69,7 @@ import {
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import BackgroundShape from "./background-shape";
+import TextAnimationContext from "./text-animation";
 import { decideHover } from "./text.function";
 
 type ErinTextReduxProps = ConnectedProps<typeof connector>
@@ -84,7 +94,8 @@ interface ErinTextState {
   textShift: {
     x: number,
     y: number
-  }
+  },
+  textAnimationType: Erin.Editor.TextAnimationTypes
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -105,7 +116,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     textShift: {
       x: 0,
       y: 0
-    }
+    },
+    textAnimationType: "none"
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -119,6 +131,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setFirstMount: (firstMount: boolean) => void;
   private setFontSize: (fontSize: number) => void;
   private setTextShift: (textShift: { x: number, y: number }) => void;
+  private setAnimationType: (textAnimationType: Erin.Editor.TextAnimationTypes) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
@@ -178,6 +191,9 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     };
     this.setTextShift = (textShift: { x: number, y: number }) => {
       this.setState({ textShift });
+    };
+    this.setAnimationType = (textAnimationType: Erin.Editor.TextAnimationTypes) => {
+      this.setState({ textAnimationType });
     };
 
     // Pan
@@ -408,6 +424,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.props.setBackgroundShape(this.state.backgroundShape);
     this.props.setColorConsumer(null);
     this.props.setPickedColor(null);
+    this.props.setTextAnimationType(this.state.textAnimationType);
     this.props.setFontStyle(this.state.fontStyle);
   }
 
@@ -435,6 +452,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.props.setFontStyle(this.state.fontStyle);
         this.props.setTextAlign(this.state.textAlign);
         this.props.setFontSize(this.state.fontSize);
+        this.props.setTextAnimationType(this.state.textAnimationType);
       }
 
       if (this.props.pickedColor && prevProps.pickedColor !== this.props.pickedColor) {
@@ -542,23 +560,32 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                   ]}
                 >
                   <Animated.View style={styles.wrapper}>
-                    <BackgroundShape
-                      shape={this.state.backgroundShape}
-                      size={this.state.size}
-                      backgroundColor={this.state.backgroundColor}
-                    >
-                      <Text 
-                        style={[
-                          {
-                            fontFamily: this.state.fontStyle,
-                            color: this.state.fontColor,
-                            textAlign: this.state.textAlign,
-                            fontSize: this.state.fontSize,
-                          }
-                        ]}
-                        onLayout={this.onTextLayout}
-                      >{this.state.text}</Text>
-                    </BackgroundShape>
+                    <TextAnimationContext.Consumer>
+                      {
+                        (AnimatedText) => {
+                          return <BackgroundShape
+                            shape={this.state.backgroundShape}
+                            size={this.state.size}
+                            backgroundColor={this.state.backgroundColor}
+                          >
+                            <AnimatedText 
+                              style={[
+                                {
+                                  fontFamily: this.state.fontStyle,
+                                  color: this.state.fontColor,
+                                  textAlign: this.state.textAlign,
+                                  fontSize: this.state.fontSize,
+                                }
+                              ]}
+                              onLayout={this.onTextLayout}
+                              textAnimationType={this.state.textAnimationType}
+                            >
+                              {this.state.text}
+                            </AnimatedText>
+                          </BackgroundShape>;
+                        }
+                      }
+                    </TextAnimationContext.Consumer>
                   </Animated.View>
                 </TapGestureHandler>
               </Animated.View>
@@ -589,6 +616,7 @@ const mapStateToProps = (state: RootState) => {
     nullComponent: state.editor.handle.nullComponent,
     onDrag: state.editor.handle.onDrag,
     fontSize: state.editor.states.fontSize,
+    textAnimationType: state.editor.states.textAnimationType
   };
 };
 
@@ -609,6 +637,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload)),
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setFontSize: (payload: SetFontSizeStateInput) => dispatch(setFontSizeState(payload)),
+    setTextAnimationType: (payload: SetTextAnimationTypeStateInput) => dispatch(setTextAnimationTypeState(payload)),
   };
 };
 

@@ -56,6 +56,8 @@ export namespace Erin {
 
         type AnimationTypes = string // Temporal declaration. Need to decide what to include in animation
 
+        export type TextAnimationTypes = "blink" | "typing" | "fade" | "moving" | "none" | "neon"
+
         export interface LetterConfig {
             background: string,
             backgroundType: BackgroundType,

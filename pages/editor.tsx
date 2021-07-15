@@ -16,6 +16,8 @@ import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import COLORS from "../src/colors";
 import { RootState } from "@redux/root-reducer";
 import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
+import TextAnimationContext, { AnimatedText } from "@components/editor/workspace/erin-components/text/text-animation";
+import HelpMessage from "@components/editor/help-message";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -82,7 +84,7 @@ class Editor extends React.Component<EditorProps> {
 
   render = () => {
     return (
-      <>
+      <TextAnimationContext.Provider value={AnimatedText}>
         <SafeAreaView style={styles.safeFirst} />
         <SafeAreaView style={styles.safeSecond}>
           <View style={styles.root}>
@@ -94,6 +96,7 @@ class Editor extends React.Component<EditorProps> {
                     <TopFloat />
                   </View>
                   <View style={styles.floatWrapperWrapper}>
+                    <HelpMessage />
                     <BottomFloat />
                   </View>
                 </View>
@@ -104,7 +107,7 @@ class Editor extends React.Component<EditorProps> {
             </View>
           </View>
         </SafeAreaView>
-      </>
+      </TextAnimationContext.Provider>
     );
   }
 }
@@ -154,6 +157,8 @@ const styles = StyleSheet.create({
   },
   floatWrapperWrapper: {
     width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   },
   toolbarWrapper: {
     flex: 1,

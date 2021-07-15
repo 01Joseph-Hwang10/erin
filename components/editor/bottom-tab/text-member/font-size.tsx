@@ -40,6 +40,7 @@ const FontSize: React.FC<FontSizeProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
+    helpMessage={"텍스트의 크기를 정합니다"}
   />;
 };
 
