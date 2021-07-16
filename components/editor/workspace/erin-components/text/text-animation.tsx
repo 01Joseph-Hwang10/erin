@@ -9,7 +9,39 @@ import {
   Text,
   StyleSheet
 } from "react-native";
-import Animated from "react-native-reanimated";
+import Blink from "./text-animation/blink";
+import Fade from "./text-animation/fade";
+import Moving from "./text-animation/moving";
+import TypeWriter from "./text-animation/typewriter";
+
+interface AnimatedTextWrapperProps {
+  children?: React.ReactNode,
+  textAnimationType: Erin.Editor.TextAnimationTypes
+}
+
+export const AnimatedTextWrapper: React.FC<AnimatedTextWrapperProps> = ({
+  children,
+  textAnimationType
+}) => {
+  switch (textAnimationType) {
+  case "blink":
+    return <Blink>
+      {children}
+    </Blink>;
+  case "fade":
+    return <Fade>
+      {children}
+    </Fade>;
+  case "moving":
+    return <Moving>
+      {children}
+    </Moving>;
+  default:
+    return <>
+      {children}
+    </>;
+  }
+};
 
 interface AnimatedTextProps {
     style?: StyleProp<ViewStyle> & StyleProp<TextStyle>,
@@ -24,25 +56,37 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
   children,
   textAnimationType
 }) => {
-  return (
-    <Animated.View 
+  switch (textAnimationType) {
+  case "typing":
+    return <TypeWriter
+      style={style}
+      onLayout={onLayout}
+    >
+      {children}
+    </TypeWriter>;
+  default:
+    return <View
       style={[styles.wrapper, styles.flexRow]}
       onLayout={onLayout}
     >
-      {
-        textAnimationType === "typing" ?
-          <React.Fragment>
-            <Text style={style}>{children}</Text>
-            <Text style={{ marginLeft: 5 }}>|</Text>
-          </React.Fragment> :
-          <Text style={style}>{children}</Text>
-      }
-    </Animated.View>
-  );
+      <Text style={style}>
+        {children}
+      </Text>
+    </View>;
+  }
 };
 
-const TextAnimationContext: React.Context<React.FC<AnimatedTextProps>> =
-    React.createContext<React.FC<AnimatedTextProps>>(AnimatedText);
+const TextAnimationContext: React.Context<{
+  AnimatedText: React.FC<AnimatedTextProps>,
+  AnimatedTextWrapper: React.FC<AnimatedTextWrapperProps>
+}> =
+    React.createContext<{
+      AnimatedText: React.FC<AnimatedTextProps>,
+      AnimatedTextWrapper: React.FC<AnimatedTextWrapperProps>
+    }>({
+      AnimatedText,
+      AnimatedTextWrapper
+    });
 TextAnimationContext.displayName = "TextAnimationContext";
 
 export default TextAnimationContext;

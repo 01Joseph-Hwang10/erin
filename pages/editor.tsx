@@ -16,7 +16,7 @@ import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import COLORS from "../src/colors";
 import { RootState } from "@redux/root-reducer";
 import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
-import TextAnimationContext, { AnimatedText } from "@components/editor/workspace/erin-components/text/text-animation";
+import TextAnimationContext, { AnimatedText, AnimatedTextWrapper } from "@components/editor/workspace/erin-components/text/text-animation";
 import HelpMessage from "@components/editor/help-message";
 
 
@@ -82,9 +82,14 @@ class Editor extends React.Component<EditorProps> {
     BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
   }
 
+  private contextProviderValue = {
+    AnimatedText,
+    AnimatedTextWrapper
+  }
+
   render = () => {
     return (
-      <TextAnimationContext.Provider value={AnimatedText}>
+      <TextAnimationContext.Provider value={this.contextProviderValue}>
         <SafeAreaView style={styles.safeFirst} />
         <SafeAreaView style={styles.safeSecond}>
           <View style={styles.root}>

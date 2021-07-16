@@ -60,6 +60,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setHelpMessage: (payload: SetHelpMessageInput) => dispatch(setHelpMessage(payload))
 });
   
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(null, mapDispatchToProps, null, { forwardRef: true });
 
 export default connector(SwitchButton);

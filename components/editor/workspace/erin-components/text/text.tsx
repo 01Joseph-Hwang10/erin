@@ -49,7 +49,6 @@ import {
   ViewStyle,
   StyleSheet,
   View, 
-  Text, 
   Animated,
 } from "react-native";
 import { 
@@ -480,6 +479,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.setFontSize(this.props.fontSize);
       }
 
+      if ( prevProps.textAnimationType !== this.props.textAnimationType ) {
+        this.setAnimationType(this.props.textAnimationType);
+      }
+
       if ( prevProps.textContent !== this.props.textContent ) {
         if ( this.props.textContent ) {
           this.setText(this.props.textContent);
@@ -513,18 +516,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           {
             transform: 
             [
-              {
-                translateX: Animated.add(this.posX, this.state.textShift.x * (-1))
-              },
-              {
-                translateY: Animated.add(this.posY, this.state.textShift.y * (-1))
-              },
-              {
-                scale: this.scale
-              },
-              {
-                rotateZ: this.rotationString
-              }
+              { translateX: Animated.add(this.posX, this.state.textShift.x * (-1)) },
+              { translateY: Animated.add(this.posY, this.state.textShift.y * (-1)) },
+              { scale: this.scale },
+              { rotateZ: this.rotationString },
             ]
           }
         ]}>
@@ -562,27 +557,31 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                   <Animated.View style={styles.wrapper}>
                     <TextAnimationContext.Consumer>
                       {
-                        (AnimatedText) => {
-                          return <BackgroundShape
-                            shape={this.state.backgroundShape}
-                            size={this.state.size}
-                            backgroundColor={this.state.backgroundColor}
+                        ({ AnimatedText, AnimatedTextWrapper }) => {
+                          return <AnimatedTextWrapper
+                            textAnimationType={this.state.textAnimationType}
                           >
-                            <AnimatedText 
-                              style={[
-                                {
-                                  fontFamily: this.state.fontStyle,
-                                  color: this.state.fontColor,
-                                  textAlign: this.state.textAlign,
-                                  fontSize: this.state.fontSize,
-                                }
-                              ]}
-                              onLayout={this.onTextLayout}
-                              textAnimationType={this.state.textAnimationType}
+                            <BackgroundShape
+                              shape={this.state.backgroundShape}
+                              size={this.state.size}
+                              backgroundColor={this.state.backgroundColor}
                             >
-                              {this.state.text}
-                            </AnimatedText>
-                          </BackgroundShape>;
+                              <AnimatedText 
+                                style={[
+                                  {
+                                    fontFamily: this.state.fontStyle,
+                                    color: this.state.fontColor,
+                                    textAlign: this.state.textAlign,
+                                    fontSize: this.state.fontSize,
+                                  }
+                                ]}
+                                onLayout={this.onTextLayout}
+                                textAnimationType={this.state.textAnimationType}
+                              >
+                                {this.state.text}
+                              </AnimatedText>
+                            </BackgroundShape>
+                          </AnimatedTextWrapper>;
                         }
                       }
                     </TextAnimationContext.Consumer>
