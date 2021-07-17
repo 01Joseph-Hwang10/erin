@@ -2,7 +2,7 @@ import { setHelpMessage, SetHelpMessageInput } from "@slices/editor/editor-gener
 import React, { Component } from "react";
 import { GestureResponderEvent } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { connect, ConnectedProps } from "react-redux";
+import { connect, ConnectedProps, Options } from "react-redux";
 import { Dispatch } from "redux";
 
 type SwitchButtonReduxProps = ConnectedProps<typeof connector>
@@ -35,9 +35,14 @@ export class SwitchButton extends Component<SwitchButtonProps, SwitchButtonState
       this.setState({ itemIndex });
     }
     
-    private onPress = () => {
-      if (this.props.onPress) {
-        this.props.onPress();
+    // private onPress = () => {
+    //   if (this.props.onPress) {
+    //     this.props.onPress();
+    //   }
+    // }
+
+    componentDidUpdate = (_: SwitchButtonProps, prevState: SwitchButtonState): void => {
+      if ( prevState.itemIndex !== this.state.itemIndex ) {
         this.props.setHelpMessage(this.props.itemKeys[this.state.itemIndex]);
       }
     }
@@ -48,7 +53,7 @@ export class SwitchButton extends Component<SwitchButtonProps, SwitchButtonState
 
       return (
         <TouchableOpacity
-          onPress={this.onPress}
+          onPress={this.props.onPress}
         >
           <Icon />
         </TouchableOpacity>
@@ -59,7 +64,11 @@ export class SwitchButton extends Component<SwitchButtonProps, SwitchButtonState
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   setHelpMessage: (payload: SetHelpMessageInput) => dispatch(setHelpMessage(payload))
 });
+
+const options: Options = {
+  forwardRef: true
+};
   
-const connector = connect(null, mapDispatchToProps, null, { forwardRef: true });
+const connector = connect(null, mapDispatchToProps, null, options);
 
 export default connector(SwitchButton);

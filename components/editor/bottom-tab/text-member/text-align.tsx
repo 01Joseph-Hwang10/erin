@@ -1,53 +1,59 @@
 import React from "react";
-import { useRef } from "react";
 import ToggleButton, { ToggleButton as ToggleButtonComponent } from "../../base/toggle-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { toggleTextAlignState } from "@slices/editor/editor-states";
 import { Feather } from "@expo/vector-icons";
-import { useEffect } from "react";
 import { textAlignToIndex } from "./text-align.function";
 
-type ShapeReduxProps = ConnectedProps<typeof connector>
+type TextAlignReduxProps = ConnectedProps<typeof connector>
 
-interface ShapeProps extends ShapeReduxProps {}
+interface TextAlignProps extends TextAlignReduxProps {}
 
+class TextAlign extends React.Component<TextAlignProps> {
 
-const Shape: React.FC<ShapeProps> = ({
-  iconSize,
-  toggleTextAlign,
-  textAlign
-}) => {
-
-  const icons: JSX.Element[] = [
-    <Feather key={0} name="align-justify" size={iconSize} color="white" />,
-    <Feather key={1} name="align-center" size={iconSize} color="white" />,
-    <Feather key={2} name="align-left" size={iconSize} color="white" />,
-    <Feather key={3} name="align-right" size={iconSize} color="white" />,
+  private icons: JSX.Element[] = [
+    <Feather key={0} name="align-justify" size={this.props.iconSize} color="white" />,
+    <Feather key={1} name="align-center" size={this.props.iconSize} color="white" />,
+    <Feather key={2} name="align-left" size={this.props.iconSize} color="white" />,
+    <Feather key={3} name="align-right" size={this.props.iconSize} color="white" />,
   ];
 
-  const buttonRef = useRef<ToggleButtonComponent>(null);
+  private buttonRef = React.createRef<ToggleButtonComponent>();
 
-  const onPress = () => {
-    toggleTextAlign();
-    buttonRef.current?.toggleIcon();
+  private onPress = () => {
+    this.props.toggleTextAlign();
+    this.buttonRef.current?.toggleIcon();
   };
 
-  useEffect(
-    () => {
-      buttonRef.current?.setIconIndex(textAlignToIndex(textAlign));
-    },
-    []
-  );
+  private setTextAlignIconIndex = () => {
+    this.buttonRef.current?.setIconIndex(
+      textAlignToIndex(
+        this.props.textAlign
+      )
+    );
+  }
 
-  return <ToggleButton 
-    ref={buttonRef}
-    onPress={onPress}
-    icons={icons}
-    helpMessage={"텍스트를 어떻게 정렬할지 설정합니다"}
-  />;
-};
+  componentDidMount = () => {
+    this.setTextAlignIconIndex();
+  }
+
+  componentDidUpdate = (prevProps: TextAlignProps) => {
+    if ( prevProps.textAlign !== this.props.textAlign ) {
+      this.setTextAlignIconIndex();
+    }
+  }
+
+  render = (): React.ReactNode => {
+    return <ToggleButton 
+      ref={this.buttonRef}
+      onPress={this.onPress}
+      icons={this.icons}
+      helpMessage={"텍스트를 어떻게 정렬할지 설정합니다"}
+    />;
+  }
+}
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -62,4 +68,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(Shape);
+export default connector(TextAlign);

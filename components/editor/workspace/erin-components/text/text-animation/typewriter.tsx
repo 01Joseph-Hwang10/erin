@@ -5,7 +5,8 @@ import {
   StyleSheet, 
   Text, 
   TextStyle, 
-  ViewStyle 
+  ViewStyle,
+  View
 } from "react-native";
 import Animated from "react-native-reanimated";
 
@@ -21,16 +22,24 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
   style
 }) => {
 
+  const cursorStyle: StyleProp<TextStyle> = {
+    color: "lightgrey",
+  };
+
   return (
-    <Animated.View
+    <View
       style={[styles.wrapper, styles.flexRow]}
       onLayout={onLayout}
     >
       <Text>
         <Text style={style}>{children}</Text>
-        <Text style={[styles.cursor, style]}>▌</Text>
+        <Animated.Text 
+          style={[styles.cursor, style, cursorStyle]}
+        >
+            ▌
+        </Animated.Text>
       </Text>
-    </Animated.View>
+    </View>
   );
 };
 

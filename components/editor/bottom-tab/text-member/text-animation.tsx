@@ -1,10 +1,8 @@
 import React from "react";
-import { useRef } from "react";
 import SwitchButton, { SwitchButton as SwitchButtonComponent } from "../../base/switch-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
-import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { toggleTextAnimationState } from "@slices/editor/editor-states";
 import { textAnimationTypeToIndex } from "./text-animation.function";
@@ -16,37 +14,46 @@ interface TextAnimationProps extends TextAnimationReduxProps {}
 
 const iconColor = "white";
 
-const TextAnimation: React.FC<TextAnimationProps> = ({
-  iconSize,
-  toggleTextAnimation,
-  textAnimationType
-}) => {
+class TextAnimation extends React.Component<TextAnimationProps> {
 
-  const icon = () => (
-    <MaterialIcons size={iconSize} color={iconColor} name="animation" />
+  private icon = () => (
+    <MaterialIcons size={this.props.iconSize} color={iconColor} name="animation" />
   );
 
-  const buttonRef = useRef<SwitchButtonComponent>(null);
+  private buttonRef = React.createRef<SwitchButtonComponent>();
 
-  const onPress = () => {
-    toggleTextAnimation();
-    buttonRef.current?.toggleItem();
+  private onPress = () => {
+    this.props.toggleTextAnimation();
+    this.buttonRef.current?.toggleItem();
   };
 
-  useEffect(
-    () => {
-      buttonRef.current?.setItemIndex(textAnimationTypeToIndex(textAnimationType));
-    },
-    []
-  );
+  private setTextItemIndex = () => {
+    this.buttonRef.current?.setItemIndex(
+      textAnimationTypeToIndex(
+        this.props.textAnimationType
+      )
+    );
+  }
 
-  return <SwitchButton 
-    ref={buttonRef}
-    onPress={onPress}
-    icon={icon}
-    itemKeys={textAnimationTypes}
-  />;
-};
+  componentDidMount = () => {
+    this.setTextItemIndex();
+  }
+
+  componentDidUpdate = (prevProps: TextAnimationProps) => {
+    if ( prevProps.textAnimationType !== this.props.textAnimationType ) {
+      this.setTextItemIndex();
+    }
+  }
+
+  render = (): React.ReactNode => {
+    return <SwitchButton 
+      ref={this.buttonRef}
+      onPress={this.onPress}
+      icon={this.icon}
+      itemKeys={textAnimationTypes}
+    />;
+  }
+}
 
 const mapStateToProps = (state: RootState) => {
   return {

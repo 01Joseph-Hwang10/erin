@@ -1,12 +1,10 @@
 import React from "react";
-import { useRef } from "react";
 import SwitchButton, { SwitchButton as SwitchButtonComponent } from "../../base/switch-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { toggleBackgroundShapeState } from "@slices/editor/editor-states";
 import { shapeToIndex } from "./background-shape.function";
-import { useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { textBackgroundShapes } from "./background-shape.data";
 
@@ -16,37 +14,46 @@ interface ShapeProps extends ShapeReduxProps {}
 
 const iconColor = "white";
 
-const Shape: React.FC<ShapeProps> = ({
-  iconSize,
-  toggleBackgroundShape: ToggleBackgroundShape,
-  backgroundShape
-}) => {
+class Shape extends React.Component<ShapeProps> {
 
-  const icon = () => (
-    <AntDesign size={iconSize} color={iconColor} name="star" />
+  private icon = () => (
+    <AntDesign size={this.props.iconSize} color={iconColor} name="star" />
   );
 
-  const buttonRef = useRef<SwitchButtonComponent>(null);
+  private buttonRef = React.createRef<SwitchButtonComponent>()
 
-  const onPress = () => {
-    ToggleBackgroundShape();
-    buttonRef.current?.toggleItem();
+  private onPress = () => {
+    this.props.toggleBackgroundShape();
+    this.buttonRef.current?.toggleItem();
   };
 
-  useEffect(
-    () => {
-      buttonRef.current?.setItemIndex(shapeToIndex(backgroundShape));
-    },
-    []
-  );
+  private setShapeItemIndex = () => {
+    this.buttonRef.current?.setItemIndex(
+      shapeToIndex(
+        this.props.backgroundShape
+      )
+    );
+  }
 
-  return <SwitchButton 
-    ref={buttonRef}
-    onPress={onPress}
-    icon={icon}
-    itemKeys={textBackgroundShapes}
-  />;
-};
+  componentDidMount = () => {
+    this.setShapeItemIndex();
+  }
+
+  componentDidUpdate = (prevProps: ShapeProps) => {
+    if ( prevProps.backgroundShape !== this.props.backgroundShape ) {
+      this.setShapeItemIndex();
+    }
+  }
+
+  render = (): React.ReactNode => {
+    return <SwitchButton 
+      ref={this.buttonRef}
+      onPress={this.onPress}
+      icon={this.icon}
+      itemKeys={textBackgroundShapes}
+    />;
+  }
+}
 
 const mapStateToProps = (state: RootState) => {
   return {

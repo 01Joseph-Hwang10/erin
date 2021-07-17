@@ -1,17 +1,19 @@
 import { RootState } from "@redux/root-reducer";
 import React, { useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import Animated, { useDerivedValue, withTiming } from "react-native-reanimated";
 import { useState } from "react";
 import { Easing } from "react-native-reanimated";
 import { useAnimatedProps } from "react-native-reanimated";
+import { camelCaseToNormal } from "@src/functions";
 
 type HelpMessageReduxProps = ConnectedProps<typeof connector>
 
 interface HelpMessageProps extends HelpMessageReduxProps {}
 
 const duration = 1000;
+const fontSize = 24;
 
 const HelpMessage: React.FC<HelpMessageProps> = ({
   helpMessage
@@ -56,7 +58,7 @@ const HelpMessage: React.FC<HelpMessageProps> = ({
     <Animated.View 
       style={[styles.root, animatedStyle]}
     >
-      <Text style={styles.text}>{helpMessage}</Text>
+      <Text style={styles.text}>{camelCaseToNormal(helpMessage)}</Text>
     </Animated.View>
   );
 };
@@ -87,6 +89,6 @@ const styles = StyleSheet.create({
     },
     textShadowRadius: 9,
     textAlign: "center",
-    fontSize: 18
+    fontSize
   }
 });

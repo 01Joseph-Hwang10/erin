@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { GestureResponderEvent } from "react-native";
 import CircularFrame, { CircularFrameProps } from "@components/common/circular-frame";
-import { connect, ConnectedProps } from "react-redux";
+import { connect, ConnectedProps, Options } from "react-redux";
 import { Dispatch } from "redux";
 import { setHelpMessage, SetHelpMessageInput } from "@slices/editor/editor-generic";
 import { RootState } from "@redux/root-reducer";
@@ -79,6 +79,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setHelpMessage: (payload: SetHelpMessageInput) => dispatch(setHelpMessage(payload))
 });
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const options: Options = {
+  forwardRef: true
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps, null, options);
 
 export default connector(ToggleButton);
