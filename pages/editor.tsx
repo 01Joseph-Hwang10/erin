@@ -17,7 +17,7 @@ import COLORS from "../src/colors";
 import { RootState } from "@redux/root-reducer";
 import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
 import TextAnimationContext, { AnimatedText, AnimatedTextWrapper } from "@components/editor/workspace/erin-components/text/text-animation";
-import HelpMessage from "@components/editor/help-message";
+import BottomFloatHelpMessage from "@components/editor/bottom-float/help-message";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -101,7 +101,7 @@ class Editor extends React.Component<EditorProps> {
                     <TopFloat />
                   </View>
                   <View style={styles.floatWrapperWrapper}>
-                    <HelpMessage />
+                    <BottomFloatHelpMessage />
                     <BottomFloat />
                   </View>
                 </View>
@@ -120,7 +120,7 @@ class Editor extends React.Component<EditorProps> {
 const mapStateToProps = (state: RootState) => {
   return {
     workspaceHeight: state.editor.generic.workspaceSpec.height,
-    stringifiedPages: JSON.stringify(state.editor.pages.pages),
+    stringifiedPages: JSON.stringify(state.editor.layer.layer),
     hasUnsavedChanges: state.editor.generic.hasUnsavedChanges
   };
 };

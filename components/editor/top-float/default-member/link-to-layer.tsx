@@ -1,20 +1,20 @@
 import React from "react";
-import { Foundation } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 
-type DeletePageReduxProps = ConnectedProps<typeof connector>
+type LinkToPageReduxProps = ConnectedProps<typeof connector>
 
-interface DeletePageProps extends DeletePageReduxProps {}
+interface LinkToPageProps extends LinkToPageReduxProps {}
 
-const DeletePage: React.FC<DeletePageProps> = ({
+const LinkToPage: React.FC<LinkToPageProps> = ({
   iconSize
 }) => {
 
   const renderIcon = () => (
-    <Foundation name="page-delete" size={iconSize} color={ICON_COLOR} />
+    <Feather name="link" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -24,7 +24,7 @@ const DeletePage: React.FC<DeletePageProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"현재의 레이어를 지웁니다"}
+    topFloatHelpMessage={"특정 레이어로 연결합니다"}
   />;
 };
 
@@ -36,4 +36,4 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, { });
 
-export default connector(DeletePage);
+export default connector(LinkToPage);

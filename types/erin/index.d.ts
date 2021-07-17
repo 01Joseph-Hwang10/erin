@@ -1,8 +1,26 @@
+import { ErinDeprecated } from 'erin/deprecated'
 
 declare module "erin"
 
+/**
+ * @description "Erin" namespace include severeal namespaces: Common, Editor, WebRenderer, NativeRenderer
+ *              These namespaces have their own purposes, which can be found as description. 
+ *              And there are types which exists at the top level of this namespace.
+ *              These possibly can be used at every part of the app
+ */
 export namespace Erin {
+
+    /* ==========APP GENERIC========== */
+
+    export type AppPageNames = "main" | "friends" | "postbox" | "myPage" | "editor" | "viewer" | "not-main"
+
+    /**
+     * @description "Common" Namespace is set of types 
+     *              which possibly can be used both editor and renderer
+     */
     export namespace Common {
+
+        /* ==========HITBOX========== */
 
         export interface PositionSpec {
             x: number,
@@ -23,10 +41,92 @@ export namespace Erin {
             ymax: number
         }
 
-        export type AppPageNames = "main" | "friends" | "postbox" | "myPage" | "editor" | "viewer" | "not-main"
+        /* ==========COMPONENT========== */
+
+        type ComponentTypes = 
+        | "text" 
+        // | "shape" 
+        | "sticker" 
+        // | "image"
+
+        export type NonableComponentTypes = ComponentTypes | "none"
+
+        /* ==========ANIMATION GENERAL========== */
+
+        type GeneralAnimationTypes = "blink" | "fade" | "moving" | "bounce"
+
+        type NonableGeneralAnimationTypes = GeneralAnimationTypes | "none"
+
+        /* ==========TEXT COMPONENT========== */
+
+        export type TextAlign = "center" | "left" | "right" | "justify"
+
+        export type TextAnimationTypes = NonableGeneralAnimationTypes | "typing" | "neon"
+
+        export type TextStyle = 
+            | "rectangle" 
+            // | "circle" 
+            // | "triangle" 
+            // | "star" 
+            // | "heart" 
+            | "roundedRectangle"
+
+        export type NonableTextStyle = TextStyle | "none"
+
+        /* ==========LETTER CONFIG========== */
+
+        type BackgroundType = "image" | "color" | "pattern"
+
+        export interface LetterConfig {
+            background: string,
+            backgroundType: BackgroundType,
+            music: string | null
+        }
     }
 
+    /**
+     * @description "Editor" Namespace is set of types 
+     *              which will be used only at editor page
+     */
     export namespace Editor {
+
+        /* ==========COMPONENT========== */
+
+        /**
+         * @todo Should include layer number to component interface
+         *       which will be in renderer
+         */
+        export interface ComponentInterface {
+            id: number, // Id should be the index of the array
+            type: ComponentTypes,
+            /** 
+             * @deprecated Since the data structure of whole erin letters changed, 
+             *             this property will highly likely not be used
+             */
+            animationId?: number, // If no animation, -1,
+            zIndex: number
+        }
+
+        type Component = ComponentInterface | null
+
+        /* ==========LAYER========== */
+
+        /**
+         * @todo Should make it as one single array 
+         *       with layer number included in component interface
+         */
+        export interface Layer {
+            id: number,
+            /**
+             * @deprecated Since the data structure of whole erin letters changed, 
+             *             this property will highly likely not be used
+             */
+            animations?: ErinDeprecated.AnimationInterface[],
+            components: Component[],
+            autoZIndex: number // It always starts with 2 since workspace's zIndex is 1
+        }
+
+        /* ==========EDITOR MENU========== */
 
         export type BottomTabMenuType = 
             | "default" 
@@ -38,7 +138,7 @@ export namespace Erin {
             | "animationDefault" 
             | "animationConfig"
 
-        export type TopFloatMenuType = "default" | "pages" | "text" | "editText" | "animationDefault"
+        export type TopFloatMenuType = "default" | "layer" | "text" | "editText" | "animationDefault"
 
         export type BottomFloatMenuType = 
             | "none" 
@@ -49,71 +149,12 @@ export namespace Erin {
             | "editText"
             | "fontSize"
 
-        type BackgroundType = "image" | "color" | "pattern"
-
-        // Let's say that text is not clickable, and can be penetrated by tap
-        type AnimationTriggerTypes = "onload" | "onButtonTap" | "onPrevEnd" | "onPrevSimultaneous" | "afterTimeout" | "afterPrevTimeout" 
-
-        type AnimationTypes = string // Temporal declaration. Need to decide what to include in animation
-
-        export type TextAnimationTypes = "blink" | "typing" | "fade" | "moving" | "none" | "neon"
-
-        export interface LetterConfig {
-            background: string,
-            backgroundType: BackgroundType,
-            music: string | null
-        }
+        /* ==========LETTER CONFIG========== */
 
         export interface Settings {
             iconSize: number,
             iconGap: number,
-        }
-
-
-        type Animation = [AnimationTypes, unknown] // unknown at second stands for animation spec
-
-        /* We'll do onload, onButtonTap, onPrevEnd, onPrevSimultaneous first */
-
-        type AnimationTrigger = [AnimationTriggerTypes, number] // number at second stands for index, if onload, -1
-
-        // Consider to change data structure like [ id(or order), duration ]
-        interface AnimationInterface {
-            id: number, // Id should be the index of the array
-            targetId: number,
-            animation: Animation,
-            trigger: AnimationTrigger
-        }
-
-        type ComponentTypes = "text" | "shape" | "sticker" | "image" // Temporal declaration. Need to decide what to include in components
-
-        export interface TextConfig {
-            fontFamily: string,
-            color: string,
-        }
-
-        export type ShapeConfig = unknown
-        
-        export type StickerConfig = unknown
-
-        export type ImageConfig = unknown
-
-        export interface ComponentInterface {
-            id: number, // Id should be the index of the array
-            type: ComponentTypes,
-            animationId: number, // If no animation, -1,
-            zIndex: number
-        }
-
-        type Component = ComponentInterface | null
-
-        export interface Page {
-            id: number,
-            animations: AnimationInterface[],
-            components: Component[],
-            autoZIndex: number // It always starts with 2 since workspace's zIndex is 1
-        }
-
-        export type BaseEditorButtonType = "press" | "toggle" | "on-hover" | "long-press" | "press-and-long-press"
+        } 
 
     }
 

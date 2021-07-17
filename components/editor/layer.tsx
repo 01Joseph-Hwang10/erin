@@ -19,22 +19,21 @@ import RNShake from "react-native-shake";
 import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
 import { RootState } from "@redux/root-reducer";
 
-type PageReduxProps = ConnectedProps<typeof connector>
+type LayerReduxProps = ConnectedProps<typeof connector>
 
-interface PageProps extends PageReduxProps {
-    page: Erin.Editor.Page
+interface LayerProps extends LayerReduxProps {
+    layer: Erin.Editor.Layer
 }
 
-interface PageState extends Erin.Editor.Page {}
+interface LayerState extends Erin.Editor.Layer {}
 
-class Page extends Component<PageProps, PageState> {
+class Layer extends Component<LayerProps, LayerState> {
 
-    public state: PageState = this.props.page
+    public state: LayerState = this.props.layer
 
-    private resetPage = () => {
+    private resetLayer = () => {
       this.setState({
         components: [],
-        animations: [],
         autoZIndex: 2,
       });
     }
@@ -70,10 +69,10 @@ class Page extends Component<PageProps, PageState> {
     componentDidMount() {
       this.props.setPushComponent(this.pushComponent);
       this.props.setNullComponent(this.nullCopmonent);
-      RNShake.addListener(this.resetPage);
+      RNShake.addListener(this.resetLayer);
     }
 
-    componentDidUpdate = (_: PageProps, prevState: PageState) => {
+    componentDidUpdate = (_: LayerProps, prevState: LayerState) => {
       if (!this.props.hasUnsavedChanges && JSON.stringify(prevState) !== JSON.stringify(this.state)) {
         this.props.setHasUnsavedChanges(true);
       }
@@ -129,7 +128,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connector(Page);
+export default connector(Layer);
 
 
 const styles = StyleSheet.create({

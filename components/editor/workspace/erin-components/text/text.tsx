@@ -1,4 +1,3 @@
-import { NonableShape } from "@components/common/shapes/shape.types";
 import { FontStyles } from "@components/editor/bottom-float/font-style-members/font-style.data";
 import { RootState } from "@redux/root-reducer";
 import { 
@@ -21,6 +20,8 @@ import {
 } from "@slices/editor/editor-handle";
 import { 
   initialFontSize,
+  setAnimationInfinite,
+  SetAnimationInfiniteInput,
   setBackgroundShapeState, 
   SetBackgroundShapeStateInput, 
   setColorConsumerState, 
@@ -39,7 +40,6 @@ import {
   SetTextContentStateInput, 
   setTextOnEditState, 
   SetTextOnEditStateInput, 
-  TextAlign
 } from "@slices/editor/editor-states";
 import { Erin } from "erin";
 import React from "react";
@@ -76,7 +76,6 @@ type ErinTextReduxProps = ConnectedProps<typeof connector>
 interface ErinTextProps extends ErinTextReduxProps {
   id: number,
   zIndex: number,
-  animationId?: number,
 }
 
 interface ErinTextState {
@@ -84,17 +83,18 @@ interface ErinTextState {
   fontStyle: FontStyles,
   text: string,
   backgroundColor: string,
-  backgroundShape: NonableShape,
+  backgroundShape: Erin.Common.NonableTextStyle,
   focused: boolean,
   size: number,
-  textAlign: TextAlign,
+  textAlign: Erin.Common.TextAlign,
   firstMount: boolean,
   fontSize: number,
   textShift: {
     x: number,
     y: number
   },
-  textAnimationType: Erin.Editor.TextAnimationTypes
+  textAnimationType: Erin.Common.TextAnimationTypes,
+  animationInfinite: boolean
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -116,7 +116,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       x: 0,
       y: 0
     },
-    textAnimationType: "none"
+    textAnimationType: "none",
+    animationInfinite: true
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -124,19 +125,21 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setText: (text: string) => void;
   private setBackgroundColor: (backgroundColor: string) => void;
   private setFocused: (focused: boolean) => void;
-  private setBackgroundShape: (backgroundShape: NonableShape) => void;
+  private setBackgroundShape: (backgroundShape: Erin.Common.NonableTextStyle) => void;
   private setSize: (size: number) => void;
-  private setTextAlign: (textAlign: TextAlign) => void;
+  private setTextAlign: (textAlign: Erin.Common.TextAlign) => void;
   private setFirstMount: (firstMount: boolean) => void;
   private setFontSize: (fontSize: number) => void;
   private setTextShift: (textShift: { x: number, y: number }) => void;
-  private setAnimationType: (textAnimationType: Erin.Editor.TextAnimationTypes) => void;
+  private setAnimationType: (textAnimationType: Erin.Common.TextAnimationTypes) => void;
+  private setAnimationInfinite: (animationInfinite: boolean) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
   private panHandlerRef = React.createRef<PanGestureHandler>();
   private pinchHandlerRef = React.createRef<PinchGestureHandler>();
   private rotationHandlerRef = React.createRef<RotationGestureHandler>();
+
   private period = 2 * Math.PI
   private posX: Animated.Value;
   private posY: Animated.Value;
@@ -158,42 +161,48 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   constructor(props: ErinTextProps) {
     super(props);
     // state
-    this.setFontColor = (fontColor: string) => {
+    this.setFontColor = ( fontColor ) => {
       this.setState({ fontColor });
     };
-    this.setFontStyle = (fontStyle: FontStyles) => {
+    this.setFontStyle = ( fontStyle ) => {
       this.setState({ fontStyle });
     };
-    this.setText = (text: string) => {
+    this.setText = ( text ) => {
       this.setState({ text });
     };
-    this.setBackgroundColor = (backgroundColor: string) => {
+    this.setBackgroundColor = ( backgroundColor ) => {
       this.setState({ backgroundColor });
     };
-    this.setFocused = (focused: boolean) => {
+    this.setFocused = ( focused ) => {
       this.setState({ focused });
     };
-    this.setBackgroundShape = (backgroundShape: NonableShape) => {
+    this.setBackgroundShape = ( backgroundShape ) => {
       this.setState({ backgroundShape });
     };
-    this.setSize = (size: number) => {
+    this.setSize = ( size ) => {
       this.setState({ size });
     };
-    this.setTextAlign = (textAlign: TextAlign) => {
+    this.setTextAlign = ( textAlign ) => {
       this.setState({ textAlign });
     };
-    this.setFirstMount = (firstMount: boolean) => {
+    this.setFirstMount = ( firstMount ) => {
       this.setState({ firstMount });
     };
-    this.setFontSize = (fontSize: number) => {
+    this.setFontSize = ( fontSize ) => {
       this.setState({ fontSize });
     };
-    this.setTextShift = (textShift: { x: number, y: number }) => {
+    this.setTextShift = ( textShift ) => {
       this.setState({ textShift });
     };
-    this.setAnimationType = (textAnimationType: Erin.Editor.TextAnimationTypes) => {
+    this.setAnimationType = ( textAnimationType ) => {
       this.setState({ textAnimationType });
     };
+    this.setAnimationInfinite = ( animationInfinite ) => {
+      this.setState({ animationInfinite })
+    }
+    this.setAnimationInfinite = ( animationInfinite ) => {
+      this.setState({ animationInfinite })
+    }
 
     // Pan
     const {
@@ -425,8 +434,9 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.props.setPickedColor(null);
     this.props.setTextAnimationType(this.state.textAnimationType);
     this.props.setFontStyle(this.state.fontStyle);
+    this.props.setAnimationInfinite(this.state.animationInfinite);
   }
-
+  
   componentDidUpdate = (prevProps: ErinTextProps) => {
     if (this.state.firstMount && prevProps.textOnEdit && !this.props.textOnEdit) {
       this.props.setCreationPoint({ x: null, y: null });
@@ -440,18 +450,19 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       this.props.setTopFloatCurrent("default");
       return;
     }
-
+    
     if (this.props.focusedComponent === this.props.id) {
-
+      
       if (!this.state.focused) {
         this.setFocused(true);
         this.props.setBackgroundShape(this.state.backgroundShape);
-        this.props.setColorConsumer(null);
+        // this.props.setColorConsumer(null);
         this.props.setPickedColor(null);
         this.props.setFontStyle(this.state.fontStyle);
         this.props.setTextAlign(this.state.textAlign);
         this.props.setFontSize(this.state.fontSize);
         this.props.setTextAnimationType(this.state.textAnimationType);
+        this.props.setAnimationInfinite(this.state.animationInfinite);
       }
 
       if (this.props.pickedColor && prevProps.pickedColor !== this.props.pickedColor) {
@@ -483,6 +494,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
         this.setAnimationType(this.props.textAnimationType);
       }
 
+      if ( prevProps.animationInfinite !== this.props.animationInfinite ) {
+        this.setAnimationInfinite(this.props.animationInfinite)
+      }
+
       if ( prevProps.textContent !== this.props.textContent ) {
         if ( this.props.textContent ) {
           this.setText(this.props.textContent);
@@ -493,7 +508,9 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       }
 
     } else {
-      if (this.state.focused) this.setFocused(false);
+      if (this.state.focused) {
+        this.setFocused(false);
+      }
     }
   }
 
@@ -560,6 +577,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                         ({ AnimatedText, AnimatedTextWrapper }) => {
                           return <AnimatedTextWrapper
                             textAnimationType={this.state.textAnimationType}
+                            infinite={this.state.animationInfinite}
                           >
                             <BackgroundShape
                               shape={this.state.backgroundShape}
@@ -577,6 +595,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                                 ]}
                                 onLayout={this.onTextLayout}
                                 textAnimationType={this.state.textAnimationType}
+                                infinite={this.state.animationInfinite}
                               >
                                 {this.state.text}
                               </AnimatedText>
@@ -615,7 +634,8 @@ const mapStateToProps = (state: RootState) => {
     nullComponent: state.editor.handle.nullComponent,
     onDrag: state.editor.handle.onDrag,
     fontSize: state.editor.states.fontSize,
-    textAnimationType: state.editor.states.textAnimationType
+    textAnimationType: state.editor.states.textAnimationType,
+    animationInfinite: state.editor.states.animationInfinite,
   };
 };
 
@@ -637,6 +657,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setFontSize: (payload: SetFontSizeStateInput) => dispatch(setFontSizeState(payload)),
     setTextAnimationType: (payload: SetTextAnimationTypeStateInput) => dispatch(setTextAnimationTypeState(payload)),
+    setAnimationInfinite: (payload: SetAnimationInfiniteInput) => dispatch(setAnimationInfinite(payload))
   };
 };
 

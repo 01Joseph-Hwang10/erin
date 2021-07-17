@@ -4,7 +4,7 @@ import { voidFunction } from "../../src/constants";
 
 
 interface NavigationState {
-    currentPage: Erin.Common.AppPageNames | string,
+    currentPage: Erin.AppPageNames | string,
     popAtEditor: () => void
 }
 

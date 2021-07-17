@@ -5,7 +5,7 @@ import { reducer as appStateReducer } from "./slices/app-state";
 import { reducer as editorGenericReducer } from "./slices/editor/editor-generic";
 import { reducer as editorAnimationReducer } from "./slices/editor/editor-animation";
 import { reducer as editorHandleReducer } from "./slices/editor/editor-handle";
-import { reducer as editorPagesReducer } from "./slices/editor/editor-pages";
+import { reducer as editorLayerReducer } from "./slices/editor/editor-layer";
 import { reducer as editorPublishReducer } from "./slices/editor/editor-publish";
 import { reducer as editorTestReducer } from "./slices/editor/editor-test";
 import { reducer as editorStatesReducer } from "@slices/editor/editor-states";
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
     generic: editorGenericReducer,
     animation: editorAnimationReducer,
     handle: editorHandleReducer,
-    pages: editorPagesReducer,
+    layer: editorLayerReducer,
     publish: editorPublishReducer,
     test: editorTestReducer,
     states: editorStatesReducer

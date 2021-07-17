@@ -8,15 +8,15 @@ import { Easing } from "react-native-reanimated";
 import { useAnimatedProps } from "react-native-reanimated";
 import { camelCaseToNormal } from "@src/functions";
 
-type HelpMessageReduxProps = ConnectedProps<typeof connector>
+type BottomFloatHelpMessageReduxProps = ConnectedProps<typeof connector>
 
-interface HelpMessageProps extends HelpMessageReduxProps {}
+interface BottomFloatHelpMessageProps extends BottomFloatHelpMessageReduxProps {}
 
 const duration = 1000;
 const fontSize = 24;
 
-const HelpMessage: React.FC<HelpMessageProps> = ({
-  helpMessage
+const BottomFloatHelpMessage: React.FC<BottomFloatHelpMessageProps> = ({
+  bottomFloatHelpMessage
 }) => {
 
   const [ visible, setVisible ] = useState(false);
@@ -42,7 +42,7 @@ const HelpMessage: React.FC<HelpMessageProps> = ({
 
   useEffect(
     () => {
-      if (helpMessage === null) {
+      if (bottomFloatHelpMessage === null) {
         setVisible(false);
       } else {
         setVisible(true);
@@ -51,25 +51,25 @@ const HelpMessage: React.FC<HelpMessageProps> = ({
         }, duration);
       }
     },
-    [helpMessage]
+    [bottomFloatHelpMessage]
   );
 
   return (
     <Animated.View 
       style={[styles.root, animatedStyle]}
     >
-      <Text style={styles.text}>{camelCaseToNormal(helpMessage)}</Text>
+      <Text style={styles.text}>{camelCaseToNormal(bottomFloatHelpMessage)}</Text>
     </Animated.View>
   );
 };
 
 const mapStateToProps = (state: RootState) => ({
-  helpMessage: state.editor.generic.helpMessage
+  bottomFloatHelpMessage: state.editor.generic.bottomFloatHelpMessage
 });
 
 const connector = connect(mapStateToProps, {});
 
-export default connector(HelpMessage);
+export default connector(BottomFloatHelpMessage);
 
 const styles = StyleSheet.create({
   root: {

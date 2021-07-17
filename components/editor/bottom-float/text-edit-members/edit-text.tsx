@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 2,
     borderColor: COLORS.DARK.secondary,
+    marginBottom: 5
   },
   buttonWrapper: {
     flex: 1,

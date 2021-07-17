@@ -9,31 +9,46 @@ import {
   Text,
   StyleSheet
 } from "react-native";
-import Blink from "./text-animation/blink";
-import Fade from "./text-animation/fade";
-import Moving from "./text-animation/moving";
+import Blink from "../common/animation/blink";
+import Fade from "../common/animation/fade";
+import Moving from "../common/animation/moving";
 import TypeWriter from "./text-animation/typewriter";
 
 interface AnimatedTextWrapperProps {
   children?: React.ReactNode,
-  textAnimationType: Erin.Editor.TextAnimationTypes
+  textAnimationType: Erin.Common.TextAnimationTypes,
+  infinite?: boolean
 }
 
 export const AnimatedTextWrapper: React.FC<AnimatedTextWrapperProps> = ({
   children,
-  textAnimationType
+  textAnimationType,
+  infinite
 }) => {
   switch (textAnimationType) {
   case "blink":
-    return <Blink>
+    return <Blink
+      infinite={infinite}
+    >
       {children}
     </Blink>;
   case "fade":
-    return <Fade>
+    return <Fade
+      infinite={infinite}
+    >
       {children}
     </Fade>;
   case "moving":
-    return <Moving>
+    return <Moving
+      infinite={infinite}
+    >
+      {children}
+    </Moving>;
+  case "bounce":
+    return <Moving
+      infinite={infinite}
+      movement={"bounce"}
+    >
       {children}
     </Moving>;
   default:
@@ -47,20 +62,23 @@ interface AnimatedTextProps {
     style?: StyleProp<ViewStyle> & StyleProp<TextStyle>,
     onLayout?: (event: LayoutChangeEvent) => void,
     children?: string,
-    textAnimationType: Erin.Editor.TextAnimationTypes
+    textAnimationType: Erin.Common.TextAnimationTypes,
+    infinite?: boolean
 }
 
 export const AnimatedText: React.FC<AnimatedTextProps> = ({
   style,
   onLayout,
   children,
-  textAnimationType
+  textAnimationType,
+  infinite
 }) => {
   switch (textAnimationType) {
   case "typing":
     return <TypeWriter
       style={style}
       onLayout={onLayout}
+      infinite={infinite}
     >
       {children}
     </TypeWriter>;

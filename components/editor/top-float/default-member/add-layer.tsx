@@ -5,16 +5,16 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 
-type CopyPageReduxProps = ConnectedProps<typeof connector>
+type AddPageReduxProps = ConnectedProps<typeof connector>
 
-interface CopyPageProps extends CopyPageReduxProps {}
+interface AddPageProps extends AddPageReduxProps {}
 
-const CopyPage: React.FC<CopyPageProps> = ({
+const AddPage: React.FC<AddPageProps> = ({
   iconSize
 }) => {
 
   const renderIcon = () => (
-    <Foundation name="page-copy" size={iconSize} color={ICON_COLOR} />
+    <Foundation name="page-add" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -24,7 +24,7 @@ const CopyPage: React.FC<CopyPageProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"현재의 레이어를 복사합니다"}
+    topFloatHelpMessage={"레이어를 추가합니다"}
   />;
 };
 
@@ -36,4 +36,4 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, { });
 
-export default connector(CopyPage);
+export default connector(AddPage);

@@ -1,6 +1,15 @@
 
-ROOT='mnt/wsl/erin_app'
+ROOT='/mnt/wsl/erin_app'
+CMDARG='-inR'
+SEARCH=$1
 
 cd $ROOT
 
-grep -r --exclude-dir=node_modules --exclude-dir=android --exclude-dir=ios --exclude-dir='.vscode' --exclude-dir='.expo' --exclude-dir=assets --exclude="package.json" --exclude="package-lock.json" --exclude=".gitignore" --exclude=".gitattributes" --exclude=".eslintrc.js" --exclude=".buckconfig" --exclude="tsconfig.json" "$1"
+if [ $# -eq 2 ]; then
+    if [ $1 = "-e" ]; then
+        CMDARG='-nRw'
+        SEARCH=$2
+    fi
+fi
+
+grep $CMDARG -E --include='*.ts' --include='*.tsx' --exclude-dir=node_modules $SEARCH

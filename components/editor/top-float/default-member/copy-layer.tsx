@@ -1,20 +1,20 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
+import { Foundation } from "@expo/vector-icons";
 import PressButton from "../../base/press-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 
-type LinkToPageReduxProps = ConnectedProps<typeof connector>
+type CopyPageReduxProps = ConnectedProps<typeof connector>
 
-interface LinkToPageProps extends LinkToPageReduxProps {}
+interface CopyPageProps extends CopyPageReduxProps {}
 
-const LinkToPage: React.FC<LinkToPageProps> = ({
+const CopyPage: React.FC<CopyPageProps> = ({
   iconSize
 }) => {
 
   const renderIcon = () => (
-    <Feather name="link" size={iconSize} color={ICON_COLOR} />
+    <Foundation name="page-copy" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -24,7 +24,7 @@ const LinkToPage: React.FC<LinkToPageProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"특정 레이어로 연결합니다"}
+    topFloatHelpMessage={"현재의 레이어를 복사합니다"}
   />;
 };
 
@@ -36,4 +36,4 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, { });
 
-export default connector(LinkToPage);
+export default connector(CopyPage);

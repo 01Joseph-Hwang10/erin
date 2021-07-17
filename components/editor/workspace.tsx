@@ -17,7 +17,7 @@ import { TapGestureHandlerStateChangeEvent, TapGestureHandler, State } from "rea
 import { SetCreationPointInput, setFocusedComponent, SetFocusedComponentInput } from "@slices/editor/editor-handle";
 import { setCreationPoint } from "@slices/editor/editor-handle";
 import CreationPoint from "@components/editor/workspace/creation-point";
-import Page from "./page";
+import Layer from "./layer";
 
 type WorkspaceReduxProps = ConnectedProps<typeof connector>
 
@@ -28,23 +28,22 @@ interface WorkspaceState {}
 class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
 
   public setToCreateMode = (): void => {
-    if (!this.props.animationMode) {
-      this.props.setFocusedComponent({
-        focusedComponent: -1,
-        focusedComponentType: "none"
-      });
-      this.props.setBottomTabCurrent("create");
-      this.props.setBottomFloatCurrent("none");
-    }
+    this.props.setFocusedComponent({
+      focusedComponent: -1,
+      focusedComponentType: "none"
+    });
+    this.props.setBottomTabCurrent("create");
+    this.props.setBottomFloatCurrent("none");
   }
 
   private onTapHandlerStateChange = (
-    { nativeEvent: {
+    { 
+      nativeEvent: {
       x,
       y,
       oldState
-    } }: 
-      TapGestureHandlerStateChangeEvent): void => {
+      } 
+    }: TapGestureHandlerStateChangeEvent): void => {
     if (oldState === State.ACTIVE) {
       if (!this.props.textOnEdit) {
         this.setToCreateMode();
@@ -73,11 +72,20 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
         break;
       }
     }
+
     if (prevProps.bottomTabCurrent !== this.props.bottomTabCurrent) {
       this.props.setBottomTabCurrent(this.props.bottomTabCurrent);
     }
+
     if (prevProps.topFloatCurrent !== this.props.topFloatCurrent) {
       this.props.setTopFloatCurrent(this.props.topFloatCurrent);
+    }
+
+    if (
+      prevProps.focusedComponent !== this.props.focusedComponent && 
+      this.props.focusedComponent !== -1
+    ) {
+      this.props.setCreationPoint({ x: null, y: null })
     }
   }
 
@@ -87,8 +95,8 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       creationPoint: {
         x, y
       },
-      pages,
-      currentPage
+      layer,
+      currentLayer
     } = this.props;
 
     return (
@@ -106,7 +114,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
               posY={y}
             />
           }
-          <Page page={pages[currentPage-1]} />
+          <Layer layer={layer[currentLayer-1]} />
         </Animated.View>
       </TapGestureHandler>
     );
@@ -115,10 +123,9 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    animationMode: state.editor.animation.animationMode,
     creationPoint: state.editor.handle.creationPoint,
-    pages: state.editor.pages.pages,
-    currentPage: state.editor.pages.currentPage,
+    layer: state.editor.layer.layer,
+    currentLayer: state.editor.layer.currentLayer,
     focusedComponentType: state.editor.handle.focusedComponentType,
     focusedComponent: state.editor.handle.focusedComponent,
     bottomTabCurrent: state.editor.generic.bottomTabCurrent,

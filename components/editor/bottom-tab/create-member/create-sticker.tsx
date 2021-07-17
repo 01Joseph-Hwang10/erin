@@ -24,7 +24,7 @@ const CreateSticker: React.FC<CreateStickerProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"스티커를 만듭니다"}
+    bottomFloatHelpMessage={"스티커를 만듭니다"}
   />;
 };
 

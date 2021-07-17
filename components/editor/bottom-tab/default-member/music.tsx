@@ -24,7 +24,7 @@ const Music: React.FC<MusicProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"편지지에 음악을 삽입합니다"}
+    bottomFloatHelpMessage={"편지지에 음악을 삽입합니다"}
   />;
 };
 

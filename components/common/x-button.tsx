@@ -24,7 +24,6 @@ const XButton: React.FC<XButtonProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={null}
   />;
 };
 

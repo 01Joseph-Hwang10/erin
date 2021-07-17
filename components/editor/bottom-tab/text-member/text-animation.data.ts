@@ -1,7 +1,7 @@
 import { Erin } from "erin";
 
 
-export const textAnimationTypes: Erin.Editor.TextAnimationTypes[] = [
+export const textAnimationTypes: Erin.Common.TextAnimationTypes[] = [
   "none",
   "blink",
   "typing",

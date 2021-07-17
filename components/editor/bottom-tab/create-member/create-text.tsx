@@ -21,7 +21,6 @@ const CreateText: React.FC<CreateTextProps> = ({
   const onPress = () => {
     if (pushComponent) {
       pushComponent({
-        animationId: -1,
         type: "text"
       });
     }
@@ -30,7 +29,7 @@ const CreateText: React.FC<CreateTextProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"텍스트를 만듭니다"}
+    bottomFloatHelpMessage={"텍스트를 만듭니다"}
   />;
 };
 

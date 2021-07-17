@@ -1,33 +1,34 @@
 import React from "react";
 import { IconMembers } from "@components/common/types";
 import { Erin } from "erin";
-import AddPage from "./top-float/default-member/add-page";
-import CopyPage from "./top-float/default-member/copy-page";
-import DeletePage from "./top-float/default-member/delete-page";
-import LinkToPage from "./top-float/default-member/link-to-page";
-import TogglePages from "./top-float/default-member/toggle-pages";
+import AddLayer from "./top-float/default-member/add-layer";
+import CopyLayer from "./top-float/default-member/copy-layer";
+import DeleteLayer from "./top-float/default-member/delete-layer";
+import LinkToLayer from "./top-float/default-member/link-to-layer";
+import ToggleLayer from "./top-float/default-member/toggle-layer";
 import ChangeText from "./top-float/text-member/change-text";
 import CheckText from "./top-float/text-member/check-text";
+import FontSize from "./bottom-tab/text-member/font-size";
 
 
 const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
   default: [
-    <TogglePages key={0} />,
-    <LinkToPage key={1} />,
+    <ToggleLayer key={0} />,
+    <LinkToLayer key={1} />,
     null,
     null,
-    <DeletePage key={4} />,
-    <CopyPage key={5} />,
-    <AddPage key={6} />
+    <DeleteLayer key={4} />,
+    <CopyLayer key={5} />,
+    <AddLayer key={6} />
   ],
   animationDefault: [],
-  pages: [],
+  layer: [],
   text: [
+    <LinkToLayer key={0} />,
     null,
     null,
     null,
-    null,
-    null,
+    <FontSize key={4} />,
     <ChangeText key={5} />,
     <CheckText key={6} />,
   ],

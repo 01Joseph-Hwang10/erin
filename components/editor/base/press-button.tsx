@@ -1,4 +1,9 @@
-import { setHelpMessage, SetHelpMessageInput } from "@slices/editor/editor-generic";
+import { 
+  setBottomFloatHelpMessage, 
+  SetBottomFloatHelpMessageInput, 
+  setTopFloatHelpMessage, 
+  SetTopFloatHelpMessageInput
+} from "@slices/editor/editor-generic";
 import React from "react";
 import { GestureResponderEvent } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,19 +15,27 @@ type PressButtonReduxProps = ConnectedProps<typeof connector>
 interface PressButtonProps extends PressButtonReduxProps {
     icon: () => JSX.Element,
     onPress?: (((event: GestureResponderEvent) => void) & (() => void)) | undefined,
-    helpMessage: string | null,
+    bottomFloatHelpMessage?: string | null,
+    topFloatHelpMessage?: string | null,
 }
 
 const PressButton: React.FC<PressButtonProps> = ({
   icon: Icon,
   onPress,
-  helpMessage,
-  setHelpMessage: SetHelpMessage
+  bottomFloatHelpMessage,
+  topFloatHelpMessage,
+  setBottomFloatHelpMessage: SetBottomFloatHelpMessage,
+  setTopFloatHelpMessage: SetTopFloatHelpMessage
 }) => {
 
   const onPressWithTimeout = () => {
     setTimeout(onPress, 50);
-    SetHelpMessage(helpMessage);
+    if (bottomFloatHelpMessage !== undefined) {
+      SetBottomFloatHelpMessage(bottomFloatHelpMessage);
+    }
+    if (topFloatHelpMessage !== undefined) {
+      SetTopFloatHelpMessage(topFloatHelpMessage);
+    }
   };
 
   return (
@@ -35,7 +48,8 @@ const PressButton: React.FC<PressButtonProps> = ({
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setHelpMessage: (payload: SetHelpMessageInput) => dispatch(setHelpMessage(payload))
+  setBottomFloatHelpMessage: (payload: SetBottomFloatHelpMessageInput) => dispatch(setBottomFloatHelpMessage(payload)),
+  setTopFloatHelpMessage: (payload: SetTopFloatHelpMessageInput) => dispatch(setTopFloatHelpMessage(payload)),
 });
 
 const connector = connect(null, mapDispatchToProps);

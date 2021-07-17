@@ -1,27 +1,31 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Slider from "@react-native-community/slider";
+import Slider from "./slider";
 import { RootState } from "@redux/root-reducer";
 import { Dispatch } from "redux";
 import { setFontSizeState, SetFontSizeStateInput } from "@slices/editor/editor-states";
 import { connect, ConnectedProps } from "react-redux";
 import { useState } from "react";
+import COLORS from "@src/colors";
 
 type FontSizeSliderReduxProps = ConnectedProps<typeof connector>
 
 interface FontSizeSliderProps extends FontSizeSliderReduxProps {}
 
 const FontSizeSlider: React.FC<FontSizeSliderProps> = ({
-  fontSize: recievedSize,
+  fontSize,
   setFontSize: SetFontSize
 }) => {
 
-  const [ fontSize ] = useState(recievedSize);
+  // const [ fontSize ] = useState(recievedSize);
 
   return (
     <View style={styles.root}>
       <Slider 
-        style={styles.slider}
+        width="100%"
+        height={40}
+        primaryColor={COLORS.DARK.sharp}
+        secondaryColor="lightseagreen"
         minimumValue={10}
         maximumValue={100}
         value={fontSize}
@@ -48,9 +52,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10
+    paddingVertical: 5,
+    paddingHorizontal: 10
   },
-  slider: {
-    width: "100%"
-  }
 });

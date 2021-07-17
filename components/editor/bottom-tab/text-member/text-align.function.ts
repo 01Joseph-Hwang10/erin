@@ -1,7 +1,7 @@
-import { TextAlign } from "@slices/editor/editor-states";
+import { Erin } from "erin";
 
 
-export const textAlignToIndex = (textAlign: TextAlign): number => {
+export const textAlignToIndex = (textAlign: Erin.Common.TextAlign): number => {
   switch (textAlign) {
   case "justify":
     return 0;

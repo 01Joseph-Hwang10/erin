@@ -1,4 +1,7 @@
-import { setHelpMessage, SetHelpMessageInput } from "@slices/editor/editor-generic";
+import { 
+  setBottomFloatHelpMessage, 
+  SetBottomFloatHelpMessageInput, 
+} from "@slices/editor/editor-generic";
 import React, { Component } from "react";
 import { GestureResponderEvent } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -43,7 +46,7 @@ export class SwitchButton extends Component<SwitchButtonProps, SwitchButtonState
 
     componentDidUpdate = (_: SwitchButtonProps, prevState: SwitchButtonState): void => {
       if ( prevState.itemIndex !== this.state.itemIndex ) {
-        this.props.setHelpMessage(this.props.itemKeys[this.state.itemIndex]);
+        this.props.setBottomFloatHelpMessage(this.props.itemKeys[this.state.itemIndex]);
       }
     }
 
@@ -62,7 +65,7 @@ export class SwitchButton extends Component<SwitchButtonProps, SwitchButtonState
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setHelpMessage: (payload: SetHelpMessageInput) => dispatch(setHelpMessage(payload))
+  setBottomFloatHelpMessage: (payload: SetBottomFloatHelpMessageInput) => dispatch(setBottomFloatHelpMessage(payload)),
 });
 
 const options: Options = {

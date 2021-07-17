@@ -1,11 +1,13 @@
 import React from "react";
+import { useState } from "react";
 import { useEffect } from "react";
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
+import Animated, { cancelAnimation, useAnimatedStyle, withTiming } from "react-native-reanimated";
 import { Easing } from "react-native-reanimated";
 import { useSharedValue } from "react-native-reanimated";
+import { AnimationProps } from "./animation.types";
 import { invisibleDuration, visibleDuration } from "./constants";
 
-interface FadeProps {
+interface FadeProps extends AnimationProps {
     children?: React.ReactNode
 }
 
@@ -17,8 +19,11 @@ const animationConfig: Animated.WithTimingConfig = {
 };
 
 const Fade: React.FC<FadeProps> = ({
-  children
+  children,
+  infinite
 }) => {
+  
+  const [ onMount, setOnMount ] = useState(true);
 
   const opacity = useSharedValue(0);
 
@@ -31,9 +36,12 @@ const Fade: React.FC<FadeProps> = ({
 
   const animationCycle = () => {
     opacity.value = withTiming(1, animationConfig);
-    setTimeout(() => {
+    const delayedAnimation = setTimeout(() => {
       opacity.value = withTiming(0, animationConfig);
     }, fadeDuration + visibleDuration);
+    if (!onMount) {
+      clearTimeout(delayedAnimation);
+    }
   };
 
   useEffect(
@@ -42,7 +50,17 @@ const Fade: React.FC<FadeProps> = ({
         animationCycle,
         fadeDuration * 2 + visibleDuration + invisibleDuration
       );
-      return () => clearInterval(animatedInterval);
+      if (infinite) {
+        animationCycle();
+      } else {
+        clearInterval(animatedInterval);
+        opacity.value = withTiming(1, animationConfig);
+      }
+      return () => {
+        setOnMount(false);
+        clearInterval(animatedInterval);
+        cancelAnimation(opacity);
+      }
     },
     []
   );

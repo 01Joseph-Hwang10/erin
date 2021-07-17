@@ -21,7 +21,8 @@ const FontSize: React.FC<FontSizeProps> = ({
   const renderIcon = () => (
     <CircularFrame
       size={iconSize}
-      borderColor={"white"}
+      border={true}
+      borderColor={"grey"}
       borderWidth={2.5}
       backgroundColor={"skyblue"}
     >
@@ -40,7 +41,7 @@ const FontSize: React.FC<FontSizeProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"텍스트의 크기를 정합니다"}
+    bottomFloatHelpMessage={"텍스트의 크기를 정합니다"}
   />;
 };
 

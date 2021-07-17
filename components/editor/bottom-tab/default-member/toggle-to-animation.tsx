@@ -24,7 +24,7 @@ const ToggleToAnimation: React.FC<ToggleToAnimationProps> = ({
   return <PressButton 
     onPress={onPress}
     icon={renderIcon}
-    helpMessage={"애니메이션을 설정합니다"}
+    bottomFloatHelpMessage={"애니메이션을 설정합니다"}
   />;
 };
 

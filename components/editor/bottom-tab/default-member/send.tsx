@@ -24,7 +24,7 @@ const Send: React.FC<SendProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"편지지를 친구에게 보냅니다"}
+    bottomFloatHelpMessage={"편지지를 친구에게 보냅니다"}
   />;
 };
 

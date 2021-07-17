@@ -1,11 +1,10 @@
-import { NonableShape } from "@components/common/shapes/shape.types";
 import { FontStyles } from "@components/editor/bottom-float/font-style-members/font-style.data";
 import { CaseReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Erin } from "erin";
 
-type ColorConsumer = "textFontColor" | "textBackgroundColor" | null
+type ColorConsumer = "textFontColor" | "textBackgroundColor"
 
-export type TextAlign = "center" | "left" | "right" | "justify"
+type NullableColorConsumer =  ColorConsumer | null
 
 export const initialFontSize = 40;
 
@@ -13,12 +12,13 @@ interface EditorStatesState {
     fontStyle: FontStyles | null,
     pickedColor: string | null,
     textOnEdit: boolean,
-    colorConsumer: ColorConsumer,
-    backgroundShape: NonableShape,
+    colorConsumer: NullableColorConsumer,
+    backgroundShape: Erin.Common.NonableTextStyle,
     textContent: string | null,
-    textAlign: TextAlign,
+    textAlign: Erin.Common.TextAlign,
     fontSize: number,
-    textAnimationType: Erin.Editor.TextAnimationTypes
+    textAnimationType: Erin.Common.TextAnimationTypes,
+    animationInfinite: boolean,
 }
 
 const initialState: EditorStatesState = {
@@ -30,7 +30,8 @@ const initialState: EditorStatesState = {
   textContent: null,
   textAlign: "justify",
   fontSize: initialFontSize,
-  textAnimationType: "none"
+  textAnimationType: "none",
+  animationInfinite: true,
 };
 
 export type SetFontStyleStateInput = FontStyles | null
@@ -60,7 +61,7 @@ const setTextOnEditStateReducer: CaseReducer<
   state.textOnEdit = textOnEdit;
 };
 
-export type SetColorConsumerStateInput = ColorConsumer
+export type SetColorConsumerStateInput = NullableColorConsumer
 
 const setColorConsumerStateReducer: CaseReducer<
   EditorStatesState,
@@ -69,7 +70,7 @@ const setColorConsumerStateReducer: CaseReducer<
   state.colorConsumer = newColorConsumer;
 };
 
-export type SetBackgroundShapeStateInput = NonableShape
+export type SetBackgroundShapeStateInput = Erin.Common.NonableTextStyle
 
 const setBackgroundShapeStateReducer: CaseReducer<
   EditorStatesState,
@@ -114,7 +115,7 @@ const setTextContentStateReducer: CaseReducer<
   state.textContent = payload;
 };
 
-export type SetTextAlignStateInput = TextAlign
+export type SetTextAlignStateInput = Erin.Common.TextAlign
 
 const setTextAlignStateReducer: CaseReducer<
   EditorStatesState,
@@ -153,7 +154,7 @@ const setFontSizeStateReducer: CaseReducer<
   state.fontSize = fontSize;
 };
 
-export type SetTextAnimationTypeStateInput = Erin.Editor.TextAnimationTypes
+export type SetTextAnimationTypeStateInput = Erin.Common.TextAnimationTypes
 
 const setTextAnimationTypeStateReducer: CaseReducer<
   EditorStatesState,
@@ -186,6 +187,15 @@ const toggleTextAnimationStateReducer: CaseReducer<
   }
 };
 
+export type SetAnimationInfiniteInput = boolean
+
+const setAnimationInfiniteReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetAnimationInfiniteInput>
+> = (state, { payload: animationInfinite }) => {
+  state.animationInfinite = animationInfinite
+}
+
 export const {
   reducer,
   actions: {
@@ -200,7 +210,8 @@ export const {
     toggleTextAlignState,
     setFontSizeState,
     setTextAnimationTypeState,
-    toggleTextAnimationState
+    toggleTextAnimationState,
+    setAnimationInfinite,
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -217,6 +228,7 @@ export const {
     toggleTextAlignState: toggleTextAlignStateReducer,
     setFontSizeState: setFontSizeStateReducer,
     setTextAnimationTypeState: setTextAnimationTypeStateReducer,
-    toggleTextAnimationState: toggleTextAnimationStateReducer
+    toggleTextAnimationState: toggleTextAnimationStateReducer,
+    setAnimationInfinite: setAnimationInfiniteReducer,
   }
 });

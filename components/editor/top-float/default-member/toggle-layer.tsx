@@ -34,13 +34,13 @@ const TogglePages: React.FC<TogglePagesProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"작업할 레이어를 변경합니다"}
+    topFloatHelpMessage={"작업할 레이어를 변경합니다"}
   />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
-    currentPage: state.editor.pages.currentPage,
+    currentPage: state.editor.layer.currentLayer,
     iconSize: state.editor.generic.settings.iconSize
   };
 };

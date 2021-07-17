@@ -5,7 +5,7 @@ import Background from "./bottom-tab/default-member/background";
 import Music from "./bottom-tab/default-member/music";
 import Save from "./bottom-tab/default-member/save";
 import Send from "./bottom-tab/default-member/send";
-import ToggleToAnimation from "./bottom-tab/default-member/toggle-to-animation";
+// import ToggleToAnimation from "./bottom-tab/default-member/toggle-to-animation";
 // import Shape from "./bottom-tab/shape-member/shape";
 // import ShapeColor from "./bottom-tab/shape-member/shape-color";
 // import ShapePattern from "./bottom-tab/shape-member/shape-pattern";
@@ -28,16 +28,18 @@ import { IconMembers } from "../common/types";
 import BackgroundShape from "./bottom-tab/text-member/background-shape";
 import BackgroundColor from "./bottom-tab/text-member/background-color";
 import TextAlign from "./bottom-tab/text-member/text-align";
-import FontSize from "./bottom-tab/text-member/font-size";
+// import FontSize from "./bottom-tab/text-member/font-size";
 import TextAnimation from "./bottom-tab/text-member/text-animation";
+import AnimationToggleInfinite from "./common/animation-toggle-infinite";
 // import BorderColor from "./bottom-tab/text-member/border-color";
 // import ChangeText from "./bottom-tab/text-member/change-text";
 
 const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   default: [
-    <ToggleToAnimation key={0} />,
-    <Background key={1} />,
-    <Music key={2} />,
+    // <ToggleToAnimation key={0} />,
+    <Background key={0} />,
+    <Music key={1} />,
+    null,
     null,
     <NotSave key={4} />,
     <Save key={5} />,
@@ -55,11 +57,11 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   shape: [],
   text: [
     <FontColor key={0} />,
-    <FontStyle key={1} />,
-    <BackgroundShape key={2} />,
-    <BackgroundColor key={3} />,
+    <BackgroundColor key={1} />,
+    <FontStyle key={2} />,
+    <BackgroundShape key={3} />,
     <TextAlign key={4} />,
-    <FontSize key={5} />,
+    <AnimationToggleInfinite key={5} />,
     <TextAnimation key={6} />,
   ],
   animationDefault: [

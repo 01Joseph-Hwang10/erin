@@ -14,7 +14,7 @@ type NullComponent = (componentIndex: number) => void;
 
 export interface EditorHandleState {
   focusedComponent: number, // if no focused component, -1,
-  focusedComponentType: Erin.Editor.ComponentTypes | "none",
+  focusedComponentType: Erin.Common.NonableComponentTypes,
   creationPoint: CreationPoint,
   pushComponent?: PushComponent,
   readComponent?: ReadComponent,
@@ -43,7 +43,7 @@ const initialState: EditorHandleState = {
 
 export type SetFocusedComponentInput = {
   focusedComponent: number,
-  focusedComponentType: Erin.Editor.ComponentTypes | "none"
+  focusedComponentType: Erin.Common.NonableComponentTypes
 }
 
 const setFocusedComponentReducer: CaseReducer<

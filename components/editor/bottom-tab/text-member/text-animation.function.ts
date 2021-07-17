@@ -1,7 +1,7 @@
 import { Erin } from "erin";
 
 
-export const textAnimationTypeToIndex = (textAnimationType: Erin.Editor.TextAnimationTypes): number => {
+export const textAnimationTypeToIndex = (textAnimationType: Erin.Common.TextAnimationTypes): number => {
   switch (textAnimationType) {
   case "none":
     return 0;

@@ -24,7 +24,7 @@ const Background: React.FC<BackgroundProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"편지지의 배경을 설정합니다"}
+    bottomFloatHelpMessage={"편지지의 배경을 설정합니다"}
   />;
 };
 

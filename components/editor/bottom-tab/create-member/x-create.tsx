@@ -2,7 +2,6 @@ import React from "react";
 import XButton from "../../../common/x-button";
 import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
-import { ICON_COLOR } from "../../base/constants";
 import { Dispatch } from "redux";
 import { setBottomTabCurrent, SetBottomTabCurrentInput } from "../../../../redux/slices/editor/editor-generic";
 import { setCreationPoint, SetCreationPointInput } from "@slices/editor/editor-handle";

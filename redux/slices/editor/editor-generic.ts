@@ -9,7 +9,8 @@ export interface EditorGenericState {
     settings: Erin.Editor.Settings,
     workspaceSpec: RectSpecType,
     hasUnsavedChanges: boolean,
-    helpMessage: string | null,
+    bottomFloatHelpMessage: string | null,
+    topFloatHelpMessage: string | null,
 }
 
 const initialState: EditorGenericState = {
@@ -25,7 +26,8 @@ const initialState: EditorGenericState = {
     height: 1
   },
   hasUnsavedChanges: false,
-  helpMessage: null
+  bottomFloatHelpMessage: null,
+  topFloatHelpMessage: null,
 };
 
 export type ConfigureIconLayoutInput = Erin.Editor.Settings;
@@ -82,13 +84,22 @@ const setHasUnsavedChangesReducer: CaseReducer<
   state.hasUnsavedChanges = hasUnsavedChanges;
 };
 
-export type SetHelpMessageInput = string | null
+export type SetBottomFloatHelpMessageInput = string | null
 
-const setHelpMessageReducer: CaseReducer<
+const setBottomFloatHelpMessageReducer: CaseReducer<
   EditorGenericState,
-  PayloadAction<SetHelpMessageInput>
+  PayloadAction<SetBottomFloatHelpMessageInput>
 > = (state, { payload: newHelpMessage }) => {
-  state.helpMessage = newHelpMessage;
+  state.bottomFloatHelpMessage = newHelpMessage;
+};
+
+export type SetTopFloatHelpMessageInput = string | null
+
+const setTopFloatHelpMessageReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetTopFloatHelpMessageInput>
+> = (state, { payload: newHelpMessage }) => {
+  state.topFloatHelpMessage = newHelpMessage;
 };
 
 export const {
@@ -100,7 +111,8 @@ export const {
     setBottomFloatCurrent,
     setWorkspaceSpec,
     setHasUnsavedChanges,
-    setHelpMessage
+    setBottomFloatHelpMessage,
+    setTopFloatHelpMessage,
   }
 } = createSlice({
   name: "editorSlice",
@@ -112,6 +124,7 @@ export const {
     setBottomFloatCurrent: setBottomFloatCurrentReducer,
     setWorkspaceSpec: setWorkspaceSpecReducer,
     setHasUnsavedChanges: setHasUnsavedChangesReducer,
-    setHelpMessage: setHelpMessageReducer
+    setBottomFloatHelpMessage: setBottomFloatHelpMessageReducer,
+    setTopFloatHelpMessage: setTopFloatHelpMessageReducer,
   }
 });

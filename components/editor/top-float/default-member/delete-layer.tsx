@@ -5,16 +5,16 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 
-type AddPageReduxProps = ConnectedProps<typeof connector>
+type DeletePageReduxProps = ConnectedProps<typeof connector>
 
-interface AddPageProps extends AddPageReduxProps {}
+interface DeletePageProps extends DeletePageReduxProps {}
 
-const AddPage: React.FC<AddPageProps> = ({
+const DeletePage: React.FC<DeletePageProps> = ({
   iconSize
 }) => {
 
   const renderIcon = () => (
-    <Foundation name="page-add" size={iconSize} color={ICON_COLOR} />
+    <Foundation name="page-delete" size={iconSize} color={ICON_COLOR} />
   );
 
   const onPress = () => {
@@ -24,7 +24,7 @@ const AddPage: React.FC<AddPageProps> = ({
   return <PressButton 
     icon={renderIcon}
     onPress={onPress}
-    helpMessage={"레이어를 추가합니다"}
+    topFloatHelpMessage={"현재의 레이어를 지웁니다"}
   />;
 };
 
@@ -36,4 +36,4 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, { });
 
-export default connector(AddPage);
+export default connector(DeletePage);

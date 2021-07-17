@@ -4,7 +4,7 @@ import { GestureResponderEvent } from "react-native";
 import CircularFrame, { CircularFrameProps } from "@components/common/circular-frame";
 import { connect, ConnectedProps, Options } from "react-redux";
 import { Dispatch } from "redux";
-import { setHelpMessage, SetHelpMessageInput } from "@slices/editor/editor-generic";
+import { setBottomFloatHelpMessage, SetBottomFloatHelpMessageInput } from "@slices/editor/editor-generic";
 import { RootState } from "@redux/root-reducer";
 
 type ToggleButtonReduxProps = ConnectedProps<typeof connector>
@@ -43,7 +43,7 @@ export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButto
       if (this.props.onPress) {
         this.props.onPress();
         if (this.props.helpMessage !== this.props.currentHelpMessage) {
-          this.props.setHelpMessage(this.props.helpMessage);
+          this.props.setBottomFloatHelpMessage(this.props.helpMessage);
         }
       }
     }
@@ -72,11 +72,11 @@ export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButto
 }
 
 const mapStateToProps = (state: RootState) => ({
-  currentHelpMessage: state.editor.generic.helpMessage
+  currentHelpMessage: state.editor.generic.bottomFloatHelpMessage
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setHelpMessage: (payload: SetHelpMessageInput) => dispatch(setHelpMessage(payload))
+  setBottomFloatHelpMessage: (payload: SetBottomFloatHelpMessageInput) => dispatch(setBottomFloatHelpMessage(payload))
 });
 
 const options: Options = {
