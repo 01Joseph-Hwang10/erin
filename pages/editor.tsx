@@ -16,8 +16,9 @@ import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import COLORS from "../src/colors";
 import { RootState } from "@redux/root-reducer";
 import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
-import TextAnimationContext, { AnimatedText, AnimatedTextWrapper } from "@components/editor/workspace/erin-components/text/text-animation";
+import TextAnimationContext, { AnimatedText } from "@components/editor/workspace/erin-components/text/text-animation";
 import BottomFloatHelpMessage from "@components/editor/bottom-float/help-message";
+import GenericAnimationContext, { AnimatedGeneric } from "@components/editor/workspace/erin-components/common/animation/generic-animation";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -82,37 +83,34 @@ class Editor extends React.Component<EditorProps> {
     BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
   }
 
-  private contextProviderValue = {
-    AnimatedText,
-    AnimatedTextWrapper
-  }
-
   render = () => {
     return (
-      <TextAnimationContext.Provider value={this.contextProviderValue}>
-        <SafeAreaView style={styles.safeFirst} />
-        <SafeAreaView style={styles.safeSecond}>
-          <View style={styles.root}>
-            <View style={styles.workspaceWrapper}>
-              <Workspace />
-              <View style={styles.floatWrapper}>
-                <View style={styles.floatbox}>
-                  <View style={styles.floatWrapperWrapper}>
-                    <TopFloat />
-                  </View>
-                  <View style={styles.floatWrapperWrapper}>
-                    <BottomFloatHelpMessage />
-                    <BottomFloat />
+      <GenericAnimationContext.Provider value={AnimatedGeneric}>
+        <TextAnimationContext.Provider value={AnimatedText}>
+          <SafeAreaView style={styles.safeFirst} />
+          <SafeAreaView style={styles.safeSecond}>
+            <View style={styles.root}>
+              <View style={styles.workspaceWrapper}>
+                <Workspace />
+                <View style={styles.floatWrapper}>
+                  <View style={styles.floatbox}>
+                    <View style={styles.floatWrapperWrapper}>
+                      <TopFloat />
+                    </View>
+                    <View style={styles.floatWrapperWrapper}>
+                      <BottomFloatHelpMessage />
+                      <BottomFloat />
+                    </View>
                   </View>
                 </View>
               </View>
+              <View style={styles.toolbarWrapper}>
+                <BottomTab />
+              </View>
             </View>
-            <View style={styles.toolbarWrapper}>
-              <BottomTab />
-            </View>
-          </View>
-        </SafeAreaView>
-      </TextAnimationContext.Provider>
+          </SafeAreaView>
+        </TextAnimationContext.Provider>
+      </GenericAnimationContext.Provider>
     );
   }
 }

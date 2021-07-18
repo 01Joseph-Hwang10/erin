@@ -67,6 +67,7 @@ import {
 } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
+import GenericAnimationContext from "../common/animation/generic-animation";
 import BackgroundShape from "./background-shape";
 import TextAnimationContext from "./text-animation";
 import { decideHover } from "./text.function";
@@ -572,38 +573,45 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                   ]}
                 >
                   <Animated.View style={styles.wrapper}>
-                    <TextAnimationContext.Consumer>
+                    <GenericAnimationContext.Consumer>
                       {
-                        ({ AnimatedText, AnimatedTextWrapper }) => {
-                          return <AnimatedTextWrapper
-                            textAnimationType={this.state.textAnimationType}
-                            infinite={this.state.animationInfinite}
+                        (AnimatedGeneric) => {
+                          return <AnimatedGeneric
+                            // @ts-ignore
+                            // Every types out of generic animation type component will eventually go to default
+                            animationType={this.state.textAnimationType}
                           >
                             <BackgroundShape
                               shape={this.state.backgroundShape}
                               size={this.state.size}
                               backgroundColor={this.state.backgroundColor}
                             >
-                              <AnimatedText 
-                                style={[
-                                  {
-                                    fontFamily: this.state.fontStyle,
-                                    color: this.state.fontColor,
-                                    textAlign: this.state.textAlign,
-                                    fontSize: this.state.fontSize,
+                              <TextAnimationContext.Consumer>
+                                {
+                                  (AnimatedText) => {
+                                    return <AnimatedText 
+                                      style={[
+                                        {
+                                          fontFamily: this.state.fontStyle,
+                                          color: this.state.fontColor,
+                                          textAlign: this.state.textAlign,
+                                          fontSize: this.state.fontSize,
+                                        }
+                                      ]}
+                                      onLayout={this.onTextLayout}
+                                      textAnimationType={this.state.textAnimationType}
+                                      infinite={this.state.animationInfinite}
+                                    >
+                                      {this.state.text}
+                                    </AnimatedText>
                                   }
-                                ]}
-                                onLayout={this.onTextLayout}
-                                textAnimationType={this.state.textAnimationType}
-                                infinite={this.state.animationInfinite}
-                              >
-                                {this.state.text}
-                              </AnimatedText>
+                                }
+                              </TextAnimationContext.Consumer>
                             </BackgroundShape>
-                          </AnimatedTextWrapper>;
+                          </AnimatedGeneric>
                         }
                       }
-                    </TextAnimationContext.Consumer>
+                    </GenericAnimationContext.Consumer>
                   </Animated.View>
                 </TapGestureHandler>
               </Animated.View>
