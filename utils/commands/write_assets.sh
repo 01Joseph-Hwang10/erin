@@ -1,7 +1,7 @@
 
-ROOT='/mnt/wsl/erin_app'
+ROOT=$(pwd)
 FROM="$ROOT/assets"
-TO="/mnt/c/Users/josep/storage"
+TO="~/storage"
 
 if [ -d $FROM ]; then
     cp -rf $FROM $TO

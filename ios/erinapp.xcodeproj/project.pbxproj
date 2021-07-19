@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0323B43E0F0E4918841FE486 /* Sunflower-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D768EA901C684D81A502ACB6 /* Sunflower-Light.ttf */; };
+		049EC58DDEE54F4E8C22FE4F /* Jua-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D25D6CACE974ED8A72FD6F1 /* Jua-Regular.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		21680FD2B462466D99E1915C /* NotoSansKR-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9F9582DD074F4BDA9091FAD0 /* NotoSansKR-Thin.otf */; };
+		2E2E733DB4A84CA58E20AED2 /* NanumGothic-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D027E0B7CD434639A8F6C595 /* NanumGothic-Regular.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		96905EF65AED1B983A6B3ABC /* libPods-erinapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-erinapp.a */; };
-		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		42614C0788D449C4A7F524F7 /* NotoSansKR-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 95D6D277B2174A238D0A4616 /* NotoSansKR-Black.otf */; };
 		458875A36A7744F8A7919FB6 /* Gaegu-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8AE4AE47115346DD853535AB /* Gaegu-Bold.ttf */; };
+		6DDB99168FF5439882720AAF /* NanumGothic-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A064186E608341D6A604C9C5 /* NanumGothic-ExtraBold.ttf */; };
+		80E13E443D6249388E5ED03D /* SingleDay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA5E4EEEBBBB4C1397918BCA /* SingleDay-Regular.ttf */; };
+		91D80597E8DC416098631F8A /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB379F239CAA4A479BFB5474 /* NotoSansKR-Regular.otf */; };
+		96905EF65AED1B983A6B3ABC /* libPods-erinapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-erinapp.a */; };
 		980CD55B4B8B48C3A71E9B74 /* Gaegu-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E6752499CAC4DC8B8ECB11E /* Gaegu-Light.ttf */; };
 		A826257AB0AC47CF9DE8F982 /* Gaegu-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44FFEB3719E04FA0A4FDC090 /* Gaegu-Regular.ttf */; };
-		049EC58DDEE54F4E8C22FE4F /* Jua-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D25D6CACE974ED8A72FD6F1 /* Jua-Regular.ttf */; };
-		C3C431971C444520A6B550EA /* NanumGothic-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A9D2B6D96D61487DA735C53E /* NanumGothic-Bold.ttf */; };
-		6DDB99168FF5439882720AAF /* NanumGothic-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A064186E608341D6A604C9C5 /* NanumGothic-ExtraBold.ttf */; };
-		2E2E733DB4A84CA58E20AED2 /* NanumGothic-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D027E0B7CD434639A8F6C595 /* NanumGothic-Regular.ttf */; };
-		42614C0788D449C4A7F524F7 /* NotoSansKR-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 95D6D277B2174A238D0A4616 /* NotoSansKR-Black.otf */; };
-		D50A117328F64489A68F1975 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB2BA7250E9640749A2840A1 /* NotoSansKR-Bold.otf */; };
 		B5817E6542634AACBAF1543F /* NotoSansKR-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 81EA1B35C2AB45B58CC08087 /* NotoSansKR-Light.otf */; };
+		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		C3C431971C444520A6B550EA /* NanumGothic-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A9D2B6D96D61487DA735C53E /* NanumGothic-Bold.ttf */; };
 		C5B70F89DFDD429182F72C8E /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4EC88DEE09B7489F872B284E /* NotoSansKR-Medium.otf */; };
-		91D80597E8DC416098631F8A /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB379F239CAA4A479BFB5474 /* NotoSansKR-Regular.otf */; };
-		21680FD2B462466D99E1915C /* NotoSansKR-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9F9582DD074F4BDA9091FAD0 /* NotoSansKR-Thin.otf */; };
-		80E13E443D6249388E5ED03D /* SingleDay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA5E4EEEBBBB4C1397918BCA /* SingleDay-Regular.ttf */; };
+		D50A117328F64489A68F1975 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB2BA7250E9640749A2840A1 /* NotoSansKR-Bold.otf */; };
 		E517DE1020F14A8893CBD812 /* Sunflower-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8311C0BDFCA242AF924EE08B /* Sunflower-Bold.ttf */; };
-		0323B43E0F0E4918841FE486 /* Sunflower-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D768EA901C684D81A502ACB6 /* Sunflower-Light.ttf */; };
 		EEF003544335435A84B0AB43 /* Sunflower-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4F8D5F362754BB88512B7C9 /* Sunflower-Medium.ttf */; };
 /* End PBXBuildFile section */
 
@@ -42,30 +42,30 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = erinapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = erinapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = erinapp/main.m; sourceTree = "<group>"; };
+		1E6752499CAC4DC8B8ECB11E /* Gaegu-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gaegu-Light.ttf"; path = "../assets/fonts/Gaegu-Light.ttf"; sourceTree = "<group>"; };
+		3D25D6CACE974ED8A72FD6F1 /* Jua-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Jua-Regular.ttf"; path = "../assets/fonts/Jua-Regular.ttf"; sourceTree = "<group>"; };
+		44FFEB3719E04FA0A4FDC090 /* Gaegu-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gaegu-Regular.ttf"; path = "../assets/fonts/Gaegu-Regular.ttf"; sourceTree = "<group>"; };
+		4EC88DEE09B7489F872B284E /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Medium.otf"; path = "../assets/fonts/NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-erinapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-erinapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-erinapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-erinapp.debug.xcconfig"; path = "Target Support Files/Pods-erinapp/Pods-erinapp.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-erinapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-erinapp.release.xcconfig"; path = "Target Support Files/Pods-erinapp/Pods-erinapp.release.xcconfig"; sourceTree = "<group>"; };
+		81EA1B35C2AB45B58CC08087 /* NotoSansKR-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Light.otf"; path = "../assets/fonts/NotoSansKR-Light.otf"; sourceTree = "<group>"; };
+		8311C0BDFCA242AF924EE08B /* Sunflower-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Sunflower-Bold.ttf"; path = "../assets/fonts/Sunflower-Bold.ttf"; sourceTree = "<group>"; };
+		8AE4AE47115346DD853535AB /* Gaegu-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gaegu-Bold.ttf"; path = "../assets/fonts/Gaegu-Bold.ttf"; sourceTree = "<group>"; };
+		95D6D277B2174A238D0A4616 /* NotoSansKR-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Black.otf"; path = "../assets/fonts/NotoSansKR-Black.otf"; sourceTree = "<group>"; };
+		9F9582DD074F4BDA9091FAD0 /* NotoSansKR-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Thin.otf"; path = "../assets/fonts/NotoSansKR-Thin.otf"; sourceTree = "<group>"; };
+		A064186E608341D6A604C9C5 /* NanumGothic-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumGothic-ExtraBold.ttf"; path = "../assets/fonts/NanumGothic-ExtraBold.ttf"; sourceTree = "<group>"; };
+		A9D2B6D96D61487DA735C53E /* NanumGothic-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumGothic-Bold.ttf"; path = "../assets/fonts/NanumGothic-Bold.ttf"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = erinapp/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AA5E4EEEBBBB4C1397918BCA /* SingleDay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SingleDay-Regular.ttf"; path = "../assets/fonts/SingleDay-Regular.ttf"; sourceTree = "<group>"; };
+		B4F8D5F362754BB88512B7C9 /* Sunflower-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Sunflower-Medium.ttf"; path = "../assets/fonts/Sunflower-Medium.ttf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		CB379F239CAA4A479BFB5474 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
+		D027E0B7CD434639A8F6C595 /* NanumGothic-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumGothic-Regular.ttf"; path = "../assets/fonts/NanumGothic-Regular.ttf"; sourceTree = "<group>"; };
+		D768EA901C684D81A502ACB6 /* Sunflower-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Sunflower-Light.ttf"; path = "../assets/fonts/Sunflower-Light.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		8AE4AE47115346DD853535AB /* Gaegu-Bold.ttf */ = {isa = PBXFileReference; name = "Gaegu-Bold.ttf"; path = "../assets/fonts/Gaegu-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1E6752499CAC4DC8B8ECB11E /* Gaegu-Light.ttf */ = {isa = PBXFileReference; name = "Gaegu-Light.ttf"; path = "../assets/fonts/Gaegu-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		44FFEB3719E04FA0A4FDC090 /* Gaegu-Regular.ttf */ = {isa = PBXFileReference; name = "Gaegu-Regular.ttf"; path = "../assets/fonts/Gaegu-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3D25D6CACE974ED8A72FD6F1 /* Jua-Regular.ttf */ = {isa = PBXFileReference; name = "Jua-Regular.ttf"; path = "../assets/fonts/Jua-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A9D2B6D96D61487DA735C53E /* NanumGothic-Bold.ttf */ = {isa = PBXFileReference; name = "NanumGothic-Bold.ttf"; path = "../assets/fonts/NanumGothic-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A064186E608341D6A604C9C5 /* NanumGothic-ExtraBold.ttf */ = {isa = PBXFileReference; name = "NanumGothic-ExtraBold.ttf"; path = "../assets/fonts/NanumGothic-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D027E0B7CD434639A8F6C595 /* NanumGothic-Regular.ttf */ = {isa = PBXFileReference; name = "NanumGothic-Regular.ttf"; path = "../assets/fonts/NanumGothic-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		95D6D277B2174A238D0A4616 /* NotoSansKR-Black.otf */ = {isa = PBXFileReference; name = "NotoSansKR-Black.otf"; path = "../assets/fonts/NotoSansKR-Black.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FB2BA7250E9640749A2840A1 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; name = "NotoSansKR-Bold.otf"; path = "../assets/fonts/NotoSansKR-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		81EA1B35C2AB45B58CC08087 /* NotoSansKR-Light.otf */ = {isa = PBXFileReference; name = "NotoSansKR-Light.otf"; path = "../assets/fonts/NotoSansKR-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4EC88DEE09B7489F872B284E /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; name = "NotoSansKR-Medium.otf"; path = "../assets/fonts/NotoSansKR-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CB379F239CAA4A479BFB5474 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; name = "NotoSansKR-Regular.otf"; path = "../assets/fonts/NotoSansKR-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9F9582DD074F4BDA9091FAD0 /* NotoSansKR-Thin.otf */ = {isa = PBXFileReference; name = "NotoSansKR-Thin.otf"; path = "../assets/fonts/NotoSansKR-Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		AA5E4EEEBBBB4C1397918BCA /* SingleDay-Regular.ttf */ = {isa = PBXFileReference; name = "SingleDay-Regular.ttf"; path = "../assets/fonts/SingleDay-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8311C0BDFCA242AF924EE08B /* Sunflower-Bold.ttf */ = {isa = PBXFileReference; name = "Sunflower-Bold.ttf"; path = "../assets/fonts/Sunflower-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D768EA901C684D81A502ACB6 /* Sunflower-Light.ttf */ = {isa = PBXFileReference; name = "Sunflower-Light.ttf"; path = "../assets/fonts/Sunflower-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B4F8D5F362754BB88512B7C9 /* Sunflower-Medium.ttf */ = {isa = PBXFileReference; name = "Sunflower-Medium.ttf"; path = "../assets/fonts/Sunflower-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FB2BA7250E9640749A2840A1 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NotoSansKR-Bold.otf"; path = "../assets/fonts/NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +104,30 @@
 				58EEBF8E8E6FB1BC6CAF49B5 /* libPods-erinapp.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6B2F4F1E09D341CA96B4A575 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8AE4AE47115346DD853535AB /* Gaegu-Bold.ttf */,
+				1E6752499CAC4DC8B8ECB11E /* Gaegu-Light.ttf */,
+				44FFEB3719E04FA0A4FDC090 /* Gaegu-Regular.ttf */,
+				3D25D6CACE974ED8A72FD6F1 /* Jua-Regular.ttf */,
+				A9D2B6D96D61487DA735C53E /* NanumGothic-Bold.ttf */,
+				A064186E608341D6A604C9C5 /* NanumGothic-ExtraBold.ttf */,
+				D027E0B7CD434639A8F6C595 /* NanumGothic-Regular.ttf */,
+				95D6D277B2174A238D0A4616 /* NotoSansKR-Black.otf */,
+				FB2BA7250E9640749A2840A1 /* NotoSansKR-Bold.otf */,
+				81EA1B35C2AB45B58CC08087 /* NotoSansKR-Light.otf */,
+				4EC88DEE09B7489F872B284E /* NotoSansKR-Medium.otf */,
+				CB379F239CAA4A479BFB5474 /* NotoSansKR-Regular.otf */,
+				9F9582DD074F4BDA9091FAD0 /* NotoSansKR-Thin.otf */,
+				AA5E4EEEBBBB4C1397918BCA /* SingleDay-Regular.ttf */,
+				8311C0BDFCA242AF924EE08B /* Sunflower-Bold.ttf */,
+				D768EA901C684D81A502ACB6 /* Sunflower-Light.ttf */,
+				B4F8D5F362754BB88512B7C9 /* Sunflower-Medium.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -154,31 +178,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		6B2F4F1E09D341CA96B4A575 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				8AE4AE47115346DD853535AB /* Gaegu-Bold.ttf */,
-				1E6752499CAC4DC8B8ECB11E /* Gaegu-Light.ttf */,
-				44FFEB3719E04FA0A4FDC090 /* Gaegu-Regular.ttf */,
-				3D25D6CACE974ED8A72FD6F1 /* Jua-Regular.ttf */,
-				A9D2B6D96D61487DA735C53E /* NanumGothic-Bold.ttf */,
-				A064186E608341D6A604C9C5 /* NanumGothic-ExtraBold.ttf */,
-				D027E0B7CD434639A8F6C595 /* NanumGothic-Regular.ttf */,
-				95D6D277B2174A238D0A4616 /* NotoSansKR-Black.otf */,
-				FB2BA7250E9640749A2840A1 /* NotoSansKR-Bold.otf */,
-				81EA1B35C2AB45B58CC08087 /* NotoSansKR-Light.otf */,
-				4EC88DEE09B7489F872B284E /* NotoSansKR-Medium.otf */,
-				CB379F239CAA4A479BFB5474 /* NotoSansKR-Regular.otf */,
-				9F9582DD074F4BDA9091FAD0 /* NotoSansKR-Thin.otf */,
-				AA5E4EEEBBBB4C1397918BCA /* SingleDay-Regular.ttf */,
-				8311C0BDFCA242AF924EE08B /* Sunflower-Bold.ttf */,
-				D768EA901C684D81A502ACB6 /* Sunflower-Light.ttf */,
-				B4F8D5F362754BB88512B7C9 /* Sunflower-Medium.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -209,7 +208,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
@@ -379,7 +378,7 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = erinapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -402,7 +401,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = erinapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -439,6 +438,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -463,11 +463,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(inherited)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -497,6 +495,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -514,11 +513,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(inherited)\"",
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
