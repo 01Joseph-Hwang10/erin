@@ -7,6 +7,7 @@ import { setScreenSpec, SetScreenSpecInput } from "../redux/slices/screen";
 import MobileLayout from "./mobile-layout";
 import { WIDTH_CONSTANT, MARGIN_CONSTANT } from "../components/editor/base/constants";
 import { configureIconLayout, ConfigureIconLayoutInput } from "../redux/slices/editor/editor-generic";
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 type LayoutWrapperReduxProps = ConnectedProps<typeof connector>
 
@@ -27,7 +28,9 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({
     });
   }, []);
 
-  return <MobileLayout />;
+  return <SafeAreaProvider>
+    <MobileLayout />
+  </SafeAreaProvider>
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

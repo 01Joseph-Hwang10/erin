@@ -1,7 +1,6 @@
 import React from "react";
-import { BackHandler, StyleSheet } from "react-native";
+import { BackHandler, StyleSheet, Platform } from "react-native";
 import { View, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import BottomTab from "../components/editor/bottom-tab";
 import Workspace from "../components/editor/workspace";
 import TopFloat from "../components/editor/top-float";
@@ -70,45 +69,50 @@ class Editor extends React.Component<EditorProps> {
     this.props.setPopAtEditor(this.handleConfirm);
     this.props.setLoading(false);
     this.props.setHasUnsavedChanges(false);
-    BackHandler.addEventListener("hardwareBackPress", this.backHandler);
+    // const backHandler = require("react-native/Libraries/Utilities/BackHandler.android")
+    if ( Platform.OS === "android" ) {
+      BackHandler.addEventListener("hardwareBackPress", this.backHandler);
+    }
   }
 
   componentDidUpdate = (prevProps: EditorProps) => {
-    if (prevProps.hasUnsavedChanges !== this.props.hasUnsavedChanges) {
+    if (
+      Platform.OS === "android" &&
+      prevProps.hasUnsavedChanges !== this.props.hasUnsavedChanges
+      ) {
       BackHandler.addEventListener("hardwareBackPress", this.backHandler);
     }
   }
 
   componentWillUnmount = () => {
-    BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
+    if ( Platform.OS === "android" ) {
+      BackHandler.removeEventListener("hardwareBackPress", this.backHandler);
+    }
   }
 
   render = () => {
     return (
       <GenericAnimationContext.Provider value={AnimatedGeneric}>
         <TextAnimationContext.Provider value={AnimatedText}>
-          <SafeAreaView style={styles.safeFirst} />
-          <SafeAreaView style={styles.safeSecond}>
-            <View style={styles.root}>
-              <View style={styles.workspaceWrapper}>
-                <Workspace />
-                <View style={styles.floatWrapper}>
-                  <View style={styles.floatbox}>
-                    <View style={styles.floatWrapperWrapper}>
-                      <TopFloat />
-                    </View>
-                    <View style={styles.floatWrapperWrapper}>
-                      <BottomFloatHelpMessage />
-                      <BottomFloat />
-                    </View>
+          <View style={styles.root}>
+            <View style={styles.workspaceWrapper}>
+              <Workspace />
+              <View style={styles.floatWrapper}>
+                <View style={styles.floatbox}>
+                  <View style={styles.floatWrapperWrapper}>
+                    <TopFloat />
+                  </View>
+                  <View style={styles.floatWrapperWrapper}>
+                    <BottomFloatHelpMessage />
+                    <BottomFloat />
                   </View>
                 </View>
               </View>
-              <View style={styles.toolbarWrapper}>
-                <BottomTab />
-              </View>
             </View>
-          </SafeAreaView>
+            <View style={styles.toolbarWrapper}>
+              <BottomTab />
+            </View>
+          </View>
         </TextAnimationContext.Provider>
       </GenericAnimationContext.Provider>
     );

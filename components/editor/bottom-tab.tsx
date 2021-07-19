@@ -12,6 +12,7 @@ import IconWrapper from "./base/icon-wrapper";
 // import Animated, { Easing, useDerivedValue, withTiming } from "react-native-reanimated";
 // import { useAnimatedProps } from "react-native-reanimated";
 import iconMembers from "./bottom-tab.data";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type BottomTabReduxProps = ConnectedProps<typeof connector>
 
@@ -23,6 +24,8 @@ const BottomTab: React.FC<BottomTabProps> = ({
   bottomTabCurrent,
   iconGap
 }) => {
+
+  const insets = useSafeAreaInsets();
 
   // const [ bottomTabCurrent, setBottomTabCurrent ] = useState<Erin.Editor.BottomTabMenuType>(bottomTabCurrentRaw);
   // const [ visible, setVisible ] = useState<boolean>(false);
@@ -53,6 +56,11 @@ const BottomTab: React.FC<BottomTabProps> = ({
     marginHorizontal: iconGap
   };
 
+  const rootStyle: StyleProp<ViewStyle> = {
+    paddingBottom: insets.bottom,
+    paddingTop: 5
+  }
+
   // const changeTabWithTransition = (): void => {
   //   setVisible(false);
   //   setTimeout(() => {
@@ -70,7 +78,7 @@ const BottomTab: React.FC<BottomTabProps> = ({
   //   [bottomTabCurrentRaw]
   // );
 
-  return <View style={styles.root}>
+  return <View style={[styles.root, rootStyle]}>
     <View
       style={[styles.wrapper]}
     >

@@ -15,6 +15,7 @@ import { Dispatch } from "redux";
 import { setCurrentPage, SetCurrentPageInput } from "../redux/slices/navigation";
 import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import { capitalizer } from "./main.function";
+import { Platform } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -62,17 +63,23 @@ const Main: React.FC<MainProps> = ({
       title: capitalizedName
     });
     const backButtonHandler = () => {
-      BackHandler.exitApp();
+      if ( Platform.OS === "android" ) {
+        BackHandler.exitApp();
+      }
       if (["main", "friends", "postbox", "myPage"].includes(currentPage)) {
         return true;
       } else {
         return false;
       }
     };
-    BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+    if ( Platform.OS === "android" ) {
+      BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+    }
     return () => {
       SetCurrentPage("not-main");
-      BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
+      if ( Platform.OS === "android" ) {
+        BackHandler.removeEventListener("hardwareBackPress", backButtonHandler);
+      }
     };
   }, [state]);
 

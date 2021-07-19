@@ -1,5 +1,5 @@
 import React from "react";
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 import { StyleProp, StyleSheet } from "react-native";
 import { View } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
@@ -7,6 +7,7 @@ import { RootState } from "../../redux/root-reducer";
 import Placeholder from "./base/placeholder";
 import { returnShadowProps } from "./base/constants";
 import iconMembers from "./top-float.data";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type TopFloatReduxProps = ConnectedProps<typeof connector>
 
@@ -21,6 +22,8 @@ const TopFloat: React.FC<TopFloatProps> = ({
   onDrag
 }) => {
 
+  const insets = useSafeAreaInsets()
+
   const marginSetter: StyleProp<ViewStyle> = {
     marginHorizontal: iconGap,
   };
@@ -34,19 +37,23 @@ const TopFloat: React.FC<TopFloatProps> = ({
     borderWidth: 1,
   };
 
-  const shadowStyle: StyleProp<ViewStyle> = returnShadowProps(45);
+  const shadowStyle: StyleProp<ViewStyle> = returnShadowProps(Platform.OS === "android" ? 45 : 10);
 
   const placeholderStyle: StyleProp<ViewStyle> = {
     width: iconSize * 0.8,
     height: iconSize
   };
 
+  const rootStyle: StyleProp<ViewStyle> = {
+    paddingTop: insets.top + 10
+  }
+
   if (onDrag) {
     return <View style={placeholderStyle}></View>;
   }
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, rootStyle]}>
       {
         iconMembers[topFloatCurrent].map((member, index) => {
           if (member) {
