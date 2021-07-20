@@ -144,7 +144,8 @@ export default connector(Editor);
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    height: "100%"
+    height: "100%",
+    backgroundColor: COLORS.LIGHT.secondary
   },
   floatWrapper: {
     justifyContent: "center",

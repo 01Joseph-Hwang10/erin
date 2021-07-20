@@ -44,6 +44,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       oldState
       } 
     }: TapGestureHandlerStateChangeEvent): void => {
+      console.log("workspace on touch")
     if (oldState === State.ACTIVE) {
       if (!this.props.textOnEdit) {
         this.setToCreateMode();

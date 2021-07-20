@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
-    new BasePackageList().getPackageList()
+    new BasePackageList().getPackageList(), null
   );
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -46,7 +46,10 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       List<ReactPackage> packages = new PackageList(this).getPackages();
-      packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+      // packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+      List<ReactPackage> unimodules = Arrays.<ReactPackage>asList(
+              new ModuleRegistryAdapter(mModuleRegistryProvider));
+      packages.addAll(unimodules);
       return packages;
     }
 
