@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Animated, LayoutChangeEvent } from "react-native";
+import { StyleSheet, View, Animated, LayoutChangeEvent, ViewStyle } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/root-reducer";
@@ -18,6 +18,8 @@ import { SetCreationPointInput, setFocusedComponent, SetFocusedComponentInput } 
 import { setCreationPoint } from "@slices/editor/editor-handle";
 import CreationPoint from "@components/editor/workspace/creation-point";
 import Layer from "./layer";
+import { SafeAreaInsetsContext } from "react-native-safe-area-context";
+import { StyleProp } from "react-native";
 
 type WorkspaceReduxProps = ConnectedProps<typeof connector>
 
@@ -44,7 +46,6 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       oldState
       } 
     }: TapGestureHandlerStateChangeEvent): void => {
-      console.log("workspace on touch")
     if (oldState === State.ACTIVE) {
       if (!this.props.textOnEdit) {
         this.setToCreateMode();
@@ -101,23 +102,39 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
     } = this.props;
 
     return (
-      <TapGestureHandler
-        onHandlerStateChange={this.onTapHandlerStateChange}
-      >
-        <Animated.View 
-          style={styles.root}
-          onLayout={this.onWorkspaceLayout}
-        >
-          {
-            x && y && 
-            <CreationPoint 
-              posX={x}
-              posY={y}
-            />
+      <SafeAreaInsetsContext.Consumer>
+        {
+          (insets) => {
+            const rootWrapperStyle: StyleProp<ViewStyle> = {
+              paddingTop: insets?.top,
+              // paddingBottom: insets?.bottom
+            }
+            return (
+              <TapGestureHandler
+                onHandlerStateChange={this.onTapHandlerStateChange}
+              >
+                <View
+                  style={rootWrapperStyle}
+                >
+                  <View 
+                    style={styles.root}
+                    onLayout={this.onWorkspaceLayout}
+                  >
+                    {
+                      x && y && 
+                      <CreationPoint 
+                        posX={x}
+                        posY={y}
+                      />
+                    }
+                    <Layer layer={layer[currentLayer-1]} />
+                  </View>
+                </View>
+              </TapGestureHandler>
+            )
           }
-          <Layer layer={layer[currentLayer-1]} />
-        </Animated.View>
-      </TapGestureHandler>
+        }
+      </SafeAreaInsetsContext.Consumer>
     );
   }
 }
@@ -154,6 +171,8 @@ const styles = StyleSheet.create({
   root: {
     width: "100%",
     height: "100%",
-    zIndex: 1
+    zIndex: 1,
+    // borderWidth: 2,
+    // borderColor: "red"
   },
 });

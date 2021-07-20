@@ -8,6 +8,8 @@ import Placeholder from "./base/placeholder";
 import { returnShadowProps } from "./base/constants";
 import iconMembers from "./top-float.data";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Animated, { useAnimatedProps, useDerivedValue, withTiming } from "react-native-reanimated";
+import { tabAnimationConfig } from "./constants";
 
 type TopFloatReduxProps = ConnectedProps<typeof connector>
 
@@ -48,12 +50,24 @@ const TopFloat: React.FC<TopFloatProps> = ({
     paddingTop: insets.top + 10
   }
 
-  if (onDrag) {
-    return <View style={placeholderStyle}></View>;
-  }
+  const animatedOpacity = useDerivedValue(
+    () => (
+      onDrag ? 
+        withTiming(0, tabAnimationConfig) :
+        withTiming(1, tabAnimationConfig)
+    ),
+    [onDrag]
+  )
+
+  const animatedStyle = useAnimatedProps(
+    () => ({
+      opacity: animatedOpacity.value
+    }),
+    [animatedOpacity]
+  )
 
   return (
-    <View style={[styles.root, rootStyle]}>
+    <Animated.View style={[styles.root, rootStyle, animatedStyle]}>
       {
         iconMembers[topFloatCurrent].map((member, index) => {
           if (member) {
@@ -73,7 +87,7 @@ const TopFloat: React.FC<TopFloatProps> = ({
           </View>;
         })
       }
-    </View>
+    </Animated.View>
   );
 };
 
@@ -96,5 +110,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 9999
-  }
+  },
 });

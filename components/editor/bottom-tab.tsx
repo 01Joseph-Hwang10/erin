@@ -13,6 +13,11 @@ import IconWrapper from "./base/icon-wrapper";
 // import { useAnimatedProps } from "react-native-reanimated";
 import iconMembers from "./bottom-tab.data";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Platform } from "react-native";
+import Animated, { Easing, withTiming } from 'react-native-reanimated'
+import { useDerivedValue } from "react-native-reanimated";
+import { useAnimatedProps } from "react-native-reanimated";
+import { tabAnimationConfig } from "./constants";
 
 type BottomTabReduxProps = ConnectedProps<typeof connector>
 
@@ -22,7 +27,9 @@ interface BottomTabProps extends BottomTabReduxProps {}
 
 const BottomTab: React.FC<BottomTabProps> = ({
   bottomTabCurrent,
-  iconGap
+  iconGap,
+  onDrag,
+  textOnEdit,
 }) => {
 
   const insets = useSafeAreaInsets();
@@ -57,8 +64,8 @@ const BottomTab: React.FC<BottomTabProps> = ({
   };
 
   const rootStyle: StyleProp<ViewStyle> = {
+    paddingTop: Platform.OS === "android" ? 0 : 10,
     paddingBottom: insets.bottom,
-    paddingTop: 5
   }
 
   // const changeTabWithTransition = (): void => {
@@ -78,9 +85,25 @@ const BottomTab: React.FC<BottomTabProps> = ({
   //   [bottomTabCurrentRaw]
   // );
 
+  const animatedOpacity = useDerivedValue(
+    () => (
+      onDrag || textOnEdit ? 
+        withTiming(0, tabAnimationConfig) :
+        withTiming(1, tabAnimationConfig)
+    ),
+    [onDrag, textOnEdit]
+  )
+
+  const animatedStyle = useAnimatedProps(
+    () => ({
+      opacity: animatedOpacity.value
+    }),
+    [animatedOpacity]
+  )
+
   return <View style={[styles.root, rootStyle]}>
-    <View
-      style={[styles.wrapper]}
+    <Animated.View
+      style={[styles.wrapper, animatedStyle]}
     >
       {
         iconMembers?.[bottomTabCurrent]?.map((member, index) => {
@@ -101,7 +124,7 @@ const BottomTab: React.FC<BottomTabProps> = ({
           </View>;
         })
       }
-    </View>
+    </Animated.View>
   </View>;
     
 };
@@ -110,11 +133,13 @@ const BottomTab: React.FC<BottomTabProps> = ({
 const mapStateToProps = (state: RootState) => {
   return {
     bottomTabCurrent: state.editor.generic.bottomTabCurrent,
-    iconGap: state.editor.generic.settings.iconGap
+    iconGap: state.editor.generic.settings.iconGap,
+    onDrag: state.editor.handle.onDrag,
+    textOnEdit: state.editor.states.textOnEdit,
   };
 };
 
-const connector = connect(mapStateToProps, {});
+const connector = connect(mapStateToProps);
 
 // export default React.memo(connector(BottomTab))
 export default connector(BottomTab);
@@ -125,7 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.DARK.primary,
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   wrapper: {
     flex: 1,

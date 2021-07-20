@@ -1,7 +1,12 @@
 import XButton from "@components/common/x-button";
+import { RootState } from "@redux/root-reducer";
 import { 
   setBottomFloatCurrent, 
-  SetBottomFloatCurrentInput, 
+  SetBottomFloatCurrentInput,
+  setBottomTabCurrent,
+  SetBottomTabCurrentInput,
+  setTopFloatCurrent,
+  SetTopFloatCurrentInput, 
 } from "@slices/editor/editor-generic";
 import { setTextOnEditState, SetTextOnEditStateInput } from "@slices/editor/editor-states";
 import React from "react";
@@ -14,12 +19,28 @@ interface NotEditTextProps extends NotEditTextReduxProps {}
 
 const NotEditText: React.FC<NotEditTextProps> = ({
   setTextOnEdit,
+  focusedComponentType,
+  textContent,
   setBottomFloatCurrent: SetBottomFloatCurrent,
+  setTopFloatCurrent: SetTopFloatCurrent,
+  setBottomTabCurrent: SetBottomTabCurrent
 }) => {
 
   const onPress = () => {
     setTextOnEdit(false);
     SetBottomFloatCurrent("none");
+    switch (focusedComponentType) {
+      case "text":
+        SetBottomFloatCurrent("none")
+        SetBottomTabCurrent( textContent ? "text" : "default")
+        SetTopFloatCurrent( textContent ? "text" : "default")
+        break;
+      default:
+        SetBottomFloatCurrent("none")
+        SetBottomTabCurrent("default")
+        SetTopFloatCurrent("default")
+        break;
+    }
   };
 
   return (
@@ -29,11 +50,18 @@ const NotEditText: React.FC<NotEditTextProps> = ({
   );
 };
 
+const mapStateToProps = (state: RootState) => ({
+  focusedComponentType: state.editor.handle.focusedComponentType,
+  textContent: state.editor.states.textContent,
+})
+
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   setTextOnEdit: (payload: SetTextOnEditStateInput) => dispatch(setTextOnEditState(payload)),
   setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload)),
+  setTopFloatCurrent: (payload: SetTopFloatCurrentInput) => dispatch(setTopFloatCurrent(payload)),
+  setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
 });
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(NotEditText);

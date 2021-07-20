@@ -1,5 +1,5 @@
 import React from "react";
-import { BackHandler, StyleSheet, Platform } from "react-native";
+import { BackHandler, StyleSheet, Platform, KeyboardAvoidingView } from "react-native";
 import { View, Alert } from "react-native";
 import BottomTab from "../components/editor/bottom-tab";
 import Workspace from "../components/editor/workspace";
@@ -91,18 +91,34 @@ class Editor extends React.Component<EditorProps> {
   }
 
   render = () => {
+    
     return (
       <GenericAnimationContext.Provider value={AnimatedGeneric}>
         <TextAnimationContext.Provider value={AnimatedText}>
-          <View style={styles.root}>
+          <KeyboardAvoidingView 
+            style={styles.root}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
             <View style={styles.workspaceWrapper}>
               <Workspace />
-              <View style={styles.floatWrapper}>
-                <View style={styles.floatbox}>
-                  <View style={styles.floatWrapperWrapper}>
+              <View 
+                style={styles.floatWrapper}
+                pointerEvents="box-none"
+                >
+                <View 
+                  style={styles.floatbox}
+                  pointerEvents="box-none"
+                  >
+                  <View 
+                    style={styles.floatComponentWrapper}
+                    pointerEvents="box-none"
+                    >
                     <TopFloat />
                   </View>
-                  <View style={styles.floatWrapperWrapper}>
+                  <View 
+                    style={styles.floatComponentWrapper}
+                    pointerEvents="box-none"
+                  >
                     <BottomFloatHelpMessage />
                     <BottomFloat />
                   </View>
@@ -112,7 +128,7 @@ class Editor extends React.Component<EditorProps> {
             <View style={styles.toolbarWrapper}>
               <BottomTab />
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </TextAnimationContext.Provider>
       </GenericAnimationContext.Provider>
     );
@@ -155,7 +171,7 @@ const styles = StyleSheet.create({
     left: 0,  
     width: "100%",
     height: "100%",
-    zIndex: 9999
+    // zIndex: 9999,
   },
   floatbox: {
     justifyContent: "space-between",
@@ -163,24 +179,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  floatWrapperWrapper: {
+  floatComponentWrapper: {
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    zIndex: 9999
   },
   toolbarWrapper: {
     flex: 1,
-    zIndex: 9999
+    zIndex: 9999,
   },
   workspaceWrapper: {
     flex: 8,
   },
-  safeFirst: {
-    flex: 0,
-    backgroundColor: COLORS.LIGHT.secondary,
-  },
-  safeSecond: {
-    flex: 1,
-    backgroundColor: COLORS.LIGHT.secondary,
-  }
 });

@@ -235,7 +235,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           } 
         }: PanGestureHandlerGestureEvent) => {
           if (!this.props.onDrag) {
-            if (translationX > 10 || translationY > 10) {
+            if (Math.abs(translationX) > 10 || Math.abs(translationY) > 10) {
               this.props.setOnDrag(true);
             }
           }

@@ -9,6 +9,7 @@ import ToggleLayer from "./top-float/default-member/toggle-layer";
 import ChangeText from "./top-float/text-member/change-text";
 import CheckText from "./top-float/text-member/check-text";
 import FontSize from "./bottom-tab/text-member/font-size";
+import NotEditText from "./top-float/edit-text-member/not-edit-text";
 
 
 const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
@@ -38,7 +39,7 @@ const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
     null,
     null,
     null,
-    null,
+    <NotEditText key={5} />,
     <CheckText key={6} />
   ]
 };
