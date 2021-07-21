@@ -7,6 +7,7 @@ import { toggleBackgroundShapeState } from "@slices/editor/editor-states";
 import { shapeToIndex } from "./background-shape.function";
 import { AntDesign } from "@expo/vector-icons";
 import { textBackgroundShapes } from "./background-shape.data";
+import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
 
 type ShapeReduxProps = ConnectedProps<typeof connector>
 
@@ -23,6 +24,9 @@ class Shape extends React.Component<ShapeProps> {
   private buttonRef = React.createRef<SwitchButtonComponent>()
 
   private onPress = () => {
+    if (this.props.bottomFloatCurrent !== "none") {
+      this.props.setBottomFloatCurrent("none");
+    }
     this.props.toggleBackgroundShape();
     this.buttonRef.current?.toggleItem();
   };
@@ -58,12 +62,14 @@ class Shape extends React.Component<ShapeProps> {
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
-    backgroundShape: state.editor.states.backgroundShape
+    backgroundShape: state.editor.states.backgroundShape,
+    bottomFloatCurrent: state.editor.generic.bottomFloatCurrent
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleBackgroundShape: () => dispatch(toggleBackgroundShapeState()),
+  setBottomFloatCurrent: (payload: SetBottomFloatCurrentInput) => dispatch(setBottomFloatCurrent(payload))
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

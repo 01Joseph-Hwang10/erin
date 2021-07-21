@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useRef } from "react";
+import { useCallback } from "react";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { cancelAnimation } from "react-native-reanimated";
 import { Easing } from "react-native-reanimated";
@@ -26,14 +28,21 @@ const Moving: React.FC<MovingProps> = ({
   onLayerChange,
 }) => {
 
-  const [ onMount, setOnMount ] = useState(true);
+  const delayedAnimation = useRef<NodeJS.Timeout | null>(null);
+  const infiniteAnimationInitializer = useRef<NodeJS.Timeout | null>(null);
+  const infiniteAnimationHandler = useRef<NodeJS.Timer | null>(null);
   
-  const animationConfig: Animated.WithTimingConfig = {
+  const animatedDistanceConfig: Animated.WithTimingConfig = {
     duration: onLayerChange ? onUnmountDuration : movingDuration,
     easing: movement && movement === "bounce" ? Easing.bounce : Easing.ease
   };
 
-  const animatedDistance = useSharedValue(infinite ? 0 : movingDistance);
+  const animatedOpacityConfig: Animated.WithTimingConfig = {
+    duration: onLayerChange ? onUnmountDuration * ( 2 / 3 ) : movingDuration * ( 2 / 3 ),
+    easing: Easing.ease
+  };
+
+  const animatedDistance = useSharedValue(movingDistance);
   const animatedOpacity = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(
@@ -46,51 +55,61 @@ const Moving: React.FC<MovingProps> = ({
     [animatedDistance, animatedOpacity]
   );
 
-  const animationCycle = () => {
-    animatedDistance.value = withTiming(movingDistance, animationConfig);
-    const delayedAnimation = setTimeout(() => {
-      animatedDistance.value = withTiming(0, animationConfig);
-    }, stayDuration + movingDuration);
-    if (!onMount) {
-      clearTimeout(delayedAnimation);
-    }
+  const animationCycle = useCallback(
+    () => {
+      if (infinite) {
+        animatedDistance.value = withTiming(movingDistance, animatedDistanceConfig);
+        delayedAnimation.current = setTimeout(() => {
+          animatedDistance.value = withTiming(0, animatedDistanceConfig);
+        }, stayDuration + movingDuration);
+      } else {
+        if (animatedDistance.value !== 0) {
+          if (delayedAnimation.current) clearTimeout(delayedAnimation.current);
+          animatedDistance.value = 0;
+        }
+      }
+    },
+    [infinite, animatedDistance.value, movement, onLayerChange]
+  );
+
+  const cleanUpAnimationIds = () => {
+    if (infiniteAnimationInitializer.current) clearInterval(infiniteAnimationInitializer.current);
+    if (infiniteAnimationHandler.current) clearInterval(infiniteAnimationHandler.current);
+    if (delayedAnimation.current) clearTimeout(delayedAnimation.current);
   };
 
+  const cleanUp = () => {
+    cleanUpAnimationIds();
+    cancelAnimation(animatedDistance);
+    cancelAnimation(animatedOpacity);
+  };
+  
   useEffect(() => {
-    let animatedInterval: NodeJS.Timer | null = null;
-    if (infinite) {
-      animatedInterval = setInterval(
-        animationCycle,
-        movingDuration * 2 + stayDuration + defaultDuration
-      );
+    cleanUp();
+    animatedDistance.value = withTiming(0, animatedDistanceConfig);
+    animatedOpacity.value = withTiming(1, animatedOpacityConfig);
+    
+    infiniteAnimationInitializer.current = setTimeout(() => {
       animationCycle();
-    } else {
-      if (animatedInterval) {
-        clearInterval(animatedInterval);
+      infiniteAnimationHandler.current = setInterval(
+        animationCycle,
+        movingDuration * 2 + defaultDuration + stayDuration
+      );
+    }, movingDuration + stayDuration);
+      
+    return cleanUp;
+  }, [infinite, movement]);
+  
+  useEffect(
+    () => {
+      if (onLayerChange) {
+        cleanUpAnimationIds();
+        animatedDistance.value = withTiming(movingDistance, animatedDistanceConfig);
+        animatedOpacity.value = withTiming(0, animatedOpacityConfig);
       }
-      animatedDistance.value = withTiming(0, animationConfig);
-      animatedOpacity.value = withTiming(1, {
-        duration: movingDuration * ( 2 / 3 ),
-        easing: Easing.linear
-      });
-    }
-    if (onLayerChange) {
-      if (animatedInterval) {
-        setOnMount(false);
-        clearInterval(animatedInterval);
-      }
-      animatedDistance.value = withTiming(movingDistance, animationConfig);
-      animatedOpacity.value = withTiming(0, animationConfig);
-    }
-    return () => {
-      if (!onLayerChange && animatedInterval) {
-        setOnMount(false);
-        clearInterval(animatedInterval);
-      }
-      cancelAnimation(animatedOpacity);
-      cancelAnimation(animatedDistance);
-    };
-  }, [infinite]);
+    },
+    [onLayerChange]
+  );
 
   return (
     <Animated.View

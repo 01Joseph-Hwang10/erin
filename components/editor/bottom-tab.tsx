@@ -14,7 +14,7 @@ import IconWrapper from "./base/icon-wrapper";
 import iconMembers from "./bottom-tab.data";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
-import Animated, { Easing, withTiming } from 'react-native-reanimated'
+import Animated, { Easing, withTiming } from "react-native-reanimated";
 import { useDerivedValue } from "react-native-reanimated";
 import { useAnimatedProps } from "react-native-reanimated";
 import { tabAnimationConfig } from "./constants";
@@ -66,7 +66,7 @@ const BottomTab: React.FC<BottomTabProps> = ({
   const rootStyle: StyleProp<ViewStyle> = {
     paddingTop: Platform.OS === "android" ? 0 : 10,
     paddingBottom: insets.bottom,
-  }
+  };
 
   // const changeTabWithTransition = (): void => {
   //   setVisible(false);
@@ -92,14 +92,14 @@ const BottomTab: React.FC<BottomTabProps> = ({
         withTiming(1, tabAnimationConfig)
     ),
     [onDrag, textOnEdit]
-  )
+  );
 
   const animatedStyle = useAnimatedProps(
     () => ({
       opacity: animatedOpacity.value
     }),
     [animatedOpacity]
-  )
+  );
 
   return <View style={[styles.root, rootStyle]}>
     <Animated.View

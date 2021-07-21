@@ -42,14 +42,18 @@ const BottomFloatHelpMessage: React.FC<BottomFloatHelpMessageProps> = ({
 
   useEffect(
     () => {
+      let delayedAnimationId: NodeJS.Timeout | null = null;
       if (bottomFloatHelpMessage === null) {
         setVisible(false);
       } else {
         setVisible(true);
-        setTimeout(() => {
+        delayedAnimationId = setTimeout(() => {
           setVisible(false);
         }, duration);
       }
+      return () => {
+        if (delayedAnimationId) clearTimeout(delayedAnimationId);
+      };
     },
     [bottomFloatHelpMessage]
   );

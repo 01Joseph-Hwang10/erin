@@ -38,7 +38,7 @@ const AnimationToggleInfinite: React.FC<AnimationToggleInfiniteProps> = ({
         icon={renderIcon}
         onPress={onPress}
         bottomFloatHelpMessage={
-          animationInfinite ? 
+          !animationInfinite ? // IDK why
             "애니메이션이 계속 실행됩니다" : 
             "애니메이션이 레이어의 시작과 끝에서만 실행됩니다"
         }

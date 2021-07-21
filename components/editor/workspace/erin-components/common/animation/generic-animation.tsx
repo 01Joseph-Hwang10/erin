@@ -15,7 +15,6 @@ export const AnimatedGeneric: React.FC<AnimatedGenericProps> = ({
   animationType,
   infinite
 }) => {
-  console.log(infinite);
   switch (animationType) {
   case "blink":
     return <Blink

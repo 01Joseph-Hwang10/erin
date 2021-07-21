@@ -7,6 +7,7 @@ import PressButton from "../../base/press-button";
 import { Dispatch } from "redux";
 import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
 import { setColorConsumerState, SetColorConsumerStateInput, setPickedColorState, SetPickedColorStateInput } from "@slices/editor/editor-states";
+import Placeholder from "@components/editor/base/placeholder";
 
 type FontColorReduxProps = ConnectedProps<typeof connector>
 
@@ -18,7 +19,8 @@ const FontColor: React.FC<FontColorProps> = ({
   setBottomFloatCurrent: SetBottomFloatCurrent,
   setColorConsumer: SetColorConsumer,
   setPickedColorState: SetPickedColorState,
-  colorConsumer
+  colorConsumer,
+  backgroundShape,
 }) => {
 
   const renderIcon = () => (
@@ -39,6 +41,10 @@ const FontColor: React.FC<FontColorProps> = ({
       SetColorConsumer("textFontColor");
     }
   };
+
+  if (backgroundShape === "neon") {
+    return <Placeholder />;
+  }
   
   return <PressButton 
     icon={renderIcon}
@@ -51,7 +57,8 @@ const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
     bottomFloatCurrent: state.editor.generic.bottomFloatCurrent,
-    colorConsumer: state.editor.states.colorConsumer
+    colorConsumer: state.editor.states.colorConsumer,
+    backgroundShape: state.editor.states.backgroundShape,
   };
 };
 

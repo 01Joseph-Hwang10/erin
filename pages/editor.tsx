@@ -79,7 +79,7 @@ class Editor extends React.Component<EditorProps> {
     if (
       Platform.OS === "android" &&
       prevProps.hasUnsavedChanges !== this.props.hasUnsavedChanges
-      ) {
+    ) {
       BackHandler.addEventListener("hardwareBackPress", this.backHandler);
     }
   }
@@ -104,15 +104,15 @@ class Editor extends React.Component<EditorProps> {
               <View 
                 style={styles.floatWrapper}
                 pointerEvents="box-none"
-                >
+              >
                 <View 
                   style={styles.floatbox}
                   pointerEvents="box-none"
-                  >
+                >
                   <View 
                     style={styles.floatComponentWrapper}
                     pointerEvents="box-none"
-                    >
+                  >
                     <TopFloat />
                   </View>
                   <View 

@@ -31,6 +31,7 @@ import TextAlign from "./bottom-tab/text-member/text-align";
 // import FontSize from "./bottom-tab/text-member/font-size";
 import TextAnimation from "./bottom-tab/text-member/text-animation";
 import AnimationToggleInfinite from "./common/animation-toggle-infinite";
+import CreateImage from "./bottom-tab/create-member/create-image";
 // import BorderColor from "./bottom-tab/text-member/border-color";
 // import ChangeText from "./bottom-tab/text-member/change-text";
 
@@ -48,7 +49,7 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   create: [
     <CreateText key={0} />,
     <CreateSticker key={1} />,
-    null,
+    <CreateImage key={2} />,
     null,
     null,
     null,
@@ -56,11 +57,11 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
   ],
   shape: [],
   text: [
+    <BackgroundShape key={3} />,
+    <FontStyle key={2} />,
+    <TextAlign key={4} />,
     <FontColor key={0} />,
     <BackgroundColor key={1} />,
-    <FontStyle key={2} />,
-    <BackgroundShape key={3} />,
-    <TextAlign key={4} />,
     <AnimationToggleInfinite key={5} />,
     <TextAnimation key={6} />,
   ],

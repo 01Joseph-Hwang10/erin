@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { 
@@ -10,7 +11,7 @@ import {
   ViewStyle,
   View
 } from "react-native";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 import { cancelAnimation } from "react-native-reanimated";
 import { Easing } from "react-native-reanimated";
 import { useAnimatedStyle } from "react-native-reanimated";
@@ -18,6 +19,7 @@ import { AnimationProps } from "../../common/animation/animation.types";
 import { onUnmountDuration } from "../../common/animation/constants";
 
 const typingInterval = 200;
+const waitInterval = 500;
 const cursorInterval = 1000;
 const cursorMinOpacity = 0.2;
 
@@ -42,6 +44,7 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
 
   const animatedOpacity = useSharedValue(cursorMinOpacity);
 
+  // No state change, no change style: Needa fix this
   const animatedCursorStyle = useAnimatedStyle(
     () => ({
       opacity: animatedOpacity.value
@@ -49,79 +52,84 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
     [animatedOpacity]
   );
 
-  const [ onMount, setOnMount ] = useState(true);
+  const onLayerChangeAnimation = useRef<NodeJS.Timeout | null>(null);
+  const cursorAnimation = useRef<NodeJS.Timer | null>(null);
+  const contentAnimation = useRef<NodeJS.Timeout | null>(null);
+  const contentDelayAnimation = useRef<NodeJS.Timeout | null>(null);
+
   const [ deleting, setDeleting ] = useState(false);
   const [ iterCount, setIterCount ] = useState(0);
   const [ content, setContent ] = useState("");
 
   const cursorStyle: StyleProp<TextStyle> = {
-    color: "lightgrey",
+    color: "dimgrey",
   };
 
-  const cursorAnimationCycle = () => {
-    animatedOpacity.value = withTiming(1, cursorAnimationConfig);
-    const delayedAnimation = setTimeout(() => {
-      animatedOpacity.value = withTiming(cursorMinOpacity, cursorAnimationConfig);
-    }, cursorInterval / 2);
-    if (!onMount) {
-      clearTimeout(delayedAnimation);
-    }
+  const cleanUpAnimationIds = () => {
+    if (cursorAnimation.current) clearInterval(cursorAnimation.current);
+    if (onLayerChangeAnimation.current) clearTimeout(onLayerChangeAnimation.current);
+    if (contentAnimation.current) clearTimeout(contentAnimation.current);
+    if (contentDelayAnimation.current) clearTimeout(contentDelayAnimation.current);
   };
 
   useEffect(
     () => {
-      const animatedContentInterval = setInterval(
-        () => {
-          if (children) {
-            if (iterCount === children.length) {
-              if (!infinite) {
-                clearInterval(animatedContentInterval);
-                return;
-              }
-              setDeleting(true);
-              return;
-            }
-            if (iterCount === 0 && deleting) {
-              setDeleting(false);
-              return;
-            }
-            setContent(children?.charAt(iterCount));
-            setIterCount(deleting ? iterCount - 1 : iterCount + 1);
-          }
-        },
-        typingInterval
+      animatedOpacity.value = withRepeat(
+        withSequence(
+          withTiming(1, cursorAnimationConfig), 
+          withTiming(cursorMinOpacity, cursorAnimationConfig)
+        ),
+        -1
       );
-
-      cursorAnimationCycle();
-      const animatedCursorInterval = setInterval(
-        cursorAnimationCycle,
-        cursorInterval
-      );
-
-      let onLayerChangeAnimation: NodeJS.Timeout | null = null;
-      if (onLayerChange) {
-        setOnMount(false);
-        clearInterval(animatedContentInterval);
-        clearInterval(animatedCursorInterval);
-        animatedOpacity.value = 0;
-        onLayerChangeAnimation = setTimeout(() => {
-          setContent("");
-        }, onUnmountDuration / 2);
-      }
-
       return () => {
-        if (!onLayerChange) {
-          setOnMount(false);
-          clearInterval(animatedContentInterval);
-          clearInterval(animatedCursorInterval);
-        }
-        if (onLayerChangeAnimation) {
-          clearTimeout(onLayerChangeAnimation);
-        }
+        cleanUpAnimationIds();
         cancelAnimation(animatedOpacity);
       };
     },
-    [infinite]
+    []
+  );
+    
+  useEffect(
+    () => {
+      if (onLayerChange) {
+        cleanUpAnimationIds();
+        animatedOpacity.value = 0;
+        onLayerChangeAnimation.current = setTimeout(() => {
+          setContent("");
+        }, onUnmountDuration / 2);
+      }
+    },
+    [onLayerChange]
+  );
+
+  useEffect(
+    () => {
+      contentAnimation.current = setTimeout(
+        () => {
+          if (children) {
+            const updateContent = () => {
+              if (contentAnimation.current) clearTimeout(contentAnimation.current);
+              setContent(children?.substring(0, iterCount));
+              setIterCount(deleting ? iterCount - 1 : iterCount + 1);
+            };
+            if (iterCount === children.length + 1) {
+              if (!infinite) {
+                if (contentAnimation.current) clearTimeout(contentAnimation.current);
+                contentAnimation.current = null;
+              } else {
+                setDeleting(true);
+                contentDelayAnimation.current = setTimeout(updateContent, waitInterval);
+              }
+            } else if (iterCount === -1 && deleting) {
+              setDeleting(false);
+              contentDelayAnimation.current = setTimeout(updateContent, waitInterval);
+            } else {
+              updateContent();
+            }
+          }
+        }, typingInterval);
+    },
+    [children, iterCount, infinite, deleting]
   );
 
   const rootStyle: StyleProp<ViewStyle> = {
@@ -129,7 +137,7 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
   };
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.wrapper, 
         styles.flexRow,
@@ -137,15 +145,15 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
       ]}
       onLayout={onLayout}
     >
-      <Text>
-        <Text style={style}>{content}</Text>
+      <Animated.Text>
+        <Animated.Text style={style}>{content}</Animated.Text>
         <Animated.Text 
-          style={[styles.cursor, style, cursorStyle, animatedCursorStyle]}
+          style={[styles.cursor, style, cursorStyle, { opacity: animatedOpacity.value }]}
         >
             ▌
         </Animated.Text>
-      </Text>
-    </View>
+      </Animated.Text>
+    </Animated.View>
   );
 };
 

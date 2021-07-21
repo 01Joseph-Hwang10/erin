@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { StyleProp, ViewStyle } from "react-native";
@@ -15,7 +15,9 @@ const Blink: React.FC<BlinkProps> = ({
   onLayerChange,
 }) => {
 
-  const [ onMount, setOnMount ] = useState(true);
+  const firstDelayedAnimation = useRef<NodeJS.Timeout | null>(null);
+  const secondDelayedAnimation = useRef<NodeJS.Timeout | null>(null);
+  const animationHandler = useRef<NodeJS.Timer | null>(null);
   const [ visible, setVisible ] = useState(false);
 
   const animatedStyle: StyleProp<ViewStyle> = {
@@ -23,38 +25,43 @@ const Blink: React.FC<BlinkProps> = ({
   };
 
   const animationCycle = () => {
-    const firstDelayedAnimation = setTimeout(() => {
+    firstDelayedAnimation.current = setTimeout(() => {  
       setVisible(true);
     }, invisibleDuration);
-    const secondDelayedAnimation = setTimeout(() => {
+    secondDelayedAnimation.current = setTimeout(() => {
       setVisible(false);
     }, visibleDuration + invisibleDuration);
-    if (!onMount) {
-      clearTimeout(firstDelayedAnimation);
-      clearTimeout(secondDelayedAnimation);
-    }
   };
 
+  const cleanUpAnimationIds = () => {
+    if (animationHandler.current) clearInterval(animationHandler.current);
+    if (firstDelayedAnimation.current) clearTimeout(firstDelayedAnimation.current);
+    if (secondDelayedAnimation.current) clearTimeout(secondDelayedAnimation.current);
+  };
+  
   useEffect(
     () => {
       animationCycle();
-      const animationInterval = setInterval(
+      animationHandler.current = setInterval(
         animationCycle,
         visibleDuration + invisibleDuration
       );
-      if (onLayerChange) {
-        setOnMount(false);
-        clearInterval(animationInterval);
-        setVisible(false);
-      }
-      return () => {
-        if (!onLayerChange) {
-          setOnMount(false);
-          clearInterval(animationInterval);
-        }
-      };
+      return cleanUpAnimationIds;
     },
     []
+  );
+
+  useEffect(
+    () => {
+      if (onLayerChange) {
+        setVisible(false);
+        if (animationHandler.current) {
+          clearInterval(animationHandler.current);
+          animationHandler.current = null;
+        }
+      }
+    },
+    [onLayerChange]
   );
 
   return (

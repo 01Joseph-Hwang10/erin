@@ -39,41 +39,6 @@ const BackgroundShape: React.FC<BackgroundShapeProps> = ({
     return <View style={[style, styles.roundedRectangle, backgroundStyle]}>
       {children}
     </View>;
-  // case "circle":
-  //   return <Circle 
-  //     style={[style]}
-  //     size={size}
-  //     backgroundColor={backgroundColor}
-  //   >
-  //     {children}
-  //   </Circle>;
-  // case "heart":
-  //   return <Heart
-  //     style={[style]}
-  //     size={size}
-  //     backgroundColor={backgroundColor}
-  //     fill={true}
-  //   >
-  //     {children}
-  //   </Heart>;
-  // case "star":
-  //   return <Star
-  //     style={style}
-  //     size={size}
-  //     backgroundColor={backgroundColor}
-  //     fill={true}
-  //   >
-  //     {children}
-  //   </Star>;
-  // case "triangle":
-  //   return <Triangle
-  //     style={style}
-  //     size={size}
-  //     backgroundColor={backgroundColor}
-  //     fill={true}
-  //   >
-  //     {children}
-  //   </Triangle>;
   default:
     return <>
       {children}

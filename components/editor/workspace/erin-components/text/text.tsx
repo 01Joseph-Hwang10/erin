@@ -597,11 +597,15 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                                           color: this.state.fontColor,
                                           textAlign: this.state.textAlign,
                                           fontSize: this.state.fontSize,
-                                        }
+                                        },
+                                        styles.textDefault
                                       ]}
                                       onLayout={this.onTextLayout}
                                       textAnimationType={this.state.textAnimationType}
+                                      textStyleType={this.state.backgroundShape}
                                       infinite={this.state.animationInfinite}
+                                      textColor={this.state.fontColor}
+                                      backgroundColor={this.state.backgroundColor}
                                     >
                                       {this.state.text}
                                     </AnimatedText>;
@@ -686,4 +690,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
+  textDefault: {
+    padding: 5
+  }
 });

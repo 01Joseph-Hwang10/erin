@@ -9,14 +9,12 @@ export const shapeToIndex = (shape: Erin.Common.NonableTextStyle): number => {
     return 1;
   case "roundedRectangle":
     return 2;
-  // case "circle":
-  //   return 3;
-  // case "triangle":
-  //   return 4;
-  // case "heart":
-  //   return 5;
-  // case "star":
-  //   return 6;
+  case "shadow":
+    return 3;
+  case "neon":
+    return 4;
+  case "emphasize":
+    return 5;
   default:
     return -1;
   }

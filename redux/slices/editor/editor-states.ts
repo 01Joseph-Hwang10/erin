@@ -87,17 +87,17 @@ const toggleBackgroundShapeStateReducer: CaseReducer<
     state.backgroundShape = "roundedRectangle";
     break;
   case "roundedRectangle":
+    state.backgroundShape = "shadow";
+    break;
+  case "shadow":
+    state.backgroundShape = "neon";
+    break;
+  case "neon":
+    state.backgroundShape = "emphasize";
+    break;
+  case "emphasize":
     state.backgroundShape = "none";
     break;
-  // case "circle":
-  //   state.backgroundShape = "heart";
-  //   break;
-  // case "heart":
-  //   state.backgroundShape = "star";
-  //   break;
-  // case "star":
-  //   state.backgroundShape = "none";
-  //   break;
   case "none":
     state.backgroundShape = "rectangle";
     break;

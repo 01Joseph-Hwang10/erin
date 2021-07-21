@@ -1,4 +1,4 @@
-import { ErinDeprecated } from 'erin/deprecated'
+import { ErinDeprecated } from "erin/deprecated";
 
 declare module "erin"
 
@@ -61,7 +61,7 @@ export namespace Erin {
 
         export type TextAlign = "center" | "left" | "right" | "justify"
 
-        export type TextAnimationTypes = NonableGeneralAnimationTypes | "typing" | "neon"
+        export type TextAnimationTypes = NonableGeneralAnimationTypes | "typing"
 
         export type TextStyle = 
             | "rectangle" 
@@ -70,6 +70,9 @@ export namespace Erin {
             // | "star" 
             // | "heart" 
             | "roundedRectangle"
+            | "shadow"
+            | "neon"
+            | "emphasize"
 
         export type NonableTextStyle = TextStyle | "none"
 

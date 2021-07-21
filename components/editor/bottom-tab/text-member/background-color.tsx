@@ -7,6 +7,7 @@ import PressButton from "../../base/press-button";
 import { Dispatch } from "redux";
 import { setBottomFloatCurrent, SetBottomFloatCurrentInput } from "@slices/editor/editor-generic";
 import { setColorConsumerState, SetColorConsumerStateInput, setPickedColorState, SetPickedColorStateInput } from "@slices/editor/editor-states";
+import Placeholder from "@components/editor/base/placeholder";
 
 type FontColorReduxProps = ConnectedProps<typeof connector>
 
@@ -18,7 +19,8 @@ const FontColor: React.FC<FontColorProps> = ({
   setBottomFloatCurrent: SetBottomFloatCurrent,
   setColorConsumer: SetColorConsumer,
   setPickedColorState: SetPickedColorState,
-  colorConsumer
+  colorConsumer,
+  backgroundShape
 }) => {
 
   const renderIcon = () => (
@@ -40,18 +42,23 @@ const FontColor: React.FC<FontColorProps> = ({
     }
   };
   
-  return <PressButton 
-    icon={renderIcon}
-    onPress={onPress}
-    bottomFloatHelpMessage={"텍스트의 보조 색상을 설정합니다"}
-  />;
+  if (["rectangle", "roundedRectangle", "neon", "emphasize"].includes(backgroundShape)) {
+    return <PressButton 
+      icon={renderIcon}
+      onPress={onPress}
+      bottomFloatHelpMessage={"텍스트의 보조 색상을 설정합니다"}
+    />;
+  }
+
+  return <Placeholder />;
 };
 
 const mapStateToProps = (state: RootState) => {
   return {
     iconSize: state.editor.generic.settings.iconSize,
     bottomFloatCurrent: state.editor.generic.bottomFloatCurrent,
-    colorConsumer: state.editor.states.colorConsumer
+    colorConsumer: state.editor.states.colorConsumer,
+    backgroundShape: state.editor.states.backgroundShape,
   };
 };
 

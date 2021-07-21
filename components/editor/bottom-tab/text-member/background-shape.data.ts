@@ -5,5 +5,8 @@ import { Erin } from "erin";
 export const textBackgroundShapes: Erin.Common.NonableTextStyle[] = [
   "none",
   "rectangle",
-  "roundedRectangle"
+  "roundedRectangle",
+  "shadow",
+  "neon",
+  "emphasize",
 ];
