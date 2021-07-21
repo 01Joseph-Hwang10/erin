@@ -180,6 +180,9 @@ const toggleTextAnimationStateReducer: CaseReducer<
     state.textAnimationType = "moving";
     break;
   case "moving":
+    state.textAnimationType = "bounce";
+    break;
+  case "bounce":
     state.textAnimationType = "none";
     break;
   default:
@@ -187,14 +190,14 @@ const toggleTextAnimationStateReducer: CaseReducer<
   }
 };
 
-export type SetAnimationInfiniteInput = boolean
+export type SetAnimationInfiniteStateInput = boolean
 
-const setAnimationInfiniteReducer: CaseReducer<
+const setAnimationInfiniteStateReducer: CaseReducer<
   EditorStatesState,
-  PayloadAction<SetAnimationInfiniteInput>
+  PayloadAction<SetAnimationInfiniteStateInput>
 > = (state, { payload: animationInfinite }) => {
-  state.animationInfinite = animationInfinite
-}
+  state.animationInfinite = animationInfinite;
+};
 
 export const {
   reducer,
@@ -211,7 +214,7 @@ export const {
     setFontSizeState,
     setTextAnimationTypeState,
     toggleTextAnimationState,
-    setAnimationInfinite,
+    setAnimationInfiniteState,
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -229,6 +232,6 @@ export const {
     setFontSizeState: setFontSizeStateReducer,
     setTextAnimationTypeState: setTextAnimationTypeStateReducer,
     toggleTextAnimationState: toggleTextAnimationStateReducer,
-    setAnimationInfinite: setAnimationInfiniteReducer,
+    setAnimationInfiniteState: setAnimationInfiniteStateReducer,
   }
 });

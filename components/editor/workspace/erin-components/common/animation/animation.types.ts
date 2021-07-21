@@ -1,3 +1,4 @@
 export type AnimationProps = {
-    infinite?: boolean
+    infinite?: boolean,
+    onLayerChange?: boolean,
 }

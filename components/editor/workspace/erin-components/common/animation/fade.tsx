@@ -5,7 +5,7 @@ import Animated, { cancelAnimation, useAnimatedStyle, withTiming } from "react-n
 import { Easing } from "react-native-reanimated";
 import { useSharedValue } from "react-native-reanimated";
 import { AnimationProps } from "./animation.types";
-import { invisibleDuration, visibleDuration } from "./constants";
+import { invisibleDuration, onUnmountDuration, visibleDuration } from "./constants";
 
 interface FadeProps extends AnimationProps {
     children?: React.ReactNode
@@ -13,26 +13,28 @@ interface FadeProps extends AnimationProps {
 
 const fadeDuration = 300;
 
-const animationConfig: Animated.WithTimingConfig = {
-  duration: fadeDuration,
-  easing: Easing.linear
-};
 
 const Fade: React.FC<FadeProps> = ({
   children,
-  infinite
+  infinite,
+  onLayerChange,
 }) => {
   
   const [ onMount, setOnMount ] = useState(true);
-
+  
   const opacity = useSharedValue(0);
-
+  
   const animatedStyle = useAnimatedStyle(
     () => ({
       opacity: opacity.value
     }),
     [opacity]
   );
+
+  const animationConfig: Animated.WithTimingConfig = {
+    duration: onLayerChange ? onUnmountDuration : fadeDuration,
+    easing: Easing.linear
+  };
 
   const animationCycle = () => {
     opacity.value = withTiming(1, animationConfig);
@@ -46,23 +48,33 @@ const Fade: React.FC<FadeProps> = ({
 
   useEffect(
     () => {
-      const animatedInterval = setInterval(
-        animationCycle,
-        fadeDuration * 2 + visibleDuration + invisibleDuration
-      );
+      // If null, there is no need to setOnMount to false.
+      let animatedInterval: NodeJS.Timer | null = null;
       if (infinite) {
+        animatedInterval = setInterval(
+          animationCycle,
+          fadeDuration * 2 + visibleDuration + invisibleDuration,
+        );
         animationCycle();
       } else {
-        clearInterval(animatedInterval);
         opacity.value = withTiming(1, animationConfig);
       }
-      return () => {
-        setOnMount(false);
-        clearInterval(animatedInterval);
-        cancelAnimation(opacity);
+      if (onLayerChange) {
+        if (animatedInterval) {
+          setOnMount(false);
+          clearInterval(animatedInterval);
+        }
+        opacity.value = withTiming(0, animationConfig);
       }
+      return () => {
+        if (!onLayerChange && animatedInterval) {
+          setOnMount(false);
+          clearInterval(animatedInterval);
+        }
+        cancelAnimation(opacity);
+      };
     },
-    []
+    [infinite]
   );
 
   return (

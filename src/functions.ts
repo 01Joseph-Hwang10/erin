@@ -10,7 +10,7 @@ export const executeWithTimeout = (func: (...args: unknown[]) => unknown, timeou
 };
 
 export const camelCaseToNormal = (inputString: string | null): string | null => {
-  if ( inputString === null ) {
+  if ( inputString === null || inputString === undefined ) {
     return null;
   }
   if (/^[a-zA-Z0-9]+$/.test(inputString)) {

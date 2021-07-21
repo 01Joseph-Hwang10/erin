@@ -15,9 +15,11 @@ import { cancelAnimation } from "react-native-reanimated";
 import { Easing } from "react-native-reanimated";
 import { useAnimatedStyle } from "react-native-reanimated";
 import { AnimationProps } from "../../common/animation/animation.types";
+import { onUnmountDuration } from "../../common/animation/constants";
 
 const typingInterval = 200;
 const cursorInterval = 1000;
+const cursorMinOpacity = 0.2;
 
 interface TypeWriterProps extends AnimationProps {
     style?: StyleProp<ViewStyle> & StyleProp<TextStyle>,
@@ -28,25 +30,26 @@ interface TypeWriterProps extends AnimationProps {
 const cursorAnimationConfig: Animated.WithTimingConfig = {
   duration: cursorInterval / 2,
   easing: Easing.linear
-}
+};
 
 const TypeWriter: React.FC<TypeWriterProps> = ({
   children,
   onLayout,
   style,
-  infinite
+  infinite,
+  onLayerChange,
 }) => {
 
-  const animatedOpacity = useSharedValue(0.2)
+  const animatedOpacity = useSharedValue(cursorMinOpacity);
 
   const animatedCursorStyle = useAnimatedStyle(
     () => ({
       opacity: animatedOpacity.value
     }),
     [animatedOpacity]
-  )
+  );
 
-  const [ onMount, setOnMount ] = useState(true)
+  const [ onMount, setOnMount ] = useState(true);
   const [ deleting, setDeleting ] = useState(false);
   const [ iterCount, setIterCount ] = useState(0);
   const [ content, setContent ] = useState("");
@@ -56,15 +59,14 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
   };
 
   const cursorAnimationCycle = () => {
-    animatedOpacity.value = withTiming(1, cursorAnimationConfig)
+    animatedOpacity.value = withTiming(1, cursorAnimationConfig);
     const delayedAnimation = setTimeout(() => {
-      animatedOpacity.value = withTiming(0.2, cursorAnimationConfig)
+      animatedOpacity.value = withTiming(cursorMinOpacity, cursorAnimationConfig);
     }, cursorInterval / 2);
     if (!onMount) {
-      clearTimeout(delayedAnimation)
+      clearTimeout(delayedAnimation);
     }
-
-  }
+  };
 
   useEffect(
     () => {
@@ -72,43 +74,67 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
         () => {
           if (children) {
             if (iterCount === children.length) {
-              if (infinite) {
-                 clearInterval(animatedContentInterval);
-                 return;
+              if (!infinite) {
+                clearInterval(animatedContentInterval);
+                return;
               }
               setDeleting(true);
               return;
             }
-            if (iterCount === 0) {
+            if (iterCount === 0 && deleting) {
               setDeleting(false);
               return;
             }
-            setContent(children?.charAt(iterCount))
-            setIterCount(deleting ? iterCount - 1 : iterCount + 1)
+            setContent(children?.charAt(iterCount));
+            setIterCount(deleting ? iterCount - 1 : iterCount + 1);
           }
         },
         typingInterval
-      )
+      );
 
-      cursorAnimationCycle()
+      cursorAnimationCycle();
       const animatedCursorInterval = setInterval(
         cursorAnimationCycle,
         cursorInterval
-      )
+      );
+
+      let onLayerChangeAnimation: NodeJS.Timeout | null = null;
+      if (onLayerChange) {
+        setOnMount(false);
+        clearInterval(animatedContentInterval);
+        clearInterval(animatedCursorInterval);
+        animatedOpacity.value = 0;
+        onLayerChangeAnimation = setTimeout(() => {
+          setContent("");
+        }, onUnmountDuration / 2);
+      }
 
       return () => {
-        setOnMount(false)
-        clearInterval(animatedContentInterval)
-        clearInterval(animatedCursorInterval)
-        cancelAnimation(animatedOpacity)
-      }
+        if (!onLayerChange) {
+          setOnMount(false);
+          clearInterval(animatedContentInterval);
+          clearInterval(animatedCursorInterval);
+        }
+        if (onLayerChangeAnimation) {
+          clearTimeout(onLayerChangeAnimation);
+        }
+        cancelAnimation(animatedOpacity);
+      };
     },
-    []
-  )
+    [infinite]
+  );
+
+  const rootStyle: StyleProp<ViewStyle> = {
+    backgroundColor: onLayerChange ? "lightskyblue" : "transparent"
+  };
 
   return (
     <View
-      style={[styles.wrapper, styles.flexRow]}
+      style={[
+        styles.wrapper, 
+        styles.flexRow,
+        rootStyle
+      ]}
       onLayout={onLayout}
     >
       <Text>

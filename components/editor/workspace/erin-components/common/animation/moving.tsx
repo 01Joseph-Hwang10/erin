@@ -4,6 +4,7 @@ import { cancelAnimation } from "react-native-reanimated";
 import { Easing } from "react-native-reanimated";
 import { useAnimatedStyle } from "react-native-reanimated";
 import { AnimationProps } from "./animation.types";
+import { onUnmountDuration } from "./constants";
 
 type Movement = "ease" | "bounce"
 
@@ -15,19 +16,20 @@ interface MovingProps extends AnimationProps {
 const stayDuration = 1500;
 const defaultDuration = 1000;
 const movingDuration = 300;
-const movingDistance = 80;
+const movingDistance = 100;
 
 
 const Moving: React.FC<MovingProps> = ({
   children,
   movement,
   infinite,
+  onLayerChange,
 }) => {
 
-  const [ onMount, setOnMount ] = useState(true)
+  const [ onMount, setOnMount ] = useState(true);
   
   const animationConfig: Animated.WithTimingConfig = {
-    duration: movingDuration,
+    duration: onLayerChange ? onUnmountDuration : movingDuration,
     easing: movement && movement === "bounce" ? Easing.bounce : Easing.ease
   };
 
@@ -55,27 +57,40 @@ const Moving: React.FC<MovingProps> = ({
   };
 
   useEffect(() => {
-    const animatedInterval = setInterval(
-      animationCycle,
-      movingDuration * 2 + stayDuration + defaultDuration
-    );
+    let animatedInterval: NodeJS.Timer | null = null;
     if (infinite) {
+      animatedInterval = setInterval(
+        animationCycle,
+        movingDuration * 2 + stayDuration + defaultDuration
+      );
       animationCycle();
     } else {
-      clearInterval(animatedInterval);
+      if (animatedInterval) {
+        clearInterval(animatedInterval);
+      }
       animatedDistance.value = withTiming(0, animationConfig);
       animatedOpacity.value = withTiming(1, {
         duration: movingDuration * ( 2 / 3 ),
         easing: Easing.linear
-      })
+      });
     }
-      return () => {
-      setOnMount(false);
+    if (onLayerChange) {
+      if (animatedInterval) {
+        setOnMount(false);
+        clearInterval(animatedInterval);
+      }
+      animatedDistance.value = withTiming(movingDistance, animationConfig);
+      animatedOpacity.value = withTiming(0, animationConfig);
+    }
+    return () => {
+      if (!onLayerChange && animatedInterval) {
+        setOnMount(false);
+        clearInterval(animatedInterval);
+      }
       cancelAnimation(animatedOpacity);
-      clearInterval(animatedInterval);
       cancelAnimation(animatedDistance);
     };
-  }, []);
+  }, [infinite]);
 
   return (
     <Animated.View

@@ -20,8 +20,8 @@ import {
 } from "@slices/editor/editor-handle";
 import { 
   initialFontSize,
-  setAnimationInfinite,
-  SetAnimationInfiniteInput,
+  setAnimationInfiniteState,
+  SetAnimationInfiniteStateInput,
   setBackgroundShapeState, 
   SetBackgroundShapeStateInput, 
   setColorConsumerState, 
@@ -199,11 +199,11 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       this.setState({ textAnimationType });
     };
     this.setAnimationInfinite = ( animationInfinite ) => {
-      this.setState({ animationInfinite })
-    }
+      this.setState({ animationInfinite });
+    };
     this.setAnimationInfinite = ( animationInfinite ) => {
-      this.setState({ animationInfinite })
-    }
+      this.setState({ animationInfinite });
+    };
 
     // Pan
     const {
@@ -496,7 +496,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       }
 
       if ( prevProps.animationInfinite !== this.props.animationInfinite ) {
-        this.setAnimationInfinite(this.props.animationInfinite)
+        this.setAnimationInfinite(this.props.animationInfinite);
       }
 
       if ( prevProps.textContent !== this.props.textContent ) {
@@ -580,6 +580,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                             // @ts-ignore
                             // Every types out of generic animation type component will eventually go to default
                             animationType={this.state.textAnimationType}
+                            infinite={this.state.animationInfinite}
                           >
                             <BackgroundShape
                               shape={this.state.backgroundShape}
@@ -603,12 +604,12 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
                                       infinite={this.state.animationInfinite}
                                     >
                                       {this.state.text}
-                                    </AnimatedText>
+                                    </AnimatedText>;
                                   }
                                 }
                               </TextAnimationContext.Consumer>
                             </BackgroundShape>
-                          </AnimatedGeneric>
+                          </AnimatedGeneric>;
                         }
                       }
                     </GenericAnimationContext.Consumer>
@@ -665,7 +666,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setBottomTabCurrent: (payload: SetBottomTabCurrentInput) => dispatch(setBottomTabCurrent(payload)),
     setFontSize: (payload: SetFontSizeStateInput) => dispatch(setFontSizeState(payload)),
     setTextAnimationType: (payload: SetTextAnimationTypeStateInput) => dispatch(setTextAnimationTypeState(payload)),
-    setAnimationInfinite: (payload: SetAnimationInfiniteInput) => dispatch(setAnimationInfinite(payload))
+    setAnimationInfinite: (payload: SetAnimationInfiniteStateInput) => dispatch(setAnimationInfiniteState(payload))
   };
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import Animated, { 
   cancelAnimation,
   Easing, 
@@ -69,7 +69,7 @@ const CreationPoint: React.FC<CreationPointProps> = ({
         styles.root,
         animatedScale,
         {
-          top: posY - HALF_POINT_SIZE,
+          top: Platform.OS === "ios" ? posY - POINT_SIZE : posY - HALF_POINT_SIZE,
           left: posX - HALF_POINT_SIZE,
         },
       ]}

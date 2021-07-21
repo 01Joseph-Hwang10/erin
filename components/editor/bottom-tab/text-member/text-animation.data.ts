@@ -6,5 +6,6 @@ export const textAnimationTypes: Erin.Common.TextAnimationTypes[] = [
   "blink",
   "typing",
   "fade",
-  "moving"
+  "moving",
+  "bounce",
 ];

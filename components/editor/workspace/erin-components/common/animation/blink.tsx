@@ -11,10 +11,11 @@ interface BlinkProps extends AnimationProps {
 }
 
 const Blink: React.FC<BlinkProps> = ({
-  children
+  children,
+  onLayerChange,
 }) => {
 
-  const [ onMount, setOnMount ] = useState(true)
+  const [ onMount, setOnMount ] = useState(true);
   const [ visible, setVisible ] = useState(false);
 
   const animatedStyle: StyleProp<ViewStyle> = {
@@ -41,10 +42,17 @@ const Blink: React.FC<BlinkProps> = ({
         animationCycle,
         visibleDuration + invisibleDuration
       );
-      return () => {
+      if (onLayerChange) {
         setOnMount(false);
         clearInterval(animationInterval);
+        setVisible(false);
       }
+      return () => {
+        if (!onLayerChange) {
+          setOnMount(false);
+          clearInterval(animationInterval);
+        }
+      };
     },
     []
   );
