@@ -5,11 +5,11 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 
-type LinkToLayerReduxProps = ConnectedProps<typeof connector>
+type LinkComponentToLayerReduxProps = ConnectedProps<typeof connector>
 
-interface LinkToLayerProps extends LinkToLayerReduxProps {}
+interface LinkComponentToLayerProps extends LinkComponentToLayerReduxProps {}
 
-const LinkToLayer: React.FC<LinkToLayerProps> = ({
+const LinkComponentToLayer: React.FC<LinkComponentToLayerProps> = ({
   iconSize
 }) => {
 
@@ -36,4 +36,4 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, { });
 
-export default connector(LinkToLayer);
+export default connector(LinkComponentToLayer);

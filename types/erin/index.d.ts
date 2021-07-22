@@ -47,7 +47,7 @@ export namespace Erin {
         | "text" 
         // | "shape" 
         | "sticker" 
-        // | "image"
+        | "image"
 
         export type NonableComponentTypes = ComponentTypes | "none"
 
@@ -75,6 +75,10 @@ export namespace Erin {
             | "emphasize"
 
         export type NonableTextStyle = TextStyle | "none"
+
+        /* ==========STICKER COMPONENT========== */
+
+        export type StickerAnimationTypes = Extract<NonableGeneralAnimationTypes, "blink" | "none" | "fade">
 
         /* ==========LETTER CONFIG========== */
 
@@ -107,7 +111,6 @@ export namespace Erin {
              *             this property will highly likely not be used
              */
             animationId?: number, // If no animation, -1,
-            zIndex: number
         }
 
         type Component = ComponentInterface | null
@@ -151,6 +154,8 @@ export namespace Erin {
             | "fontStyle"
             | "editText"
             | "fontSize"
+
+        export type BottomDrawerMenuType = "none" | "stickerList"
 
         /* ==========LETTER CONFIG========== */
 

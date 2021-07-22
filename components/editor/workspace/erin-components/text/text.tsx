@@ -95,7 +95,8 @@ interface ErinTextState {
     y: number
   },
   textAnimationType: Erin.Common.TextAnimationTypes,
-  animationInfinite: boolean
+  animationInfinite: boolean,
+  zIndex: number,
 }
 
 // const defaultFont: FontStyles = "Gaegu-Bold";
@@ -118,7 +119,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       y: 0
     },
     textAnimationType: "none",
-    animationInfinite: true
+    animationInfinite: true,
+    zIndex: 1
   }
 
   private setFontColor: (fontColor: string) => void;
@@ -134,6 +136,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setTextShift: (textShift: { x: number, y: number }) => void;
   private setAnimationType: (textAnimationType: Erin.Common.TextAnimationTypes) => void;
   private setAnimationInfinite: (animationInfinite: boolean) => void;
+  private setZIndex: (zIndex: number) => void;
 
   private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
@@ -162,48 +165,21 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   constructor(props: ErinTextProps) {
     super(props);
     // state
-    this.setFontColor = ( fontColor ) => {
-      this.setState({ fontColor });
-    };
-    this.setFontStyle = ( fontStyle ) => {
-      this.setState({ fontStyle });
-    };
-    this.setText = ( text ) => {
-      this.setState({ text });
-    };
-    this.setBackgroundColor = ( backgroundColor ) => {
-      this.setState({ backgroundColor });
-    };
-    this.setFocused = ( focused ) => {
-      this.setState({ focused });
-    };
-    this.setBackgroundShape = ( backgroundShape ) => {
-      this.setState({ backgroundShape });
-    };
-    this.setSize = ( size ) => {
-      this.setState({ size });
-    };
-    this.setTextAlign = ( textAlign ) => {
-      this.setState({ textAlign });
-    };
-    this.setFirstMount = ( firstMount ) => {
-      this.setState({ firstMount });
-    };
-    this.setFontSize = ( fontSize ) => {
-      this.setState({ fontSize });
-    };
-    this.setTextShift = ( textShift ) => {
-      this.setState({ textShift });
-    };
-    this.setAnimationType = ( textAnimationType ) => {
-      this.setState({ textAnimationType });
-    };
-    this.setAnimationInfinite = ( animationInfinite ) => {
-      this.setState({ animationInfinite });
-    };
-    this.setAnimationInfinite = ( animationInfinite ) => {
-      this.setState({ animationInfinite });
-    };
+    this.setFontColor = ( fontColor ) => this.setState({ fontColor });
+    this.setFontStyle = ( fontStyle ) => this.setState({ fontStyle });
+    this.setText = ( text ) => this.setState({ text });
+    this.setBackgroundColor = ( backgroundColor ) => this.setState({ backgroundColor });
+    this.setFocused = ( focused ) => this.setState({ focused });
+    this.setBackgroundShape = ( backgroundShape ) => this.setState({ backgroundShape });
+    this.setSize = ( size ) => this.setState({ size });
+    this.setTextAlign = ( textAlign ) => this.setState({ textAlign });
+    this.setFirstMount = ( firstMount ) => this.setState({ firstMount });
+    this.setFontSize = ( fontSize ) => this.setState({ fontSize });
+    this.setTextShift = ( textShift ) => this.setState({ textShift });
+    this.setAnimationType = ( textAnimationType ) => this.setState({ textAnimationType });
+    this.setAnimationInfinite = ( animationInfinite ) => this.setState({ animationInfinite });
+    this.setAnimationInfinite = ( animationInfinite ) => this.setState({ animationInfinite });
+    this.setZIndex = ( zIndex ) => this.setState({ zIndex });
 
     // Pan
     const {
@@ -436,6 +412,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.props.setTextAnimationType(this.state.textAnimationType);
     this.props.setFontStyle(this.state.fontStyle);
     this.props.setAnimationInfinite(this.state.animationInfinite);
+    this.setZIndex(this.props.autoZIndex);
   }
   
   componentDidUpdate = (prevProps: ErinTextProps) => {
@@ -649,6 +626,7 @@ const mapStateToProps = (state: RootState) => {
     fontSize: state.editor.states.fontSize,
     textAnimationType: state.editor.states.textAnimationType,
     animationInfinite: state.editor.states.animationInfinite,
+    autoZIndex: state.editor.layer.layer[state.editor.layer.currentLayer].autoZIndex,
   };
 };
 

@@ -19,6 +19,8 @@ interface EditorStatesState {
     fontSize: number,
     textAnimationType: Erin.Common.TextAnimationTypes,
     animationInfinite: boolean,
+    stickerId: string | null,
+    stickerAnimationType: Erin.Common.StickerAnimationTypes
 }
 
 const initialState: EditorStatesState = {
@@ -32,6 +34,8 @@ const initialState: EditorStatesState = {
   fontSize: initialFontSize,
   textAnimationType: "none",
   animationInfinite: true,
+  stickerId: null,
+  stickerAnimationType: "none"
 };
 
 export type SetFontStyleStateInput = FontStyles | null
@@ -190,6 +194,33 @@ const toggleTextAnimationStateReducer: CaseReducer<
   }
 };
 
+export type SetStickerAnimationTypeStateInput = Erin.Common.StickerAnimationTypes
+
+const setStickerAnimationTypeStateReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetStickerAnimationTypeStateInput>
+> = (state, { payload: textAnimationType }) => {
+  state.textAnimationType = textAnimationType;
+};
+
+const toggleStickerAnimationStateReducer: CaseReducer<
+  EditorStatesState
+> = (state) => {
+  switch (state.textAnimationType) {
+  case "none":
+    state.textAnimationType = "blink";
+    break;
+  case "blink":
+    state.textAnimationType = "fade";
+    break;
+  case "fade":
+    state.textAnimationType = "none";
+    break;
+  default:
+    break;
+  }
+};
+
 export type SetAnimationInfiniteStateInput = boolean
 
 const setAnimationInfiniteStateReducer: CaseReducer<
@@ -197,6 +228,15 @@ const setAnimationInfiniteStateReducer: CaseReducer<
   PayloadAction<SetAnimationInfiniteStateInput>
 > = (state, { payload: animationInfinite }) => {
   state.animationInfinite = animationInfinite;
+};
+
+export type SetStickerIdStateInput = string | null
+
+const setStickerIdStateReducer: CaseReducer<
+  EditorStatesState,
+  PayloadAction<SetStickerIdStateInput>
+> = (state, { payload: stickerId }) => {
+  state.stickerId = stickerId;
 };
 
 export const {
@@ -215,6 +255,9 @@ export const {
     setTextAnimationTypeState,
     toggleTextAnimationState,
     setAnimationInfiniteState,
+    setStickerIdState,
+    setStickerAnimationTypeState,
+    toggleStickerAnimationState,
   }
 } = createSlice({
   name: "editorStatesSlice",
@@ -233,5 +276,8 @@ export const {
     setTextAnimationTypeState: setTextAnimationTypeStateReducer,
     toggleTextAnimationState: toggleTextAnimationStateReducer,
     setAnimationInfiniteState: setAnimationInfiniteStateReducer,
+    setStickerIdState: setStickerIdStateReducer,
+    setStickerAnimationTypeState: setStickerAnimationTypeStateReducer,
+    toggleStickerAnimationState: toggleStickerAnimationStateReducer,
   }
 });

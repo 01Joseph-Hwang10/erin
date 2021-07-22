@@ -32,6 +32,7 @@ import TextAlign from "./bottom-tab/text-member/text-align";
 import TextAnimation from "./bottom-tab/text-member/text-animation";
 import AnimationToggleInfinite from "./common/animation-toggle-infinite";
 import CreateImage from "./bottom-tab/create-member/create-image";
+import StickerAnimation from "./bottom-tab/sticker-member/sticker-animation";
 // import BorderColor from "./bottom-tab/text-member/border-color";
 // import ChangeText from "./bottom-tab/text-member/change-text";
 
@@ -81,7 +82,15 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     null,
     <CheckAnimationConfig key={6} />
   ],
-  sticker: []
+  sticker: [
+    null,
+    null,
+    null,
+    null,
+    null,
+    <AnimationToggleInfinite key={5} />,
+    <StickerAnimation key={6} />,
+  ]
 };
 
 export default iconMembers;

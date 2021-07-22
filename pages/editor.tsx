@@ -18,6 +18,7 @@ import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/edito
 import TextAnimationContext, { AnimatedText } from "@components/editor/workspace/erin-components/text/text-animation";
 import BottomFloatHelpMessage from "@components/editor/bottom-float/help-message";
 import GenericAnimationContext, { AnimatedGeneric } from "@components/editor/workspace/erin-components/common/animation/generic-animation";
+import BottomDrawer from "@components/editor/bottom-drawer";
 
 
 type EditorNavigationProp = StackNavigationProp<
@@ -128,6 +129,9 @@ class Editor extends React.Component<EditorProps> {
             <View style={styles.toolbarWrapper}>
               <BottomTab />
             </View>
+            <View style={styles.bottomDrawerWrapper}>
+              <BottomDrawer />
+            </View>
           </KeyboardAvoidingView>
         </TextAnimationContext.Provider>
       </GenericAnimationContext.Provider>
@@ -183,13 +187,19 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 9999
+    zIndex: 8888
   },
   toolbarWrapper: {
     flex: 1,
-    zIndex: 9999,
+    zIndex: 8888,
   },
   workspaceWrapper: {
     flex: 8,
   },
+  bottomDrawerWrapper: {
+    height: "70%",
+    width: "100%",
+    position: "absolute",
+    top: "100%"
+  }
 });

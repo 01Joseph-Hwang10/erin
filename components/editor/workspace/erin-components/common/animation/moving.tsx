@@ -6,7 +6,7 @@ import { cancelAnimation } from "react-native-reanimated";
 import { Easing } from "react-native-reanimated";
 import { useAnimatedStyle } from "react-native-reanimated";
 import { AnimationProps } from "./animation.types";
-import { onUnmountDuration } from "./constants";
+import { easeOutCubic, onUnmountDuration } from "./constants";
 
 type Movement = "ease" | "bounce"
 
@@ -34,12 +34,12 @@ const Moving: React.FC<MovingProps> = ({
   
   const animatedDistanceConfig: Animated.WithTimingConfig = {
     duration: onLayerChange ? onUnmountDuration : movingDuration,
-    easing: movement && movement === "bounce" ? Easing.bounce : Easing.ease
+    easing: movement && movement === "bounce" ? Easing.bounce : easeOutCubic
   };
 
   const animatedOpacityConfig: Animated.WithTimingConfig = {
     duration: onLayerChange ? onUnmountDuration * ( 2 / 3 ) : movingDuration * ( 2 / 3 ),
-    easing: Easing.ease
+    easing: easeOutCubic
   };
 
   const animatedDistance = useSharedValue(movingDistance);

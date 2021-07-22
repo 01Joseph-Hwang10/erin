@@ -10,6 +10,7 @@ import ChangeText from "./top-float/text-member/change-text";
 import CheckText from "./top-float/text-member/check-text";
 import FontSize from "./bottom-tab/text-member/font-size";
 import NotEditText from "./top-float/edit-text-member/not-edit-text";
+import LinkComponentToLayer from "./top-float/common/link-component-to-layer";
 
 
 const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
@@ -25,7 +26,7 @@ const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
   animationDefault: [],
   layer: [],
   text: [
-    <LinkToLayer key={0} />,
+    <LinkComponentToLayer key={0} />,
     null,
     null,
     null,

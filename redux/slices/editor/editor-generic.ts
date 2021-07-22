@@ -6,6 +6,7 @@ export interface EditorGenericState {
     bottomTabCurrent: Erin.Editor.BottomTabMenuType,
     topFloatCurrent: Erin.Editor.TopFloatMenuType,
     bottomFloatCurrent: Erin.Editor.BottomFloatMenuType,
+    bottomDrawerCurrent: Erin.Editor.BottomDrawerMenuType,
     settings: Erin.Editor.Settings,
     workspaceSpec: RectSpecType,
     hasUnsavedChanges: boolean,
@@ -17,6 +18,7 @@ const initialState: EditorGenericState = {
   bottomTabCurrent: "default",
   topFloatCurrent: "default",
   bottomFloatCurrent: "none",
+  bottomDrawerCurrent: "none",
   settings: {
     iconSize: 1,
     iconGap: 1
@@ -66,6 +68,15 @@ const setBottomFloatCurrentReducer: CaseReducer<
   state.bottomFloatCurrent = bottomFloatCurrent;
 };
 
+export type SetBottomDrawerCurrentInput = Erin.Editor.BottomDrawerMenuType
+
+const setBottomDrawerCurrentReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetBottomDrawerCurrentInput>
+> = (state, { payload: bottomDrawerCurrent }) => {
+  state.bottomDrawerCurrent = bottomDrawerCurrent;
+};
+
 export type SetWorkspaceSpecInput = RectSpecType
 
 const setWorkspaceSpecReducer: CaseReducer<
@@ -113,6 +124,7 @@ export const {
     setHasUnsavedChanges,
     setBottomFloatHelpMessage,
     setTopFloatHelpMessage,
+    setBottomDrawerCurrent,
   }
 } = createSlice({
   name: "editorSlice",
@@ -126,5 +138,6 @@ export const {
     setHasUnsavedChanges: setHasUnsavedChangesReducer,
     setBottomFloatHelpMessage: setBottomFloatHelpMessageReducer,
     setTopFloatHelpMessage: setTopFloatHelpMessageReducer,
+    setBottomDrawerCurrent: setBottomDrawerCurrentReducer,
   }
 });

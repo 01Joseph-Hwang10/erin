@@ -1,1 +1,1 @@
-ROOT = '/mnt/wsl/erin_app'
+ROOT = '/Users/hwanghyeongyu/Documents/projects/erin_app'

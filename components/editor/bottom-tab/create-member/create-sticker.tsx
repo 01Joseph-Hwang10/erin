@@ -4,13 +4,16 @@ import { RootState } from "../../../../redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import { ICON_COLOR } from "../../base/constants";
 import PressButton from "../../base/press-button";
+import { Dispatch } from "redux";
+import { setBottomDrawerCurrent, SetBottomDrawerCurrentInput } from "@slices/editor/editor-generic";
 
 type CreateStickerReduxProps = ConnectedProps<typeof connector>
 
 interface CreateStickerProps extends CreateStickerReduxProps {}
 
 const CreateSticker: React.FC<CreateStickerProps> = ({
-  iconSize
+  iconSize,
+  setBottomDrawerCurrent: SetBottomDrawerCurrent
 }) => {
 
   const renderIcon = () => (
@@ -18,7 +21,7 @@ const CreateSticker: React.FC<CreateStickerProps> = ({
   );
 
   const onPress = () => {
-    // Needa do sth here
+    SetBottomDrawerCurrent("stickerList");
   };
   
   return <PressButton 
@@ -34,6 +37,12 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const connector = connect(mapStateToProps, { });
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setBottomDrawerCurrent: (payload: SetBottomDrawerCurrentInput) => dispatch(setBottomDrawerCurrent(payload))
+  };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export default connector(CreateSticker);

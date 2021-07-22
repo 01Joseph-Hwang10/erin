@@ -1,8 +1,7 @@
 import { Erin } from "erin";
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import { View, Text } from "react-native";
-import Shape from "./bottom-tab/shape-member/shape";
+import { View } from "react-native";
 import Placeholder from "./workspace/erin-components/placeholder";
 import ErinText from "./workspace/erin-components/text/text";
 import Stickers from "./workspace/erin-components/stickers/stickers";
@@ -38,14 +37,13 @@ class Layer extends Component<LayerProps, LayerState> {
       });
     }
 
-    public pushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id" | "zIndex">): void => {
+    public pushComponent = (component: Omit<Erin.Editor.ComponentInterface, "id">): void => {
       this.setState(prevState => ({
         components: [
           ...prevState.components, 
           {
             ...component,
             id: prevState.components.length,
-            zIndex: prevState.autoZIndex
           }
         ],
         autoZIndex: prevState.autoZIndex + 1
@@ -97,8 +95,6 @@ class Layer extends Component<LayerProps, LayerState> {
                     id={component.id}
                     zIndex={this.state.autoZIndex}
                   />;
-                case "shape":
-                  return <Shape key={index} />;
                 case "sticker":
                   return <Stickers key={index} />;
                 default:
