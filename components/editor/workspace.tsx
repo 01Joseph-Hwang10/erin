@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Animated, LayoutChangeEvent, ViewStyle } from "react-native";
+import { StyleSheet, View, LayoutChangeEvent, ViewStyle } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/root-reducer";
@@ -41,9 +41,9 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
   private onTapHandlerStateChange = (
     { 
       nativeEvent: {
-      x,
-      y,
-      oldState
+        x,
+        y,
+        oldState
       } 
     }: TapGestureHandlerStateChangeEvent): void => {
     if (oldState === State.ACTIVE) {
@@ -87,7 +87,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
       prevProps.focusedComponent !== this.props.focusedComponent && 
       this.props.focusedComponent !== -1
     ) {
-      this.props.setCreationPoint({ x: null, y: null })
+      this.props.setCreationPoint({ x: null, y: null });
     }
   }
 
@@ -108,7 +108,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
             const rootWrapperStyle: StyleProp<ViewStyle> = {
               paddingTop: insets?.top,
               // paddingBottom: insets?.bottom
-            }
+            };
             return (
               <TapGestureHandler
                 onHandlerStateChange={this.onTapHandlerStateChange}
@@ -131,7 +131,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
                   </View>
                 </View>
               </TapGestureHandler>
-            )
+            );
           }
         }
       </SafeAreaInsetsContext.Consumer>

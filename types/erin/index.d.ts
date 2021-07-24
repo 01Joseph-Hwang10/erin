@@ -138,11 +138,11 @@ export namespace Erin {
             | "default" 
             | "create" 
             | "text" 
-            | "shape"
+            // | "shape"
             // | "image"
             | "sticker" 
-            | "animationDefault" 
-            | "animationConfig"
+            // | "animationDefault" 
+            // | "animationConfig"
 
         export type TopFloatMenuType = "default" | "layer" | "text" | "editText" | "animationDefault"
 

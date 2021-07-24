@@ -4,10 +4,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { View, Animated } from "react-native";
 import StickerList from "./bottom-drawer/sticker-list";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import { Erin } from "erin";
 import { RootState } from "@redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
+
 
 const backgroundColor = hexToRgbComponents(COLORS.DARK.secondary);
 
@@ -33,9 +34,14 @@ interface BottomDrawerProps extends BottomDrawerReduxProps {}
 const BottomDrawer: React.FC<BottomDrawerProps> = ({
   bottomDrawerCurrent
 }) => {
+
   return (
     <Animated.View style={styles.root}>
-      <View style={styles.handler}></View>
+      <PanGestureHandler>
+        <Animated.View style={styles.handlerWrapper}>
+          <View style={styles.handler}></View>
+        </Animated.View>
+      </PanGestureHandler>
       <View style={styles.contentWrapper}>
         <BottomDrawerContent
           bottomDrawerCurrent={bottomDrawerCurrent}
@@ -74,5 +80,10 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
     alignItems: "center"
+  },
+  handlerWrapper: {
+    width: "100%",
+    justifyContent: "center",
+    alignContent: "center"
   }
 });

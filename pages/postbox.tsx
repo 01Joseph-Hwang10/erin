@@ -8,6 +8,7 @@ import { Dispatch } from "redux";
 import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import { connect, ConnectedProps } from "react-redux";
 import { useFonts } from "expo-font";
+import Svg, { Path } from "react-native-svg";
 
 type PostboxNavigationProp = StackNavigationProp<
   StackParamList,

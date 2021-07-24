@@ -11,16 +11,8 @@ import Send from "./bottom-tab/default-member/send";
 // import ShapePattern from "./bottom-tab/shape-member/shape-pattern";
 import FontColor from "./bottom-tab/text-member/font-color";
 import FontStyle from "./bottom-tab/text-member/font-style";
-import ToggleToDefault from "./bottom-tab/animation-default-member/toggle-to-default";
-import AddAnimation from "./bottom-tab/animation-default-member/add-animation";
-import DeleteAnimation from "./bottom-tab/animation-default-member/delete-animation";
-import TestAnimation from "./bottom-tab/animation-default-member/test-animation";
-import AnimationType from "./bottom-tab/animation-config-member/animation-type";
-import AnimationTrigger from "./bottom-tab/animation-config-member/animation-trigger";
-import TimeDial from "./bottom-tab/animation-config-member/time-dial";
 import { Erin } from "erin";
 // import CheckShape from "./bottom-tab/shape-member/check-shape";
-import CheckAnimationConfig from "./bottom-tab/animation-config-member/check-animation-config";
 import XCreate from "./bottom-tab/create-member/x-create";
 import CreateSticker from "./bottom-tab/create-member/create-sticker";
 import NotSave from "./bottom-tab/default-member/not-save";
@@ -56,7 +48,6 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     null,
     <XCreate key={6} />
   ],
-  shape: [],
   text: [
     <BackgroundShape key={3} />,
     <FontStyle key={2} />,
@@ -65,22 +56,6 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     <BackgroundColor key={1} />,
     <AnimationToggleInfinite key={5} />,
     <TextAnimation key={6} />,
-  ],
-  animationDefault: [
-    <ToggleToDefault key={0} />,
-    <AddAnimation key={1} />,
-    <DeleteAnimation key={2} />,
-    null,
-    null,
-    null,
-    <TestAnimation key={6} />
-  ],
-  animationConfig: [
-    <AnimationType key={0} />,
-    <AnimationTrigger key={1} />,
-    <TimeDial key={"2-4"} />,
-    null,
-    <CheckAnimationConfig key={6} />
   ],
   sticker: [
     null,
