@@ -43,3 +43,13 @@ export const hexToRgbComponents = (hex: string): {
   } : null;
 };
 
+export const insertOpacity = (rgb: string, opacity: number): string => {
+  const rgbComponents = rgb
+    .replace(" ", "")
+    .replace("rgb", "")
+    .replace("(", "")
+    .replace(")", "")
+    .split(",");
+  return `rgba( ${rgbComponents[0]}, ${rgbComponents[1]}, ${rgbComponents[2]}, ${opacity} )`;
+};
+

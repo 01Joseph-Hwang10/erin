@@ -64,11 +64,7 @@ export namespace Erin {
         export type TextAnimationTypes = NonableGeneralAnimationTypes | "typing"
 
         export type TextStyle = 
-            | "rectangle" 
-            // | "circle" 
-            // | "triangle" 
-            // | "star" 
-            // | "heart" 
+            | "rectangle"
             | "roundedRectangle"
             | "shadow"
             | "neon"

@@ -1,6 +1,7 @@
 import { setBottomDrawerCurrent, SetBottomDrawerCurrentInput } from "@slices/editor/editor-generic";
 import { setStickerIdState, SetStickerIdStateInput } from "@slices/editor/editor-states";
 import React from "react";
+import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
@@ -27,6 +28,7 @@ const StickerButton: React.FC<StickerButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
+      style={styles.root}
     >
       {children}
     </TouchableOpacity>
@@ -41,3 +43,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 const connector = connect(null, mapDispatchToProps);
 
 export default connector(StickerButton);
+
+const styles = StyleSheet.create({
+  root: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row"
+  }
+});

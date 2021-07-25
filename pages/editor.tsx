@@ -128,8 +128,6 @@ class Editor extends React.Component<EditorProps> {
             </View>
             <View style={styles.toolbarWrapper}>
               <BottomTab />
-            </View>
-            <View style={styles.bottomDrawerWrapper}>
               <BottomDrawer />
             </View>
           </KeyboardAvoidingView>
@@ -196,10 +194,4 @@ const styles = StyleSheet.create({
   workspaceWrapper: {
     flex: 8,
   },
-  bottomDrawerWrapper: {
-    height: "70%",
-    width: "100%",
-    position: "absolute",
-    top: "100%"
-  }
 });

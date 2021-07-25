@@ -1,5 +1,5 @@
 
-ROOT='/mnt/wsl/erin_app'
+ROOT='/Users/hwanghyeongyu/Documents/projects/erin_app'
 CMDARG='-inR'
 SEARCH=$1
 
@@ -12,4 +12,4 @@ if [ $# -eq 2 ]; then
     fi
 fi
 
-grep $CMDARG -E --include='*.ts' --include='*.tsx' --exclude-dir=node_modules $SEARCH
+grep $CMDARG -E --include='*.ts' --include='*.tsx' --exclude-dir=node_modules $SEARCH *

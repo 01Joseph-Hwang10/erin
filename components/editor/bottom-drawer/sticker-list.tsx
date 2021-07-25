@@ -1,26 +1,50 @@
-import { stickerIds } from "@components/common/stickers/constants";
+import { stickerIds } from "@components/common/stickers/sticker-renderer.data";
 import StickerRenderer from "@components/common/stickers/sticker-renderer";
 import React from "react";
 import { StyleSheet } from "react-native";
 import { FlatList, ListRenderItem, View } from "react-native";
 import StickerButton from "./sticker-list/sticker-button";
+import { SvgProps } from "react-native-svg";
+import { RootState } from "@redux/root-reducer";
+import { connect, ConnectedProps } from "react-redux";
 
 
-const renderItem: ListRenderItem<string> = ({ item: stickerId }) => (
-  <StickerButton
-    stickerId={stickerId}
-  >
-    <StickerRenderer stickerId={stickerId} />
-  </StickerButton>
-);
 
 const Divider = () => (
   <View style={styles.divider}></View>
 );
-
+  
 const keyExtractor = (item: string) => item;
 
-const StickerList: React.FC = () => {
+type StickerListReduxProps = ConnectedProps<typeof connector>
+
+interface StickerListProps extends StickerListReduxProps {}
+  
+const StickerList: React.FC<StickerListProps> = ({
+  screenWidth
+}) => {
+
+  const svgProps: SvgProps = {
+    preserveAspectRatio: "xMidyMid meet",
+    style: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  };
+
+  const renderItem: ListRenderItem<string> = ({ item: stickerId }) => (
+    <View style={[styles.stickerButtonWrapper, { width: screenWidth / 3 }]}>
+      <StickerButton
+        stickerId={stickerId}
+      >
+        <StickerRenderer 
+          stickerId={stickerId} 
+          svgProps={svgProps}
+        />
+      </StickerButton>
+    </View>
+  );
+
   return <FlatList 
     data={stickerIds}
     renderItem={renderItem}
@@ -30,22 +54,28 @@ const StickerList: React.FC = () => {
     keyExtractor={keyExtractor}
     ListFooterComponent={Divider}
     contentContainerStyle={styles.contentContainer}
-    style={styles.root}
   />;
 };
 
-export default StickerList;
+const mapStateToProps = (state: RootState) => ({
+  screenWidth: state.screen.screenSpec.width
+});
+
+const connector = connect(mapStateToProps);
+
+export default connector(StickerList);
 
 const styles = StyleSheet.create({
   divider: {
-    width: 10,
-    height: 10
-  },
-  root: {
-    width: "100%"
+    width: 50,
+    height: 50
   },
   contentContainer: {
     justifyContent: "flex-start",
     alignContent: "space-between"
+  },
+  stickerButtonWrapper: {
+    justifyContent: "center",
+    alignContent: "center"
   }
 });

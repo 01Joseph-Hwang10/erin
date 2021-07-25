@@ -48,8 +48,8 @@ import {
   StyleProp, 
   ViewStyle,
   StyleSheet,
-//   View, 
-  // Animated,
+  View, 
+  Animated,
 } from "react-native";
 import { 
   PanGestureHandler, 
@@ -71,7 +71,6 @@ import GenericAnimationContext from "../common/animation/generic-animation";
 import BackgroundShape from "./background-shape";
 import TextAnimationContext from "./text-animation";
 import { decideHover } from "./text.function";
-import Animated from "react-native-reanimated";
 
 type ErinTextReduxProps = ConnectedProps<typeof connector>
 
@@ -139,24 +138,24 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   private setAnimationInfinite: (animationInfinite: boolean) => void;
   private setZIndex: (zIndex: number) => void;
 
-  private rootViewRef = React.createRef<Animated.View>();
+  private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
   private panHandlerRef = React.createRef<PanGestureHandler>();
   private pinchHandlerRef = React.createRef<PinchGestureHandler>();
   private rotationHandlerRef = React.createRef<RotationGestureHandler>();
 
-  // private period = 2 * Math.PI;
-  private posX: Animated.Value<number>;
-  private posY: Animated.Value<number>;
+  private period = 2 * Math.PI;
+  private posX: Animated.Value;
+  private posY: Animated.Value;
   private lastPosition: { x: number, y: number };
-  private pinchScale: Animated.Value<number>;
-  private baseScale: Animated.Value<number>;
-  // private scale: Animated.AnimatedMultiplication;
+  private pinchScale: Animated.Value;
+  private baseScale: Animated.Value;
+  private scale: Animated.AnimatedMultiplication;
   private lastScale: number;
-  private rotation: Animated.Value<number>;
-  private lastRotation: number;
-  // private rotation: Animated.AnimatedModulo;
-  // private rotationString: Animated.AnimatedInterpolation;
+  private rotationRaw: Animated.Value;
+  private lastRotationRaw: number;
+  private rotation: Animated.AnimatedModulo;
+  private rotationString: Animated.AnimatedInterpolation;
   private onPinchGestureEvent: (event: PinchGestureHandlerGestureEvent) => void;
   private onRotateGestureEvent: (
     event: RotationGestureHandlerGestureEvent
@@ -238,7 +237,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     // Scale
     this.baseScale = new Animated.Value(1);
     this.pinchScale = new Animated.Value(1);
-    // this.scale = Animated.multiply( this.baseScale, this.pinchScale );
+    this.scale = Animated.multiply( this.baseScale, this.pinchScale );
     this.lastScale = 1;
     this.onPinchGestureEvent = Animated.event(
       [{ nativeEvent: { scale: this.pinchScale } }],
@@ -246,15 +245,15 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     );
 
     // Rotation
-    this.rotation = new Animated.Value(0);
-    this.lastRotation = 0;
-    // this.rotation = Animated.modulo(this.rotation, this.period);
-    // this.rotationString = this.rotation.interpolate({
-    //   inputRange: [0, this.period],
-    //   outputRange: ["0rad", `${this.period}rad`]
-    // });
+    this.rotationRaw = new Animated.Value(0);
+    this.lastRotationRaw = 0;
+    this.rotation = Animated.modulo(this.rotationRaw, this.period);
+    this.rotationString = this.rotation.interpolate({
+      inputRange: [0, this.period],
+      outputRange: ["0rad", `${this.period}rad`]
+    });
     this.onRotateGestureEvent = Animated.event(
-      [{ nativeEvent: { rotation: this.rotation }}],
+      [{ nativeEvent: { rotation: this.rotationRaw }}],
       { useNativeDriver: true }
     );
   }
@@ -296,8 +295,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
       }
       this.lastPosition.x += translationX;
       this.lastPosition.y += translationY;
-      // this.posX.setOffset(this.lastPosition.x);
-      // this.posY.setOffset(this.lastPosition.y);
+      this.posX.setOffset(this.lastPosition.x);
+      this.posY.setOffset(this.lastPosition.y);
       this.posX.setValue(0);
       this.posY.setValue(0);
     }
@@ -321,9 +320,9 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           focusedComponentType: "text"
         });
       }
-      this.lastRotation += rotation;
-      // this.rotation.setOffset(this.lastRotation);
-      this.rotation.setValue(0);
+      this.lastRotationRaw += rotation;
+      this.rotationRaw.setOffset(this.lastRotationRaw);
+      this.rotationRaw.setValue(0);
     }
   };
 
@@ -376,7 +375,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   private measureRootView = () => {
-    this.rootViewRef.current?.getNode().measure(
+    this.rootViewRef.current?.measure(
       (_, __, width) => {
         this.setSize(width / this.lastScale);
       }
@@ -398,8 +397,8 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   componentDidMount = () => {
-    // this.posX.setOffset(this.lastPosition.x);
-    // this.posY.setOffset(this.lastPosition.y);
+    this.posX.setOffset(this.lastPosition.x);
+    this.posY.setOffset(this.lastPosition.y);
     this.props.setFocusedComponent({
       focusedComponent: this.props.id,
       focusedComponentType: "text"
@@ -512,10 +511,10 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           {
             transform: 
             [
-              { translateX: Animated.add(this.posX, this.state.textShift.x * (-1), this.lastPosition.x) },
-              { translateY: Animated.add(this.posY, this.state.textShift.y * (-1), this.lastPosition.y) },
-              { scale: Animated.multiply(this.baseScale, this.pinchScale) },
-              { rotateZ: Animated.concat(Animated.add(this.rotation, this.lastRotation), "rad") },
+              { translateX: Animated.add(this.posX, this.state.textShift.x * (-1)) },
+              { translateY: Animated.add(this.posY, this.state.textShift.y * (-1)) },
+              { scale: this.scale },
+              { rotateZ: this.rotationString },
             ]
           }
         ]}>
@@ -627,7 +626,7 @@ const mapStateToProps = (state: RootState) => {
     fontSize: state.editor.states.fontSize,
     textAnimationType: state.editor.states.textAnimationType,
     animationInfinite: state.editor.states.animationInfinite,
-    autoZIndex: state.editor.layer.layer[state.editor.layer.currentLayer].autoZIndex,
+    autoZIndex: state.editor.layer.layer[state.editor.layer.currentLayer-1].autoZIndex,
   };
 };
 
