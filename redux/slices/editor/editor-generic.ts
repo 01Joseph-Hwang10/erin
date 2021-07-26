@@ -12,6 +12,7 @@ export interface EditorGenericState {
     hasUnsavedChanges: boolean,
     bottomFloatHelpMessage: string | null,
     topFloatHelpMessage: string | null,
+    stickerCategoryCurrent: Erin.Common.StickerCategories
 }
 
 const initialState: EditorGenericState = {
@@ -30,6 +31,7 @@ const initialState: EditorGenericState = {
   hasUnsavedChanges: false,
   bottomFloatHelpMessage: null,
   topFloatHelpMessage: null,
+  stickerCategoryCurrent: "all",
 };
 
 export type ConfigureIconLayoutInput = Erin.Editor.Settings;
@@ -113,6 +115,15 @@ const setTopFloatHelpMessageReducer: CaseReducer<
   state.topFloatHelpMessage = newHelpMessage;
 };
 
+export type SetStickerCategoryCurrent = Erin.Common.StickerCategories;
+
+const setStickerCategoryCurrentReducer: CaseReducer<
+  EditorGenericState,
+  PayloadAction<SetStickerCategoryCurrent>
+> = (state, { payload: newStickerCategoryCurrent }) => {
+  state.stickerCategoryCurrent = newStickerCategoryCurrent;
+};
+
 export const {
   reducer,
   actions: {
@@ -125,6 +136,7 @@ export const {
     setBottomFloatHelpMessage,
     setTopFloatHelpMessage,
     setBottomDrawerCurrent,
+    setStickerCategoryCurrent,
   }
 } = createSlice({
   name: "editorSlice",
@@ -139,5 +151,6 @@ export const {
     setBottomFloatHelpMessage: setBottomFloatHelpMessageReducer,
     setTopFloatHelpMessage: setTopFloatHelpMessageReducer,
     setBottomDrawerCurrent: setBottomDrawerCurrentReducer,
+    setStickerCategoryCurrent: setStickerCategoryCurrentReducer,
   }
 });

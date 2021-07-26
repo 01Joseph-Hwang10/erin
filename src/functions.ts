@@ -9,11 +9,13 @@ export const executeWithTimeout = (func: (...args: unknown[]) => unknown, timeou
   );
 };
 
+const testCamelCase = (inputString: string): boolean => /^[a-zA-Z0-9]+$/.test(inputString);
+
 export const camelCaseToNormal = (inputString: string | null): string | null => {
   if ( inputString === null || inputString === undefined ) {
     return null;
   }
-  if (/^[a-zA-Z0-9]+$/.test(inputString)) {
+  if (testCamelCase(inputString)) {
     return inputString.split("").reduce(
       (acc, cur, idx) => {
         if (idx === 0) {
@@ -21,6 +23,27 @@ export const camelCaseToNormal = (inputString: string | null): string | null => 
         }
         if (cur === cur.toUpperCase()) {
           return acc + " " + cur;
+        }
+        return acc + cur;
+      },
+      ""
+    );
+  }
+  return inputString;
+};
+
+export const camelCaseToUpperSnakeCase = (inputString: string | null): string | null => {
+  if ( inputString === null || inputString === undefined ) {
+    return null;
+  }
+  if (testCamelCase(inputString)) {
+    return inputString.split("").reduce(
+      (acc, cur, idx) => {
+        if (idx === 0) {
+          return acc + cur.toUpperCase();
+        }
+        if (cur === cur.toUpperCase()) {
+          return acc + "_" + cur.toUpperCase();
         }
         return acc + cur;
       },

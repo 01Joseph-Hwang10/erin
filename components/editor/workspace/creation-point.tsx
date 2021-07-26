@@ -15,8 +15,8 @@ interface CreationPointProps {
     posY: number,
 }
 
-const POINT_SIZE = 80;
-const HALF_POINT_SIZE = POINT_SIZE / 2;
+export const POINT_SIZE = 80;
+export const HALF_POINT_SIZE = POINT_SIZE / 2;
 const DURATION = 50;
 
 const CreationPoint: React.FC<CreationPointProps> = ({

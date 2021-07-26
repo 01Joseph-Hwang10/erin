@@ -30,7 +30,7 @@
         "assets/*"
       ],
     },
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
   "exclude": [
     "node_modules",

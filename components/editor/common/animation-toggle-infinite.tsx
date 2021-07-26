@@ -8,6 +8,7 @@ import Placeholder from "@components/editor/base/placeholder";
 import { onMountTextAnimations } from "../workspace/erin-components/text/text-animation/text-animation.data";
 import { Dispatch } from "redux";
 import { setAnimationInfiniteState, SetAnimationInfiniteStateInput } from "@slices/editor/editor-states";
+import { onMountStickerAnimations } from "../workspace/erin-components/sticker/sticker-animation/sticker-animation.data";
 
 type AnimationToggleInfiniteReduxProps = ConnectedProps<typeof connector>
 
@@ -18,7 +19,8 @@ const AnimationToggleInfinite: React.FC<AnimationToggleInfiniteProps> = ({
   animationInfinite,
   focusedComponentType,
   textAnimationType,
-  setAnimationInfinite
+  setAnimationInfinite,
+  stickerAnimationType,
 }) => {
 
   const renderIcon = () => (
@@ -30,8 +32,13 @@ const AnimationToggleInfinite: React.FC<AnimationToggleInfiniteProps> = ({
   };
 
   if (
-    focusedComponentType === "text" &&
-        onMountTextAnimations.includes(textAnimationType)
+    ( focusedComponentType === "text" &&
+      onMountTextAnimations.includes(textAnimationType) 
+    ) ||
+    (
+      focusedComponentType === "sticker" &&
+      onMountStickerAnimations.includes(stickerAnimationType)
+    )
   ) {
     return (
       <PressButton 
@@ -53,7 +60,8 @@ const mapStateToProps = (state: RootState) => ({
   iconSize: state.editor.generic.settings.iconSize,
   animationInfinite: state.editor.states.animationInfinite,
   focusedComponentType: state.editor.handle.focusedComponentType,
-  textAnimationType: state.editor.states.textAnimationType
+  textAnimationType: state.editor.states.textAnimationType,
+  stickerAnimationType: state.editor.states.stickerAnimationType,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

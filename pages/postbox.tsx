@@ -9,6 +9,7 @@ import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import { connect, ConnectedProps } from "react-redux";
 import { useFonts } from "expo-font";
 import Svg, { Path } from "react-native-svg";
+import { setBottomFloatHelpMessage, SetBottomFloatHelpMessageInput, setTopFloatHelpMessage, SetTopFloatHelpMessageInput } from "@slices/editor/editor-generic";
 
 type PostboxNavigationProp = StackNavigationProp<
   StackParamList,
@@ -24,7 +25,9 @@ interface PostboxProps extends PostboxReduxProps {
 const Postbox: React.FC<PostboxProps> = ({
   navigation,
   loading,
-  setLoading: SetLoading
+  setLoading: SetLoading,
+  setTopFloatHelpMessage: SetTopFloatHelpMessage,
+  setBottomFloatHelpMessage: SetBottomFloatHelpMessage
 }) => {
 
   const [ loaded ] = useFonts({
@@ -55,6 +58,8 @@ const Postbox: React.FC<PostboxProps> = ({
     const loading = setInterval(
       () => {
         if (loaded) {
+          SetTopFloatHelpMessage(null);
+          SetBottomFloatHelpMessage(null);
           navigation.navigate("editor");
           clearInterval(loading);
         }
@@ -91,7 +96,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    setLoading: (payload: SetLoadingInput) => dispatch(setLoading(payload))
+    setLoading: (payload: SetLoadingInput) => dispatch(setLoading(payload)),
+    setBottomFloatHelpMessage: (payload: SetBottomFloatHelpMessageInput) => dispatch(setBottomFloatHelpMessage(payload)),
+    setTopFloatHelpMessage: (payload: SetTopFloatHelpMessageInput) => dispatch(setTopFloatHelpMessage(payload)),
   };
 };
 

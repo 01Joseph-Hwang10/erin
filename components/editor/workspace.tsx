@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, LayoutChangeEvent, ViewStyle } from "react-native";
+import { StyleSheet, View, LayoutChangeEvent, ViewStyle, Platform } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/root-reducer";
@@ -68,6 +68,10 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
         this.props.setBottomTabCurrent("text");
         this.props.setTopFloatCurrent("text");
         break;
+      case "sticker":
+        this.props.setBottomTabCurrent("sticker");
+        this.props.setTopFloatCurrent("sticker");
+        break;
       default:
         this.props.setBottomTabCurrent("default");
         this.props.setTopFloatCurrent("default");
@@ -112,6 +116,7 @@ class Workspace extends React.Component<WorkspaceProps, WorkspaceState> {
             return (
               <TapGestureHandler
                 onHandlerStateChange={this.onTapHandlerStateChange}
+                numberOfTaps={Platform.OS === "android" ? 2 : 1}
               >
                 <View
                   style={rootWrapperStyle}

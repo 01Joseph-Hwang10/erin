@@ -11,3 +11,5 @@ export const ROUTES = {
 export const voidFunction = (): void => {};
 
 export const APP_PAGES: Erin.AppPageNames[] = ["editor", "friends", "main", "myPage", "postbox", "viewer"];
+
+export const DEBUG = true;

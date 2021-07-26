@@ -1,6 +1,6 @@
 import { RootState } from "@redux/root-reducer";
 import React, { useEffect } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import Animated, { useDerivedValue, withTiming } from "react-native-reanimated";
 import { useState } from "react";
@@ -13,10 +13,11 @@ type BottomFloatHelpMessageReduxProps = ConnectedProps<typeof connector>
 interface BottomFloatHelpMessageProps extends BottomFloatHelpMessageReduxProps {}
 
 const duration = 1000;
-const fontSize = 24;
+const fontSize = Platform.OS === "ios" ? 20 : 18;
 
 const BottomFloatHelpMessage: React.FC<BottomFloatHelpMessageProps> = ({
-  bottomFloatHelpMessage
+  bottomFloatHelpMessage,
+  hasUnsavedChanges,
 }) => {
 
   const [ visible, setVisible ] = useState(false);
@@ -58,6 +59,17 @@ const BottomFloatHelpMessage: React.FC<BottomFloatHelpMessageProps> = ({
     [bottomFloatHelpMessage]
   );
 
+  if (
+    bottomFloatHelpMessage === null &&
+    !hasUnsavedChanges
+  ) {
+    return (
+      <View style={styles.root}>
+        <Text style={styles.text}>{`화면을${Platform.OS === "android" ? " 더블 " : " "}탭하여 새 오브젝트를 만들 수 있어요!`}</Text>
+      </View>
+    );
+  }
+
   return (
     <Animated.View 
       style={[styles.root, animatedStyle]}
@@ -68,7 +80,8 @@ const BottomFloatHelpMessage: React.FC<BottomFloatHelpMessageProps> = ({
 };
 
 const mapStateToProps = (state: RootState) => ({
-  bottomFloatHelpMessage: state.editor.generic.bottomFloatHelpMessage
+  bottomFloatHelpMessage: state.editor.generic.bottomFloatHelpMessage,
+  hasUnsavedChanges: state.editor.generic.hasUnsavedChanges,
 });
 
 const connector = connect(mapStateToProps, {});
@@ -94,5 +107,5 @@ const styles = StyleSheet.create({
     textShadowRadius: 9,
     textAlign: "center",
     fontSize
-  }
+  },
 });

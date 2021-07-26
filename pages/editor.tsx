@@ -138,6 +138,17 @@ class Editor extends React.Component<EditorProps> {
 }
 
 const mapStateToProps = (state: RootState) => {
+  // console.log(
+  //   "\n",
+  //   state.editor.generic,
+  //   "\n",
+  //   state.editor.handle,
+  //   "\n",
+  //   state.editor.layer,
+  //   "\n",
+  //   state.editor.states,
+  //   "\n",
+  // );
   return {
     workspaceHeight: state.editor.generic.workspaceSpec.height,
     stringifiedPages: JSON.stringify(state.editor.layer.layer),

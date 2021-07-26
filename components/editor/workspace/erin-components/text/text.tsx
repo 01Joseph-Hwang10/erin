@@ -178,7 +178,6 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.setTextShift = ( textShift ) => this.setState({ textShift });
     this.setAnimationType = ( textAnimationType ) => this.setState({ textAnimationType });
     this.setAnimationInfinite = ( animationInfinite ) => this.setState({ animationInfinite });
-    this.setAnimationInfinite = ( animationInfinite ) => this.setState({ animationInfinite });
     this.setZIndex = ( zIndex ) => this.setState({ zIndex });
 
     // Pan
@@ -412,7 +411,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
     this.props.setTextAnimationType(this.state.textAnimationType);
     this.props.setFontStyle(this.state.fontStyle);
     this.props.setAnimationInfinite(this.state.animationInfinite);
-    this.setZIndex(this.props.autoZIndex);
+    this.setZIndex(this.props.zIndex);
   }
   
   componentDidUpdate = (prevProps: ErinTextProps) => {
@@ -493,115 +492,136 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
   }
 
   render(): React.ReactNode {
-    return <PanGestureHandler
-      ref={this.panHandlerRef}
-      onGestureEvent={this.onPanGestureEvent}
-      onHandlerStateChange={this.onPanHandlerStateChange}
-      simultaneousHandlers={[
-        this.rotationHandlerRef,
-        this.pinchHandlerRef,
-        this.tapHandlerRef
-      ]}
-    >
-      <Animated.View 
-        ref={this.rootViewRef}
-        style={[
-          styles.root,
-          this.rootStyle,
-          {
-            transform: 
+    return (
+      <PanGestureHandler
+        ref={this.panHandlerRef}
+        onGestureEvent={this.onPanGestureEvent}
+        onHandlerStateChange={this.onPanHandlerStateChange}
+        simultaneousHandlers={[
+          this.rotationHandlerRef,
+          this.pinchHandlerRef,
+          this.tapHandlerRef
+        ]}
+      >
+        <Animated.View 
+          ref={this.rootViewRef}
+          style={[
+            styles.root,
+            this.rootStyle,
+            {
+              transform: 
             [
               { translateX: Animated.add(this.posX, this.state.textShift.x * (-1)) },
               { translateY: Animated.add(this.posY, this.state.textShift.y * (-1)) },
-              { scale: this.scale },
-              { rotateZ: this.rotationString },
-            ]
-          }
-        ]}>
-        <RotationGestureHandler
-          ref={this.rotationHandlerRef}
-          onGestureEvent={this.onRotateGestureEvent}
-          onHandlerStateChange={this.onRotateHandlerStateChange}
-          simultaneousHandlers={[
-            this.panHandlerRef,
-            this.pinchHandlerRef,
-            this.tapHandlerRef
-          ]}
-        >
-          <Animated.View style={styles.wrapper}>
-            <PinchGestureHandler
-              ref={this.pinchHandlerRef}
-              onGestureEvent={this.onPinchGestureEvent}
-              onHandlerStateChange={this.onPinchHandlerStateChange}
-              simultaneousHandlers={[
-                this.panHandlerRef,
-                this.rotationHandlerRef,
-                this.tapHandlerRef
+            ],
+              zIndex: this.state.zIndex
+            }
+          ]}>
+          <RotationGestureHandler
+            ref={this.rotationHandlerRef}
+            onGestureEvent={this.onRotateGestureEvent}
+            onHandlerStateChange={this.onRotateHandlerStateChange}
+            simultaneousHandlers={[
+              this.panHandlerRef,
+              this.pinchHandlerRef,
+              this.tapHandlerRef
+            ]}
+          >
+            <Animated.View 
+              style={[
+                styles.wrapper,
+                {
+                  transform: 
+                  [
+                    { rotateZ: this.rotationString }
+                  ]
+                }
               ]}
             >
-              <Animated.View style={styles.wrapper}>
-                <TapGestureHandler
-                  ref={this.tapHandlerRef}
-                  onHandlerStateChange={this.onTapHandlerStateChange}
-                  simultaneousHandlers={[
-                    this.panHandlerRef,
-                    this.rotationHandlerRef,
-                    this.pinchHandlerRef
+              <PinchGestureHandler
+                ref={this.pinchHandlerRef}
+                onGestureEvent={this.onPinchGestureEvent}
+                onHandlerStateChange={this.onPinchHandlerStateChange}
+                simultaneousHandlers={[
+                  this.panHandlerRef,
+                  this.rotationHandlerRef,
+                  this.tapHandlerRef
+                ]}
+              >
+                <Animated.View 
+                  style={[
+                    styles.wrapper,
+                    {
+                      transform: 
+                      [
+                        { scale: this.scale }
+                      ]
+                    }
                   ]}
                 >
-                  <Animated.View style={styles.wrapper}>
-                    <GenericAnimationContext.Consumer>
-                      {
-                        (AnimatedGeneric) => {
-                          return <AnimatedGeneric
+                  <TapGestureHandler
+                    ref={this.tapHandlerRef}
+                    onHandlerStateChange={this.onTapHandlerStateChange}
+                    simultaneousHandlers={[
+                      this.panHandlerRef,
+                      this.rotationHandlerRef,
+                      this.pinchHandlerRef
+                    ]}
+                  >
+                    <Animated.View style={styles.wrapper}>
+                      <GenericAnimationContext.Consumer>
+                        {
+                          (AnimatedGeneric) => {
+                            return <AnimatedGeneric
                             // @ts-ignore
                             // Every types out of generic animation type component will eventually go to default
-                            animationType={this.state.textAnimationType}
-                            infinite={this.state.animationInfinite}
-                          >
-                            <BackgroundShape
-                              shape={this.state.backgroundShape}
-                              size={this.state.size}
-                              backgroundColor={this.state.backgroundColor}
+                              animationType={this.state.textAnimationType}
+                              infinite={this.state.animationInfinite}
                             >
-                              <TextAnimationContext.Consumer>
-                                {
-                                  (AnimatedText) => {
-                                    return <AnimatedText 
-                                      style={[
-                                        {
-                                          fontFamily: this.state.fontStyle,
-                                          color: this.state.fontColor,
-                                          textAlign: this.state.textAlign,
-                                          fontSize: this.state.fontSize,
-                                        },
-                                        styles.textDefault
-                                      ]}
-                                      onLayout={this.onTextLayout}
-                                      textAnimationType={this.state.textAnimationType}
-                                      textStyleType={this.state.backgroundShape}
-                                      infinite={this.state.animationInfinite}
-                                      textColor={this.state.fontColor}
-                                      backgroundColor={this.state.backgroundColor}
-                                    >
-                                      {this.state.text}
-                                    </AnimatedText>;
+                              <BackgroundShape
+                                shape={this.state.backgroundShape}
+                                size={this.state.size}
+                                backgroundColor={this.state.backgroundColor}
+                              >
+                                <TextAnimationContext.Consumer>
+                                  {
+                                    (AnimatedText) => {
+                                      return <AnimatedText 
+                                        style={[
+                                          {
+                                            fontFamily: this.state.fontStyle,
+                                            color: this.state.fontColor,
+                                            textAlign: this.state.textAlign,
+                                            fontSize: this.state.fontSize,
+                                          },
+                                          styles.textDefault
+                                        ]}
+                                        onLayout={this.onTextLayout}
+                                        textAnimationType={this.state.textAnimationType}
+                                        textStyleType={this.state.backgroundShape}
+                                        infinite={this.state.animationInfinite}
+                                        textColor={this.state.fontColor}
+                                        backgroundColor={this.state.backgroundColor}
+                                      >
+                                        {this.state.text}
+                                      </AnimatedText>;
+                                    }
                                   }
-                                }
-                              </TextAnimationContext.Consumer>
-                            </BackgroundShape>
-                          </AnimatedGeneric>;
+                                </TextAnimationContext.Consumer>
+                              </BackgroundShape>
+                            </AnimatedGeneric>;
+                          }
                         }
-                      }
-                    </GenericAnimationContext.Consumer>
-                  </Animated.View>
-                </TapGestureHandler>
-              </Animated.View>
-            </PinchGestureHandler>
-          </Animated.View>
-        </RotationGestureHandler>
-      </Animated.View>
-    </PanGestureHandler>;
+                      </GenericAnimationContext.Consumer>
+                    </Animated.View>
+                  </TapGestureHandler>
+                </Animated.View>
+              </PinchGestureHandler>
+            </Animated.View>
+          </RotationGestureHandler>
+        </Animated.View>
+      </PanGestureHandler>
+    );
   }
 
 }
@@ -626,7 +646,6 @@ const mapStateToProps = (state: RootState) => {
     fontSize: state.editor.states.fontSize,
     textAnimationType: state.editor.states.textAnimationType,
     animationInfinite: state.editor.states.animationInfinite,
-    autoZIndex: state.editor.layer.layer[state.editor.layer.currentLayer-1].autoZIndex,
   };
 };
 

@@ -206,15 +206,15 @@ const setStickerAnimationTypeStateReducer: CaseReducer<
 const toggleStickerAnimationStateReducer: CaseReducer<
   EditorStatesState
 > = (state) => {
-  switch (state.textAnimationType) {
+  switch (state.stickerAnimationType) {
   case "none":
-    state.textAnimationType = "blink";
+    state.stickerAnimationType = "blink";
     break;
   case "blink":
-    state.textAnimationType = "fade";
+    state.stickerAnimationType = "fade";
     break;
   case "fade":
-    state.textAnimationType = "none";
+    state.stickerAnimationType = "none";
     break;
   default:
     break;

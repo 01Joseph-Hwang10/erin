@@ -4,7 +4,7 @@ import { stickerTable } from "./sticker-renderer.data";
 
 
 interface StickerRendererProps {
-  stickerId: string,
+  stickerId: string | null,
   svgProps?: SvgProps
 }
 
@@ -13,10 +13,13 @@ const StickerRenderer: React.FC<StickerRendererProps> = ({
   svgProps
 }) => {
 
-  const Sticker = stickerTable[stickerId];
+  if (stickerId) {
+    const Sticker = stickerTable[stickerId][0];
 
-  return <Sticker {...svgProps} />;
-
+    return <Sticker {...svgProps} />;
+  }
+  
+  return <></>;
 };
 
 export default StickerRenderer;

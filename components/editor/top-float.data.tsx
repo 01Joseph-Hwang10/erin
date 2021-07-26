@@ -11,6 +11,7 @@ import CheckText from "./top-float/text-member/check-text";
 import FontSize from "./bottom-tab/text-member/font-size";
 import NotEditText from "./top-float/edit-text-member/not-edit-text";
 import LinkComponentToLayer from "./top-float/common/link-component-to-layer";
+import CheckSticker from "./top-float/sticker-member/check-sticker";
 
 
 const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
@@ -23,7 +24,6 @@ const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
     <CopyLayer key={5} />,
     <AddLayer key={6} />
   ],
-  animationDefault: [],
   layer: [],
   text: [
     <LinkComponentToLayer key={0} />,
@@ -42,6 +42,15 @@ const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
     null,
     <NotEditText key={5} />,
     <CheckText key={6} />
+  ],
+  sticker: [
+    <LinkComponentToLayer key={0} />,
+    null,
+    null,
+    null,
+    null,
+    null,
+    <CheckSticker key={6} />,
   ]
 };
 

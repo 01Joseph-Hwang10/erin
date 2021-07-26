@@ -61,6 +61,10 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({
         position.value = withTiming(-drawerHeight, animationConfig);
         setOpened(true);
       }
+      if (bottomDrawerCurrent === "none" && opened) {
+        position.value = withTiming(0, animationConfig);
+        setOpened(false);
+      }
     },
     [bottomDrawerCurrent]
   );
@@ -159,7 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    flex: 50
+    flex: 50,
   },
   handlerWrapper: {
     width: "100%",

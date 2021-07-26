@@ -76,6 +76,16 @@ export namespace Erin {
 
         export type StickerAnimationTypes = Extract<NonableGeneralAnimationTypes, "blink" | "none" | "fade">
 
+        export type StickerCategories = 
+            | "all" 
+            | "animals" 
+            | "oriental" 
+            | "chocolate" 
+            | "loveYou" 
+            | "pastel"
+            | "things"
+            | "bright"
+
         /* ==========LETTER CONFIG========== */
 
         type BackgroundType = "image" | "color" | "pattern"
@@ -140,11 +150,17 @@ export namespace Erin {
             // | "animationDefault" 
             // | "animationConfig"
 
-        export type TopFloatMenuType = "default" | "layer" | "text" | "editText" | "animationDefault"
+        export type TopFloatMenuType = 
+            | "default" 
+            | "layer" 
+            | "text" 
+            | "editText" 
+            // | "animationDefault" 
+            | "sticker"
 
         export type BottomFloatMenuType = 
             | "none" 
-            | "animationTimeline" 
+            // | "animationTimeline" 
             | "deleteComponent"
             | "colorPicker"
             | "fontStyle"

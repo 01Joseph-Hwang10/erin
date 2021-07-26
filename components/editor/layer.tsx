@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { View } from "react-native";
 import Placeholder from "./workspace/erin-components/placeholder";
 import ErinText from "./workspace/erin-components/text/text";
-import Stickers from "./workspace/erin-components/stickers/stickers";
+import Stickers from "./workspace/erin-components/sticker/sticker";
 import ErrorComponent from "./workspace/erin-components/error-component";
 import { Dispatch } from "redux";
 import { 
@@ -96,7 +96,11 @@ class Layer extends Component<LayerProps, LayerState> {
                     zIndex={this.state.autoZIndex}
                   />;
                 case "sticker":
-                  return <Stickers key={index} />;
+                  return <Stickers 
+                    key={index} 
+                    id={component.id}
+                    zIndex={this.state.autoZIndex}
+                  />;
                 default:
                   return <ErrorComponent key={index} />;
                 }

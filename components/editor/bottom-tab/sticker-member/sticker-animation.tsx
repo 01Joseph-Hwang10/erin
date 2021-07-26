@@ -27,7 +27,7 @@ class TextAnimation extends React.Component<TextAnimationProps> {
     this.buttonRef.current?.toggleItem();
   };
 
-  private setTextItemIndex = () => {
+  private setStickerItemIndex = () => {
     this.buttonRef.current?.setItemIndex(
       stickerAnimationTypeToIndex(
         this.props.stickerAnimationType
@@ -36,12 +36,12 @@ class TextAnimation extends React.Component<TextAnimationProps> {
   }
 
   componentDidMount = () => {
-    this.setTextItemIndex();
+    this.setStickerItemIndex();
   }
 
   componentDidUpdate = (prevProps: TextAnimationProps) => {
     if ( prevProps.stickerAnimationType !== this.props.stickerAnimationType ) {
-      this.setTextItemIndex();
+      this.setStickerItemIndex();
     }
   }
 
