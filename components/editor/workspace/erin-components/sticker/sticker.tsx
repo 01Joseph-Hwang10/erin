@@ -21,7 +21,7 @@ import {
 } from "@slices/editor/editor-states";
 import { Erin } from "erin";
 import React, { Component } from "react";
-import { StyleSheet, Animated, View, Platform } from "react-native";
+import { StyleSheet, Animated, View, Platform, Insets } from "react-native";
 import { 
   PanGestureHandler, 
   PanGestureHandlerGestureEvent, 
@@ -56,6 +56,8 @@ interface StickerState {
   stickerId: string | null,
   focused: boolean,
 }
+
+const BASE_SCALE = 2;
 
 class Sticker extends Component<StickerProps> {
 
@@ -159,13 +161,24 @@ class Sticker extends Component<StickerProps> {
     );
 
     // Scale
-    this.baseScale = new Animated.Value(1);
+    this.baseScale = new Animated.Value(BASE_SCALE);
     this.pinchScale = new Animated.Value(1);
     this.scale = Animated.multiply( this.baseScale, this.pinchScale );
-    this.lastScale = 1;
+    this.lastScale = BASE_SCALE;
     this.onPinchGestureEvent = Animated.event(
       [{ nativeEvent: { scale: this.pinchScale } }],
-      { useNativeDriver: true }
+      { 
+        useNativeDriver: true ,
+        listener: ({
+          nativeEvent: {
+            scale
+          }
+        }: PinchGestureHandlerGestureEvent) => {
+          if (Platform.OS === "android") {
+            this.lastScale = scale;
+          }
+        }
+      }
     );
 
     // Rotation
@@ -348,6 +361,7 @@ class Sticker extends Component<StickerProps> {
           this.pinchHandlerRef,
           this.tapHandlerRef,
         ]}
+        avgTouches={true}
       >
         <Animated.View
           style={[
@@ -397,7 +411,7 @@ class Sticker extends Component<StickerProps> {
                     styles.wrapper,
                     {
                       transform: [
-                        { scale: this.scale }
+                        { scale: Platform.OS === "android" ? this.pinchScale : this.scale }
                       ]
                     }
                   ]}
@@ -420,10 +434,11 @@ class Sticker extends Component<StickerProps> {
                               infinite={this.state.animationInfinite}
                             >
                               <View 
-                                style={styles.root}
+                                style={[styles.wrapper, styles.flexRow]}
                               >
                                 <StickerRenderer 
                                   stickerId={this.state.stickerId}
+                                  lastScale={Platform.OS === "android" ? this.lastScale : 1}
                                 />
                               </View>
                             </AnimatedGeneric>;
@@ -482,4 +497,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
+  virtualStickerCover: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 2
+  },
+  flexRow: {
+    flexDirection: "row"
+  }
 });

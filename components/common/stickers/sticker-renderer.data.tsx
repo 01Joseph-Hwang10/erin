@@ -1,5 +1,4 @@
 import React from "react";
-import { SvgProps } from "react-native-svg";
 import Sticker115D602 from "@assets/stickers/stickers-component/Sticker115D602";
 import Sticker115D2077 from "@assets/stickers/stickers-component/Sticker115D2077";
 import Sticker115D1783 from "@assets/stickers/stickers-component/Sticker115D1783";
@@ -107,9 +106,10 @@ import Sticker114D2279 from "@assets/stickers/stickers-component/Sticker114D2279
 import Sticker115D2279 from "@assets/stickers/stickers-component/Sticker115D2279";
 import Sticker114D2641 from "@assets/stickers/stickers-component/Sticker114D2641";
 import { Erin } from "erin";
+import { StickerSvgProps } from "@assets/stickers/utils/types";
 
 
-export const stickerTable: Record<string, [ React.FC<SvgProps>, Erin.Common.StickerCategories ]> = {
+export const stickerTable: Record<string, [ React.FC<StickerSvgProps>, Erin.Common.StickerCategories ]> = {
   "115-602": [ Sticker115D602, "animals" ] ,
   "115-2077": [ Sticker115D2077, "animals" ] ,
   "115-1783": [ Sticker115D1783, "animals" ] ,

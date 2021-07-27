@@ -11,6 +11,6 @@ for filename in os.listdir(TARGET):
     filepath = os.path.join(TARGET, filename)
     with open(filepath, 'r') as rf:
         code = rf.read()
-    code = code.replace(re.compile(r'\\\{\\\.\\\.\\\.props\\\}').findall(code)[0], '{'+'...'+'props'+'}')
+    code = code.replace(')' + '}', '}' + ')')
     with open(filepath, 'w') as wf:
         wf.write(code)

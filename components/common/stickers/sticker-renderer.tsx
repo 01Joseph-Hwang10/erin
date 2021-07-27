@@ -5,21 +5,24 @@ import { stickerTable } from "./sticker-renderer.data";
 
 interface StickerRendererProps {
   stickerId: string | null,
-  svgProps?: SvgProps
+  svgProps?: SvgProps,
+  lastScale: number,
 }
 
-const StickerRenderer: React.FC<StickerRendererProps> = ({
-  stickerId,
-  svgProps
-}) => {
+class StickerRenderer extends React.Component<StickerRendererProps> {
 
-  if (stickerId) {
-    const Sticker = stickerTable[stickerId][0];
-
-    return <Sticker {...svgProps} />;
-  }
+  render = (): React.ReactNode => {
+    if (this.props.stickerId) {
+      const Sticker = stickerTable[this.props.stickerId][0];
   
-  return <></>;
-};
+      return <Sticker 
+        lastScale={this.props.lastScale} 
+        svgProps={this.props.svgProps}
+      />;
+    }
+    
+    return <></>;
+  }
+}
 
 export default StickerRenderer;

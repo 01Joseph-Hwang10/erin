@@ -502,6 +502,7 @@ class ErinText extends React.Component<ErinTextProps, ErinTextState> {
           this.pinchHandlerRef,
           this.tapHandlerRef
         ]}
+        avgTouches={true}
       >
         <Animated.View 
           ref={this.rootViewRef}

@@ -35,7 +35,12 @@ const StickerButton: React.FC<StickerButtonProps> = ({
   };
 
   return (
-    <View style={[styles.stickerButtonWrapper, { width: screenWidth / 3 }]}>
+    <View 
+      style={[
+        styles.stickerButtonWrapper, 
+        { width: screenWidth / 3 }
+      ]}
+    >
       <TouchableOpacity
         onPress={onPress}
         onLongPress={voidFunction}

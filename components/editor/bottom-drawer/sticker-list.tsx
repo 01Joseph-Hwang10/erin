@@ -42,6 +42,7 @@ const StickerList: React.FC<StickerListProps> = ({
       <StickerRenderer 
         stickerId={stickerId} 
         svgProps={svgProps}
+        lastScale={1}
       />
     </StickerButton>
   );
