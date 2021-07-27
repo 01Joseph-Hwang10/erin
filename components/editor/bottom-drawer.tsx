@@ -24,14 +24,15 @@ interface BottomDrawerContentProps {
     bottomDrawerCurrent: Erin.Editor.BottomDrawerMenuType
 }
 
-const BottomDrawerContent: React.FC<BottomDrawerContentProps> = () => {
-  // switch (bottomDrawerCurrent) {
-  // case "stickerList":
-  //   return <StickerList />;
-  // default:
-  //   return <></>;
-  // }
-  return <StickerList />;
+const BottomDrawerContent: React.FC<BottomDrawerContentProps> = ({
+  bottomDrawerCurrent
+}) => {
+  switch (bottomDrawerCurrent) {
+  case "stickerList":
+    return <StickerList />;
+  default:
+    return <></>;
+  }
 };
 
 type BottomDrawerReduxProps = ConnectedProps<typeof connector>

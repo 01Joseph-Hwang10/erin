@@ -1,9 +1,12 @@
 import { RootState } from "@redux/root-reducer";
 import { setBottomDrawerCurrent, SetBottomDrawerCurrentInput } from "@slices/editor/editor-generic";
 import { setStickerIdState, SetStickerIdStateInput } from "@slices/editor/editor-states";
+import COLORS from "@src/colors";
 import { voidFunction } from "@src/constants";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { useEffect } from "react";
+import { useState } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
@@ -12,8 +15,11 @@ type StickerButtonReduxProps = ConnectedProps<typeof connector>
 
 interface StickerButtonProps extends StickerButtonReduxProps {
     children?: React.ReactNode,
-    stickerId: string
+    stickerId: string,
+    index: number
 }
+
+const lazyLoadingDelay = 50;
 
 const StickerButton: React.FC<StickerButtonProps> = ({
   children,
@@ -22,7 +28,10 @@ const StickerButton: React.FC<StickerButtonProps> = ({
   stickerId,
   screenWidth,
   pushComponent,
+  index
 }) => {
+
+  const [ loading, setLoading ] = useState(true);
 
   const onPress = () => {
     setStickerId(stickerId);
@@ -33,6 +42,18 @@ const StickerButton: React.FC<StickerButtonProps> = ({
       });
     }
   };
+
+  useEffect(
+    () => {
+      const loadingHandler = setTimeout(
+        () => {
+          setLoading(false);
+        },
+        index * lazyLoadingDelay
+      );
+      return () => clearInterval(loadingHandler);
+    }
+  );
 
   return (
     <View 
@@ -46,7 +67,14 @@ const StickerButton: React.FC<StickerButtonProps> = ({
         onLongPress={voidFunction}
         style={styles.root}
       >
-        {children}
+        {
+          loading ? 
+            <ActivityIndicator 
+              size="large"
+              color={COLORS.LIGHT.secondary}
+            /> :
+            children
+        }
       </TouchableOpacity>
     </View>
   );

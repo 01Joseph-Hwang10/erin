@@ -6,7 +6,6 @@ import { stickerTable } from "./sticker-renderer.data";
 interface StickerRendererProps {
   stickerId: string | null,
   svgProps?: SvgProps,
-  lastScale: number,
 }
 
 class StickerRenderer extends React.Component<StickerRendererProps> {
@@ -16,8 +15,7 @@ class StickerRenderer extends React.Component<StickerRendererProps> {
       const Sticker = stickerTable[this.props.stickerId][0];
   
       return <Sticker 
-        lastScale={this.props.lastScale} 
-        svgProps={this.props.svgProps}
+        {...this.props.svgProps}
       />;
     }
     

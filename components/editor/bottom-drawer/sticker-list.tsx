@@ -8,45 +8,51 @@ import { SvgProps } from "react-native-svg";
 import { RootState } from "@redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import StickerCategories from "./sticker-list/sticker-categories";
-
-
+import { StickerScaleContext } from "../workspace/erin-components/sticker/sticker-scale-context";
+import { AfterInteractions } from "react-native-interactions";
 
 const Divider = () => <View style={styles.divider}></View>;
 
 const ListHeaderComponent = () => <View style={styles.listHeader}></View>;
 
 const ListFooterComponent = () => <View style={styles.listFooter}></View>;
-  
+
 const keyExtractor = (item: string) => item;
+
+
+const svgProps: SvgProps = {
+  preserveAspectRatio: "xMidyMid meet",
+  style: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+};
+
+const renderItem: ListRenderItem<string> = ({ item: stickerId, index }) => (
+  <StickerButton
+    stickerId={stickerId}
+    index={index}
+  >
+    <StickerRenderer 
+      stickerId={stickerId} 
+      svgProps={svgProps}
+    />
+  </StickerButton>
+);
 
 type StickerListReduxProps = ConnectedProps<typeof connector>
 
 interface StickerListProps extends StickerListReduxProps {}
-  
+
 const StickerList: React.FC<StickerListProps> = ({
-  stickerCategoryCurrent
+  stickerCategoryCurrent,
+  screenWidth
 }) => {
 
-  const svgProps: SvgProps = {
-    preserveAspectRatio: "xMidyMid meet",
-    style: {
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  };
-
-  const renderItem: ListRenderItem<string> = ({ item: stickerId }) => (
-    <StickerButton
-      stickerId={stickerId}
-    >
-      <StickerRenderer 
-        stickerId={stickerId} 
-        svgProps={svgProps}
-        lastScale={1}
-      />
-    </StickerButton>
-  );
-
+  const itemHeight = screenWidth * 1.3 / 3;
+  
+  const getItemLayout = (_: unknown, index: number) => ({length: itemHeight, offset: (itemHeight + 50) * index, index});
+  
   const filteredStickerIds = stickerInfos.reduce(
     (acc, [stickerId, stickerCategory]) => 
       stickerCategoryCurrent === "all" || stickerCategoryCurrent === stickerCategory ? [...acc, stickerId] : acc,
@@ -60,26 +66,33 @@ const StickerList: React.FC<StickerListProps> = ({
       </View>
     </View>
     <View style={styles.listWrapper}>
-      <View style={styles.innerWrapper}>
-        <FlatList 
-          data={filteredStickerIds}
-          renderItem={renderItem}
-          ItemSeparatorComponent={Divider}
-          horizontal={false}
-          numColumns={3}
-          keyExtractor={keyExtractor}
-          ListHeaderComponent={ListHeaderComponent}
-          ListFooterComponent={ListFooterComponent}
-          contentContainerStyle={styles.contentContainer}
-          scrollEnabled={true}
-        />
-      </View>
+      <StickerScaleContext.Provider value={1}>
+        <View style={styles.innerWrapper}>
+          <AfterInteractions>
+            <FlatList 
+              data={filteredStickerIds}
+              renderItem={renderItem}
+              ItemSeparatorComponent={Divider}
+              horizontal={false}
+              numColumns={3}
+              keyExtractor={keyExtractor}
+              ListHeaderComponent={ListHeaderComponent}
+              ListFooterComponent={ListFooterComponent}
+              contentContainerStyle={styles.contentContainer}
+              scrollEnabled={true}
+              getItemLayout={getItemLayout}
+            />
+          </AfterInteractions>
+        </View>
+      </StickerScaleContext.Provider> 
     </View>
   </View>;
+
 };
 
 const mapStateToProps = (state: RootState) => ({
-  stickerCategoryCurrent: state.editor.generic.stickerCategoryCurrent
+  stickerCategoryCurrent: state.editor.generic.stickerCategoryCurrent,
+  screenWidth: state.screen.screenSpec.width
 });
 
 const connector = connect(mapStateToProps);

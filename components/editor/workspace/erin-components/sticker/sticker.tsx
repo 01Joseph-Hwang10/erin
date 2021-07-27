@@ -21,7 +21,7 @@ import {
 } from "@slices/editor/editor-states";
 import { Erin } from "erin";
 import React, { Component } from "react";
-import { StyleSheet, Animated, View, Platform, Insets } from "react-native";
+import { StyleSheet, Animated, View, Platform } from "react-native";
 import { 
   PanGestureHandler, 
   PanGestureHandlerGestureEvent, 
@@ -41,6 +41,8 @@ import { Dispatch } from "redux";
 import { HALF_POINT_SIZE } from "../../creation-point";
 import GenericAnimationContext from "../common/animation/generic-animation";
 import { decideHover } from "../text/text.function";
+import { BASE_SCALE } from "./constants";
+import { StickerScaleContext } from "./sticker-scale-context";
 
 type StickerReduxProps = ConnectedProps<typeof connector>
 
@@ -56,8 +58,6 @@ interface StickerState {
   stickerId: string | null,
   focused: boolean,
 }
-
-const BASE_SCALE = 2;
 
 class Sticker extends Component<StickerProps> {
 
@@ -75,6 +75,7 @@ class Sticker extends Component<StickerProps> {
   private setStickerId: (stickerId: string) => void;
   private setFocused: (focused: boolean) => void;
 
+  private rootViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
   private panHandlerRef = React.createRef<PanGestureHandler>();
   private pinchHandlerRef = React.createRef<PinchGestureHandler>();
@@ -169,15 +170,6 @@ class Sticker extends Component<StickerProps> {
       [{ nativeEvent: { scale: this.pinchScale } }],
       { 
         useNativeDriver: true ,
-        listener: ({
-          nativeEvent: {
-            scale
-          }
-        }: PinchGestureHandlerGestureEvent) => {
-          if (Platform.OS === "android") {
-            this.lastScale = scale;
-          }
-        }
       }
     );
 
@@ -267,7 +259,7 @@ class Sticker extends Component<StickerProps> {
     {
       nativeEvent: {
         oldState,
-        scale
+        scale,
       }
     }: PinchGestureHandlerStateChangeEvent
   ) => {
@@ -283,6 +275,7 @@ class Sticker extends Component<StickerProps> {
       }
       this.lastScale *= scale;
       this.baseScale.setValue(this.lastScale);
+      // this.pinchScale.setValue(Platform.OS === "android" ? scale : 1);
       this.pinchScale.setValue(1);
     }
   };
@@ -295,7 +288,6 @@ class Sticker extends Component<StickerProps> {
     }: TapGestureHandlerStateChangeEvent
   ) => {
     if (oldState === State.ACTIVE) {
-      console.log("tapped");
       if (
         this.props.focusedComponent !== this.props.id ||
         this.props.focusedComponentType !== "sticker"
@@ -326,6 +318,7 @@ class Sticker extends Component<StickerProps> {
   }
   
   componentDidUpdate = (prevProps: StickerProps) => {
+
     if (this.props.focusedComponent === this.props.id) {
       
       if (!this.state.focused) {
@@ -411,7 +404,7 @@ class Sticker extends Component<StickerProps> {
                     styles.wrapper,
                     {
                       transform: [
-                        { scale: Platform.OS === "android" ? this.pinchScale : this.scale }
+                        { scale: Platform.OS !== "android" ? this.scale : this.pinchScale },
                       ]
                     }
                   ]}
@@ -435,11 +428,13 @@ class Sticker extends Component<StickerProps> {
                             >
                               <View 
                                 style={[styles.wrapper, styles.flexRow]}
+                                ref={this.rootViewRef}
                               >
-                                <StickerRenderer 
-                                  stickerId={this.state.stickerId}
-                                  lastScale={Platform.OS === "android" ? this.lastScale : 1}
-                                />
+                                <StickerScaleContext.Provider value={Platform.OS !== "android" ? 1 : this.lastScale}>
+                                  <StickerRenderer 
+                                    stickerId={this.state.stickerId}
+                                  />
+                                </StickerScaleContext.Provider>
                               </View>
                             </AnimatedGeneric>;
                           }
