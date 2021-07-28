@@ -19,6 +19,7 @@ import {
   setStickerIdState, 
   SetStickerIdStateInput 
 } from "@slices/editor/editor-states";
+import { RectSpecType } from "@slices/screen";
 import { Erin } from "erin";
 import React, { Component } from "react";
 import { StyleSheet, Animated, View, Platform } from "react-native";
@@ -38,7 +39,6 @@ import {
 } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
-import { HALF_POINT_SIZE } from "../../creation-point";
 import GenericAnimationContext from "../common/animation/generic-animation";
 import { decideHover } from "../text/text.function";
 import { BASE_SCALE } from "./constants";
@@ -51,12 +51,22 @@ interface StickerProps extends StickerReduxProps {
   zIndex: number,
 }
 
+type Collider = RectSpecType & { 
+  androidAdjustmentFactorX: number, 
+  androidAdjustmentFactorY: number, 
+  halfWidth: number, 
+  halfHeight: number 
+};
+
 interface StickerState {
   stickerAnimationType: Erin.Common.StickerAnimationTypes,
   animationInfinite: boolean,
   zIndex: number,
   stickerId: string | null,
   focused: boolean,
+  androidScale: number,
+  collider: Collider,
+  iosInitialScale: number
 }
 
 class Sticker extends Component<StickerProps> {
@@ -67,6 +77,16 @@ class Sticker extends Component<StickerProps> {
     zIndex: 1,
     stickerId: null,
     focused: false,
+    androidScale: 1,
+    collider: { 
+      width: 0, 
+      height: 0, 
+      androidAdjustmentFactorX: 0, 
+      androidAdjustmentFactorY: 0, 
+      halfWidth: 0, 
+      halfHeight: 0 
+    },
+    iosInitialScale: BASE_SCALE
   }
 
   private setAnimationType: (textAnimationType: Erin.Common.TextAnimationTypes) => void;
@@ -74,8 +94,10 @@ class Sticker extends Component<StickerProps> {
   private setZIndex: (zIndex: number) => void;
   private setStickerId: (stickerId: string) => void;
   private setFocused: (focused: boolean) => void;
+  private setAndroidScale: (androidScale: number) => void;
+  private setCollider: (collider: Collider) => void;
 
-  private rootViewRef = React.createRef<View>();
+  private stickerWrapperViewRef = React.createRef<View>();
   private tapHandlerRef = React.createRef<TapGestureHandler>();
   private panHandlerRef = React.createRef<PanGestureHandler>();
   private pinchHandlerRef = React.createRef<PinchGestureHandler>();
@@ -107,6 +129,8 @@ class Sticker extends Component<StickerProps> {
     this.setZIndex = ( zIndex ) => this.setState({ zIndex });
     this.setStickerId = ( stickerId ) => this.setState({ stickerId });
     this.setFocused = ( focused ) => this.setState({ focused });
+    this.setAndroidScale = ( androidScale ) => this.setState({ androidScale });
+    this.setCollider = ( collider ) => this.setState({ collider });
 
     // Pan
     const {
@@ -162,14 +186,27 @@ class Sticker extends Component<StickerProps> {
     );
 
     // Scale
-    this.baseScale = new Animated.Value(BASE_SCALE);
+    this.baseScale = new Animated.Value(Platform.OS === "android" ? BASE_SCALE : 1);
     this.pinchScale = new Animated.Value(1);
     this.scale = Animated.multiply( this.baseScale, this.pinchScale );
-    this.lastScale = BASE_SCALE;
+    this.lastScale = Platform.OS === "android" ? BASE_SCALE : 1;
     this.onPinchGestureEvent = Animated.event(
-      [{ nativeEvent: { scale: this.pinchScale } }],
+      [
+        { nativeEvent: 
+          { scale: this.pinchScale } 
+        }
+      ],
       { 
         useNativeDriver: true ,
+        listener: ({
+          nativeEvent: {
+            scale,
+          }
+        }: PinchGestureHandlerGestureEvent) => {
+          if (Platform.OS === "android") {
+            this.setAndroidScale(scale);
+          }
+        }
       }
     );
 
@@ -275,8 +312,10 @@ class Sticker extends Component<StickerProps> {
       }
       this.lastScale *= scale;
       this.baseScale.setValue(this.lastScale);
-      // this.pinchScale.setValue(Platform.OS === "android" ? scale : 1);
       this.pinchScale.setValue(1);
+      if (Platform.OS === "android") {
+        this.setAndroidScale(1);
+      }
     }
   };
 
@@ -300,24 +339,52 @@ class Sticker extends Component<StickerProps> {
     }
   }
 
-  componentDidMount = () => {
-    this.posX.setOffset(this.lastPosition.x);
-    this.posY.setOffset(this.lastPosition.y);
-    this.props.setFocusedComponent({
-      focusedComponent: this.props.id,
-      focusedComponentType: "sticker"
-    });
-    // this.props.setTopFloatCurrent("editText");
-    this.props.setStickerAnimtionType(this.state.stickerAnimationType);
-    this.props.setAnimationInfinite(this.state.animationInfinite);
-    this.setZIndex(this.props.zIndex);
-    if (this.props.stickerId) {
-      this.setStickerId(this.props.stickerId);
-    }
-    this.props.setCreationPoint({ x: null, y: null });
+  private onStickerWrapperViewLayout = () => {
+    this.stickerWrapperViewRef.current?.measure(
+      (_, __, width, height) => {
+        if (
+          !this.state.collider.width ||
+          !this.state.collider.height
+        ) {
+          this.setCollider({ 
+            width, 
+            height, 
+            androidAdjustmentFactorX: width / ( 2 * BASE_SCALE ), 
+            androidAdjustmentFactorY: height / ( 4 * BASE_SCALE ), 
+            halfWidth: width / 2, 
+            halfHeight: height / 2 
+          });
+        }
+      }
+    );
   }
+    
+    componentDidMount = () => {
+      this.props.setFocusedComponent({
+        focusedComponent: this.props.id,
+        focusedComponentType: "sticker"
+      });
+      // this.props.setTopFloatCurrent("editText");
+      this.props.setStickerAnimtionType(this.state.stickerAnimationType);
+      this.props.setAnimationInfinite(this.state.animationInfinite);
+      this.setZIndex(this.props.zIndex);
+      if (this.props.stickerId) {
+        this.setStickerId(this.props.stickerId);
+      }
+      this.props.setCreationPoint({ x: null, y: null });
+    }
   
-  componentDidUpdate = (prevProps: StickerProps) => {
+  componentDidUpdate = (prevProps: StickerProps, prevState: StickerState) => {
+
+    if (
+      prevState.collider.width === 0 && 
+      prevState.collider.height === 0 && 
+      this.state.collider.width &&
+      this.state.collider.height
+    ) {
+      this.posX.setOffset(this.lastPosition.x);
+      this.posY.setOffset(this.lastPosition.y); 
+    }
 
     if (this.props.focusedComponent === this.props.id) {
       
@@ -344,6 +411,7 @@ class Sticker extends Component<StickerProps> {
   }
 
   render(): React.ReactNode {
+
     return (
       <PanGestureHandler
         onGestureEvent={this.onPanGestureEvent}
@@ -354,6 +422,8 @@ class Sticker extends Component<StickerProps> {
           this.pinchHandlerRef,
           this.tapHandlerRef,
         ]}
+        minPointers={1}
+        maxPointers={1}
         avgTouches={true}
       >
         <Animated.View
@@ -361,10 +431,18 @@ class Sticker extends Component<StickerProps> {
             styles.root,
             styles.wrapper,
             {
-              transform: [
-                { translateX: this.posX },
-                { translateY: Platform.OS === "ios" ? Animated.add(this.posY, -HALF_POINT_SIZE) : this.posY },
-              ],
+              transform: Platform.OS === "android" ?
+                [
+                  { translateX: this.posX },
+                  { translateY: this.posY },
+                  { translateX: Animated.multiply(-this.state.collider.androidAdjustmentFactorX, this.scale) },
+                  { translateY: Animated.multiply(-this.state.collider.androidAdjustmentFactorY, this.scale) },
+                ] :
+                [
+                  { translateX: Animated.subtract(this.posX, this.state.collider.halfWidth) },
+                  { translateY: Animated.subtract(this.posY, this.state.collider.halfHeight) },
+                ]
+              ,
               zIndex: this.state.zIndex
             }
           ]}
@@ -378,13 +456,14 @@ class Sticker extends Component<StickerProps> {
               this.pinchHandlerRef,
               this.tapHandlerRef,
             ]}
+            minPointers={2}
           >
             <Animated.View 
               style={[
                 styles.wrapper,
                 {
                   transform: [
-                    { rotateZ: this.rotationString }
+                    { rotateZ: this.rotationString },
                   ]
                 }
               ]}
@@ -398,13 +477,14 @@ class Sticker extends Component<StickerProps> {
                   this.rotationHandlerRef,
                   this.tapHandlerRef
                 ]}
+                minPointers={2}
               >
                 <Animated.View 
                   style={[
                     styles.wrapper,
                     {
                       transform: [
-                        { scale: Platform.OS !== "android" ? this.scale : this.pinchScale },
+                        { scale: Platform.OS !== "android" ? this.scale : 1 },
                       ]
                     }
                   ]}
@@ -417,29 +497,28 @@ class Sticker extends Component<StickerProps> {
                       this.rotationHandlerRef,
                       this.pinchHandlerRef,
                     ]}
+                    minPointers={1}
                   >
-                    <Animated.View style={styles.wrapper}>
-                      <GenericAnimationContext.Consumer>
-                        {
-                          (AnimatedGeneric) => {
-                            return <AnimatedGeneric
-                              animationType={this.state.stickerAnimationType}
-                              infinite={this.state.animationInfinite}
-                            >
-                              <View 
-                                style={[styles.wrapper, styles.flexRow]}
-                                ref={this.rootViewRef}
-                              >
-                                <StickerScaleContext.Provider value={Platform.OS !== "android" ? 1 : this.lastScale}>
-                                  <StickerRenderer 
-                                    stickerId={this.state.stickerId}
-                                  />
-                                </StickerScaleContext.Provider>
-                              </View>
-                            </AnimatedGeneric>;
+                    <Animated.View 
+                      style={styles.wrapper}
+                    >
+                      <View 
+                        style={[
+                          styles.wrapper, 
+                          styles.flexRow,
+                          {
+                            opacity: this.state.collider.width && this.state.collider.height ? 1 : 0
                           }
-                        }
-                      </GenericAnimationContext.Consumer>
+                        ]}
+                        ref={this.stickerWrapperViewRef}
+                        onLayout={this.onStickerWrapperViewLayout}
+                      >
+                        <StickerScaleContext.Provider value={Platform.OS !== "android" ? this.state.iosInitialScale : this.state.androidScale * this.lastScale}>
+                          <StickerRenderer 
+                            stickerId={this.state.stickerId}
+                          />
+                        </StickerScaleContext.Provider>
+                      </View>
                     </Animated.View>
                   </TapGestureHandler>
                 </Animated.View>

@@ -1,7 +1,7 @@
 import { stickerInfos } from "@components/common/stickers/sticker-renderer.data";
 import StickerRenderer from "@components/common/stickers/sticker-renderer";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Animated, StyleSheet } from "react-native";
 import { FlatList, ListRenderItem, View } from "react-native";
 import StickerButton from "./sticker-list/sticker-button";
 import { SvgProps } from "react-native-svg";

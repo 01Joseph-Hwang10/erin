@@ -1,2 +1,2 @@
 
-export const BASE_SCALE = 2;
+export const BASE_SCALE = 3;

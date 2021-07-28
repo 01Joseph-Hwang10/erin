@@ -35,9 +35,10 @@ const iconMembers: IconMembers<Erin.Editor.BottomTabMenuType> = {
     <Music key={1} />,
     null,
     null,
+    null,
     <NotSave key={4} />,
     <Save key={5} />,
-    <Send key={6} />
+    // <Send key={6} />
   ],
   create: [
     <CreateText key={0} />,

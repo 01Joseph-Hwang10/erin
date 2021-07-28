@@ -15,7 +15,7 @@ interface CreationPointProps {
     posY: number,
 }
 
-export const POINT_SIZE = 80;
+export const POINT_SIZE = 50;
 export const HALF_POINT_SIZE = POINT_SIZE / 2;
 const DURATION = 50;
 
@@ -69,7 +69,7 @@ const CreationPoint: React.FC<CreationPointProps> = ({
         styles.root,
         animatedScale,
         {
-          top: Platform.OS === "ios" ? posY - POINT_SIZE : posY - HALF_POINT_SIZE,
+          top: Platform.OS === "ios" ? posY - POINT_SIZE * 1.5 : posY - HALF_POINT_SIZE,
           left: posX - HALF_POINT_SIZE,
         },
       ]}

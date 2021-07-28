@@ -12,6 +12,7 @@ import FontSize from "./bottom-tab/text-member/font-size";
 import NotEditText from "./top-float/edit-text-member/not-edit-text";
 import LinkComponentToLayer from "./top-float/common/link-component-to-layer";
 import CheckSticker from "./top-float/sticker-member/check-sticker";
+import Resize from "./top-float/common/resize";
 
 
 const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
@@ -29,7 +30,7 @@ const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
     <LinkComponentToLayer key={0} />,
     null,
     null,
-    null,
+    <Resize key={3} />,
     <FontSize key={4} />,
     <ChangeText key={5} />,
     <CheckText key={6} />,
@@ -49,7 +50,7 @@ const iconMembers: IconMembers<Erin.Editor.TopFloatMenuType> = {
     null,
     null,
     null,
-    null,
+    <Resize key={5} />,
     <CheckSticker key={6} />,
   ]
 };
