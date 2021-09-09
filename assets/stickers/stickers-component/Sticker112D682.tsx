@@ -14,6 +14,7 @@ function Sticker112D682(props: SvgProps) {
       height={52 * stickerScale}
       fill="none"
       {...props}
+      viewBox="0 0 75 52"
     >
       <Path
         d="M34.714 28.734c4.263 0 7.72-3.328 7.72-7.434 0-4.105-3.457-7.434-7.72-7.434-4.264 0-7.72 3.329-7.72 7.434 0 4.106 3.456 7.434 7.72 7.434z"

@@ -14,6 +14,7 @@ function Sticker115D2163(props: SvgProps) {
       height={62 * stickerScale}
       fill="none"
       {...props}
+      viewBox="0 0 74 62"
     >
       <Path
         opacity={0.66}
