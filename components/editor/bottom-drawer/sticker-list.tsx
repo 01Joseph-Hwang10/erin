@@ -8,7 +8,7 @@ import { SvgProps } from "react-native-svg";
 import { RootState } from "@redux/root-reducer";
 import { connect, ConnectedProps } from "react-redux";
 import StickerCategories from "./sticker-list/sticker-categories";
-import { StickerScaleContext } from "../workspace/erin-components/sticker/sticker-scale-context";
+import { StickerScaleContext } from "../../context/sticker-scale-context";
 import { AfterInteractions } from "react-native-interactions";
 
 const Divider = () => <View style={styles.divider}></View>;

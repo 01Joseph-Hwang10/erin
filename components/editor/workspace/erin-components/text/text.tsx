@@ -67,9 +67,9 @@ import {
 } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
-import GenericAnimationContext from "../common/animation/generic-animation";
+import GenericAnimationContext from "../../../../context/generic-animation-context";
 import BackgroundShape from "./background-shape";
-import TextAnimationContext from "./text-animation";
+import TextAnimationContext from "../../../../context/text-animation-context";
 import { decideHover } from "./text.function";
 
 type ErinTextReduxProps = ConnectedProps<typeof connector>

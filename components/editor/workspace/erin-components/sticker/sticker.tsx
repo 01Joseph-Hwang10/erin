@@ -39,10 +39,10 @@ import {
 } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
-import GenericAnimationContext from "../common/animation/generic-animation";
+import GenericAnimationContext from "../../../../context/generic-animation-context";
 import { decideHover } from "../text/text.function";
 import { BASE_SCALE } from "./constants";
-import { StickerScaleContext } from "./sticker-scale-context";
+import { StickerScaleContext } from "../../../../context/sticker-scale-context";
 
 type StickerReduxProps = ConnectedProps<typeof connector>
 

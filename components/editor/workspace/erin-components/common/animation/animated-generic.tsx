@@ -10,7 +10,7 @@ interface AnimatedGenericProps {
   infinite?: boolean
 }
 
-export const AnimatedGeneric: React.FC<AnimatedGenericProps> = ({
+const AnimatedGeneric: React.FC<AnimatedGenericProps> = ({
   children,
   animationType,
   infinite
@@ -48,8 +48,4 @@ export const AnimatedGeneric: React.FC<AnimatedGenericProps> = ({
   }
 };
 
-const GenericAnimationContext: React.Context<React.FC<AnimatedGenericProps>> = 
-    React.createContext<React.FC<AnimatedGenericProps>>(AnimatedGeneric);
-GenericAnimationContext.displayName = "GenericAnimationContext";
-
-export default GenericAnimationContext;
+export default AnimatedGeneric;

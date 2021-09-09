@@ -67,11 +67,11 @@ import {
 } from "react-native-gesture-handler";
 import { connect, ConnectedProps } from "react-redux";
 import { Dispatch } from "redux";
-import GenericAnimationContext from "@components/editor/workspace/erin-components/common/animation/generic-animation";
 import BackgroundShape from "@components/editor/workspace/erin-components/text/background-shape";
-import TextAnimationContext from "@components/editor/workspace/erin-components/text/text-animation";
+import TextAnimationContext from "@components/context/text-animation-context";
 import { decideHover } from "@components/editor/workspace/erin-components/text/text.function";
 import Animated from "react-native-reanimated";
+import GenericAnimationContext from "@components/context/generic-animation-context";
 
 type ErinTextReduxProps = ConnectedProps<typeof connector>
 

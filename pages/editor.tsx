@@ -15,10 +15,12 @@ import { setLoading, SetLoadingInput } from "../redux/slices/app-state";
 import COLORS from "../src/colors";
 import { RootState } from "@redux/root-reducer";
 import { setHasUnsavedChanges, SetHasUnsavedChanges } from "@slices/editor/editor-generic";
-import TextAnimationContext, { AnimatedText } from "@components/editor/workspace/erin-components/text/text-animation";
+import TextAnimationContext from "@components/context/text-animation-context";
 import BottomFloatHelpMessage from "@components/editor/bottom-float/help-message";
-import GenericAnimationContext, { AnimatedGeneric } from "@components/editor/workspace/erin-components/common/animation/generic-animation";
 import BottomDrawer from "@components/editor/bottom-drawer";
+import GenericAnimationContext from "@components/context/generic-animation-context";
+import AnimatedGeneric from "@components/editor/workspace/erin-components/common/animation/animated-generic";
+import AnimatedText from "@components/editor/workspace/erin-components/text/text-animation/animated-text";
 
 
 type EditorNavigationProp = StackNavigationProp<

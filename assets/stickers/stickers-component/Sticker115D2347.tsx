@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useContext } from "react";
-import { StickerScaleContext } from "@components/editor/workspace/erin-components/sticker/sticker-scale-context";
+import { StickerScaleContext } from "@components/context/sticker-scale-context";
 import Svg, { SvgProps, Path } from "react-native-svg";
 
 // Viewbox

@@ -11,7 +11,7 @@ import {
   Text,
   StyleSheet
 } from "react-native";
-import TypeWriter from "./text-animation/typewriter";
+import TypeWriter from "./typewriter";
 
 
 interface AnimatedTextProps {
@@ -25,7 +25,7 @@ interface AnimatedTextProps {
     backgroundColor: string,
 }
 
-export const AnimatedText: React.FC<AnimatedTextProps> = ({
+const AnimatedText: React.FC<AnimatedTextProps> = ({
   style,
   onLayout,
   children,
@@ -102,11 +102,7 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
   }
 };
 
-const TextAnimationContext: React.Context<React.FC<AnimatedTextProps>> =
-    React.createContext<React.FC<AnimatedTextProps>>(AnimatedText);
-TextAnimationContext.displayName = "TextAnimationContext";
-
-export default TextAnimationContext;
+export default AnimatedText;
 
 const styles = StyleSheet.create({
   wrapper: {
