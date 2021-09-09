@@ -55,5 +55,5 @@ web-build/
 
 # Assets
 
-assets/
-android/app/src/main/assets/
+# assets/
+# android/app/src/main/assets/

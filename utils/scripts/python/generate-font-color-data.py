@@ -4,7 +4,7 @@ import os
 from constants import ROOT
 import re
 
-COLOR_DATA = f'{ROOT}/src/color-palette.ts'
+COLOR_DATA = os.path.join(ROOT, 'src/color-palette.ts')
 WEB_URL = 'https://www.w3.org/TR/css-color-3/'
 
 web = requests.get(WEB_URL)

@@ -1,8 +1,8 @@
 import os
 from constants import ROOT
 
-FONTS_DIR = f'{ROOT}/assets/fonts/'
-FONT_DATA = f'{ROOT}/components/editor/bottom-float/font-style-members/font-style.data.ts'
+FONTS_DIR = os.path.join(ROOT,'assets/fonts/')
+FONT_DATA = os.path.join(ROOT,'components/editor/bottom-float/font-style-members/font-style.data.ts')
 
 for _, __, filenames in os.walk(FONTS_DIR):
     with open(FONT_DATA, 'w') as wf:

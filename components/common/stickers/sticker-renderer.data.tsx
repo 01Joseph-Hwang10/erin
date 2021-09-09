@@ -108,7 +108,7 @@ import Sticker114D2641 from "@assets/stickers/stickers-component/Sticker114D2641
 import { Erin } from "erin";
 import { SvgProps } from "react-native-svg";
 
-
+// export const stickerTable: Record<string, [ React.FC<SvgProps>, Erin.Common.StickerCategories ]> = {};
 export const stickerTable: Record<string, [ React.FC<SvgProps>, Erin.Common.StickerCategories ]> = {
   "115-602": [ Sticker115D602, "animals" ] ,
   "115-2077": [ Sticker115D2077, "animals" ] ,

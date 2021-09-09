@@ -30,6 +30,7 @@ const Postbox: React.FC<PostboxProps> = ({
   setBottomFloatHelpMessage: SetBottomFloatHelpMessage
 }) => {
 
+  // NotoSansKR, Gaegu, Sunflower, SingleDay, NanumGothic, Jua
   const [ loaded ] = useFonts({
     "NotoSansKR-Thin": require("@assets/fonts/NotoSansKR-Thin.otf"),
     "Gaegu-Light": require("@assets/fonts/Gaegu-Light.ttf"),
