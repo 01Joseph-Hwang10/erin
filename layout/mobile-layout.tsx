@@ -2,37 +2,31 @@ import React from "react";
 import Editor from "../pages/editor";
 import Viewer from "../pages/viewer";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 import Main from "./main";
 
-
 export type StackParamList = {
-  main: undefined,
-  editor: undefined,
-  viewer: undefined
-}
+  main: undefined;
+  editor: undefined;
+  viewer: undefined;
+};
+
+const screenOptions: StackNavigationOptions = {
+  headerShown: false,
+};
 
 const Stack = createStackNavigator<StackParamList>();
 
 const MobileLayout: React.FC = () => {
-
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='main'>
-        <Stack.Screen 
-          name="main"
-          component={Main}
-        />
-        <Stack.Screen 
-          name='editor'
-          component={Editor}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen 
-          name='viewer'
-          component={Viewer}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator initialRouteName="main" screenOptions={screenOptions}>
+        <Stack.Screen name="main" component={Main} />
+        <Stack.Screen name="editor" component={Editor} />
+        <Stack.Screen name="viewer" component={Viewer} />
       </Stack.Navigator>
     </NavigationContainer>
   );
