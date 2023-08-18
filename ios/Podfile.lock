@@ -3,7 +3,7 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (3.2.0):
     - UMCore
-  - EXConstants (11.0.1):
+  - EXConstants (11.0.2):
     - ExpoModulesCore
     - UMCore
   - EXErrorRecovery (2.2.0):
@@ -18,6 +18,9 @@ PODS:
     - ExpoModulesCore
     - React-Core
     - UMCore
+  - EXImagePicker (10.2.3):
+    - ExpoModulesCore
+    - UMCore
   - EXKeepAwake (9.2.0):
     - UMCore
   - EXLinearGradient (9.2.0):
@@ -31,12 +34,12 @@ PODS:
   - ExpoModulesCore/Interfaces (0.2.0):
     - ExpoModulesCore/Core
     - UMCore
-  - EXSplashScreen (0.11.2):
+  - EXSplashScreen (0.11.4):
     - React-Core
     - UMCore
   - EXStructuredHeaders (1.1.1):
     - UMCore
-  - EXUpdates (0.8.2):
+  - EXUpdates (0.8.5):
     - EXStructuredHeaders
     - EXUpdatesInterface
     - React-Core
@@ -331,8 +334,8 @@ PODS:
   - RNSVG (12.1.1):
     - React
   - UMAppLoader (2.2.0)
-  - UMCore (7.1.1)
-  - UMReactNativeAdapter (6.3.4):
+  - UMCore (7.1.2)
+  - UMReactNativeAdapter (6.3.7):
     - ExpoModulesCore
     - React-Core
     - UMCore
@@ -348,6 +351,7 @@ DEPENDENCIES:
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
+  - EXImagePicker (from `../node_modules/expo-image-picker/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
@@ -414,6 +418,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-font/ios"
   EXImageLoader:
     :path: "../node_modules/expo-image-loader/ios"
+  EXImagePicker:
+    :path: "../node_modules/expo-image-picker/ios"
   EXKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   EXLinearGradient:
@@ -507,17 +513,18 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   EXApplication: 9ff2a206009d6e55bca6c20b3f33d07986b51ef3
-  EXConstants: 3babb61f8f4bb7dffe85b8b7d6eaa31d903e4d7e
+  EXConstants: 4cb52b6d8f636c767104a44bf7db3873e9c01a6f
   EXErrorRecovery: 404d827bc7d42f306c062d58a60b06afc4d082b3
   EXFileSystem: 0a04aba8da751b9ac954065911bcf166503f8267
   EXFont: 9846ba1bb6f5f5aed44e20eea3ac70693323832d
   EXImageLoader: d3531a3fe530b22925c19977cb53bb43e3821fe6
+  EXImagePicker: 414a3663910fd6604248e84c9c77a0501ae0d18b
   EXKeepAwake: f4105ef469be7b283f66ce2d7234bb71ac80cd26
   EXLinearGradient: f9ea3259f096b27008860ca50764184225dc71c9
   ExpoModulesCore: 2734852616127a6c1fc23012197890a6f3763dc7
-  EXSplashScreen: 6208ca88470ff5979fd49a08ef3feb01143a2b79
+  EXSplashScreen: 847e0d8026731c1090bf269ede3e15ac87d88958
   EXStructuredHeaders: e52b880264d15b8ad07d36670226c29476af6334
-  EXUpdates: dcc9d0432e1ad0a3f51b8721375401b4708bf7a1
+  EXUpdates: 013d26649cb6ab4f8d8d80c35d3d4be150b47e7c
   EXUpdatesInterface: b68e78b912a03fff7901a5f46ec200c45e3506a5
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
@@ -552,11 +559,11 @@ SPEC CHECKSUMS:
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   UMAppLoader: 21af63390e55c82e037fb9752d93114a80ecf16e
-  UMCore: 2f671796d7439604a1cf8ac7bbe5809cd5c50437
-  UMReactNativeAdapter: 684b07b79d5fe52b496d2b50bfe31f68d7daf71a
+  UMCore: ce3a4faa010239063b8343895b29a6d97b01069d
+  UMReactNativeAdapter: bb7922210cf6fdb5768f78685f3c3a2060299119
   UMTaskManagerInterface: 2be431101b73604e64fbfffcf759336f9d8fccbb
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: baa777d867118ab754ba112811f6593bc19f24e3
+PODFILE CHECKSUM: 273360428a1712960417f54634178a1c4c667c32
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.12.1
